@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+---
+<Base
+  title="Privacy: Helix Tech"
+  description="What helixtech.app keeps about its visitors, which is next to nothing, and where the contact form sends what you write."
+  image="/og/privacy.png"
+>
+  <article class="wrap privacy">
+    <p class="eyebrow" data-reveal>Privacy</p>
+    <h1 data-reveal>Nothing to track.</h1>
+    <p class="lede" data-reveal>
+      This site is a set of static pages. It sets no cookies, runs no analytics and loads nothing from anyone else: no
+      scripts, no fonts, no images, no trackers.
+    </p>
+
+    <div class="sections">
+      <section data-reveal>
+        <h2>What the site keeps</h2>
+        <p>
+          If you pick a theme with the switch in the header, that choice is kept in your own browser’s storage so the
+          page opens the same way next time. It never leaves your browser, and clearing site data removes it.
+        </p>
+        <p>
+          The server writes the usual access log: the requested page, the time, your IP address and your browser’s
+          name. It exists to spot and block abuse, and is read by nothing else.
+        </p>
+      </section>
+
+      <section data-reveal>
+        <h2>The contact form</h2>
+        <p>
+          The <a href="/contact/">contact form</a> is delivered by <a href="https://web3forms.com">Web3Forms</a>.
+          What you type (your name, email address, subject and message) goes to them and on to Helix Tech by email,
+          and a copy stays in their dashboard. Their handling of it is set out in the{' '}
+          <a href="https://web3forms.com/privacy">Web3Forms privacy policy</a>. Your message is used to reply to you
+          and for nothing else. If you would rather not use the form, email works the same.
+        </p>
+      </section>
+
+      <section data-reveal>
+        <h2>Links elsewhere</h2>
+        <p>
+          The tools, their issues and their releases live on GitHub. Once you follow a link there, GitHub’s own{' '}
+          <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>
+          {' '}applies.
+        </p>
+      </section>
+
+      <section data-reveal>
+        <h2>Questions</h2>
+        <p>Ask through the <a href="/contact/">contact page</a>.</p>
+        <p class="updated">Last updated 30 October 2026.</p>
+      </section>
+    </div>
+
+    <p data-reveal>
+      <a class="button" href="/">Back to the home page <Icon name="arrow-right" /></a>
+    </p>
+  </article>
+</Base>
+
+<style>
+  .privacy {
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(4rem, 8vw, 7rem);
+  }
+  h1 {
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+  }
+  .lede {
+    max-width: 52ch;
+    font-size: var(--step-1);
+  }
+  .sections {
+    display: grid;
+    gap: 2rem;
+    margin-block: clamp(2rem, 5vw, 3.5rem);
+  }
+  section {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    font-size: var(--step-2);
+  }
+  .updated {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

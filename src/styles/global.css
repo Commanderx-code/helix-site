@@ -52,6 +52,21 @@
     --muted: #5b6178;
   }
 }
+/* The same colours when the switch in the header has chosen light */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --ink: #f6f7fb;
+  --deep: #ffffff;
+  --raised: #eef0f6;
+  --line: #dde1ec;
+  --line-strong: #c9cede;
+  --mint: #0f766e;
+  --violet: #6d28d9;
+  --on-accent: #ffffff;
+  --chrome: #0f1220;
+  --text: #3a4054;
+  --muted: #5b6178;
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 

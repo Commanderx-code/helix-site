@@ -14,8 +14,12 @@ interface Props {
   tool?: string;
   /** Keep the page out of search results, as for the form's landing page */
   noindex?: boolean;
+  /** The picture shown when the page's link is shared; see src/og */
+  image?: string;
+  /** Structured data for search engines, as a schema.org object */
+  jsonLd?: Record<string, unknown>;
 }
-const { title, description, tool, noindex = false } = Astro.props;
+const { title, description, tool, noindex = false, image = '/og/home.png', jsonLd } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // The copyright runs from the first year to the year of the build
 const year = new Date().getFullYear();
@@ -46,10 +50,19 @@ const gallery = (
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0b0d12" />
     {noindex && <meta name="robots" content="noindex" />}
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Helix Tech releases" href="/feed.xml" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Helix Tech" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+    <script is:inline src="/theme.js"></script>
   </head>
   <body data-tool={tool}>
     <a class="skip" href="#main">Skip to content</a>
@@ -63,8 +76,13 @@ const gallery = (
           <a href="/#tools">Tools</a>
           <a href="/#homelab">Homelab</a>
           <a href="/#faq">FAQ</a>
+          <a href="/news/">What’s new</a>
           <a href="/contact/">Contact</a>
           <a href="https://github.com/Commanderx-code">GitHub <Icon name="external" size={14} /></a>
+          <button class="theme" type="button" data-theme-toggle aria-label="Switch theme">
+            <span class="sun"><Icon name="sun" size={18} /></span>
+            <span class="moon"><Icon name="moon" size={18} /></span>
+          </button>
         </nav>
       </div>
     </header>
@@ -112,7 +130,10 @@ const gallery = (
             <p class="heading">More</p>
             <a href="/#homelab"><Icon name="arrow-right" size={14} />Homelab</a>
             <a href="/#faq"><Icon name="arrow-right" size={14} />FAQ</a>
+            <a href="/news/"><Icon name="arrow-right" size={14} />What’s new</a>
             <a href="/contact/"><Icon name="arrow-right" size={14} />Contact</a>
+            <a href="/privacy/"><Icon name="arrow-right" size={14} />Privacy</a>
+            <a href="/feed.xml"><Icon name="arrow-right" size={14} />RSS feed</a>
             <a href="https://github.com/Commanderx-code"><Icon name="arrow-right" size={14} />GitHub</a>
           </nav>
           <div class="shots" data-reveal>
@@ -134,7 +155,7 @@ const gallery = (
         <div class="legal">
           <div>
             <p>© {years} Helix Tech LLC. Helix Tech™ is a trademark of Helix Tech LLC.</p>
-            <p>The public tools are open source under the MIT license.</p>
+            <p>The public tools are open source under the MIT license. <a href="/privacy/">Privacy</a></p>
           </div>
           <div class="legal-links">
             <a class="round" href="https://github.com/Commanderx-code" aria-label="Helix Tech on GitHub">
@@ -153,6 +174,7 @@ const gallery = (
     <script>
       import '../scripts/copy.ts';
       import '../scripts/motion.ts';
+      import '../scripts/theme.ts';
     </script>
   </body>
 </html>
@@ -208,8 +230,16 @@ const gallery = (
       display: block;
     }
   }
+  :root[data-theme='light'] :global(.on-dark) {
+    display: none;
+  }
+  :root[data-theme='light'] :global(.on-light) {
+    display: block;
+  }
   .bar nav {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 0.25rem;
   }
   .bar nav a {
@@ -222,10 +252,44 @@ const gallery = (
     color: var(--text);
     text-decoration: none;
     font-size: 0.9375rem;
+    white-space: nowrap;
   }
   .bar nav a:hover {
     color: var(--chrome);
     background: var(--raised);
+  }
+  /* The theme switch: a sun while the page is dark, a moon while it is light.
+     Shown only once theme.js has run, since without it the switch does nothing */
+  .theme {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    min-height: 2.75rem;
+    margin-left: 0.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+  :root[data-theme] .theme {
+    display: inline-flex;
+  }
+  .theme:hover {
+    color: var(--chrome);
+    background: var(--raised);
+  }
+  .theme span {
+    display: inline-flex;
+  }
+  .theme .moon,
+  :root[data-theme='light'] .theme .sun {
+    display: none;
+  }
+  :root[data-theme='light'] .theme .moon {
+    display: inline-flex;
   }
   @media (max-width: 30rem) {
     .bar nav a {

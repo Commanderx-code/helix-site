@@ -7,10 +7,27 @@ import Icon from '../components/Icon.astro';
 import { tools, latestRelease, repoStats } from '../data/tools';
 import { testimonials } from '../data/testimonials';
 import { faq } from '../data/faq';
+import logo from '../assets/brand/logo-on-dark.png';
 const [releases, stats] = await Promise.all([
   Promise.all(tools.map((t) => latestRelease(t.repo))),
   Promise.all(tools.map((t) => repoStats(t.repo))),
 ]);
+
+const site = String(Astro.site);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Helix Tech',
+  url: site,
+  description: 'Open tools for setting up, rescuing and enjoying your machines.',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Helix Tech LLC',
+    url: site,
+    logo: new URL(logo.src, Astro.site).href,
+    sameAs: ['https://github.com/Commanderx-code'],
+  },
+};
 
 // The command in the hero is the featured tool's first install entry
 const [featured] = tools;
@@ -76,6 +93,7 @@ const homelab = [
 <Base
   title="Helix Tech: tools for setting up, rescuing and enjoying your machines"
   description="Helix Toolbox, Helix Boot, Config Bible, webOS Launcher and Touchdown: open tools for setting up, rescuing and enjoying your machines."
+  jsonLd={jsonLd}
 >
   <section class="hero wrap">
     {

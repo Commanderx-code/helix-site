@@ -12,7 +12,11 @@ const key = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
 const sent = new URL('/contact/sent/', Astro.site).href;
 const withIssues = tools.filter((t) => t.repo);
 ---
-<Base title="Contact Helix Tech" description={`Write to Helix Tech about the tools, the site or anything else, or email ${email}.`}>
+<Base
+  title="Contact Helix Tech"
+  description={`Write to Helix Tech about the tools, the site or anything else, or email ${email}.`}
+  image="/og/contact.png"
+>
   <section class="wrap head">
     <p class="eyebrow" data-reveal>Contact</p>
     <h1 data-reveal>Say hello.</h1>

@@ -257,6 +257,31 @@ export async function latestRelease(repo?: string): Promise<Release | undefined>
   return r && { tag: r.tag_name, date: r.published_at, url: r.html_url };
 }
 
+export interface ReleaseNote extends Release {
+  name: string;
+  /** The notes, as Markdown */
+  body: string;
+  prerelease: boolean;
+}
+
+/** The newest published releases of a public repository, newest first, read at build time. */
+export async function releaseNotes(repo?: string, count = 3): Promise<ReleaseNote[]> {
+  if (!repo) return [];
+  const list = await github(`repos/${repo}/releases?per_page=${count + 2}`);
+  if (!Array.isArray(list)) return [];
+  return list
+    .filter((r: any) => !r.draft)
+    .slice(0, count)
+    .map((r: any) => ({
+      tag: r.tag_name,
+      date: r.published_at,
+      url: r.html_url,
+      name: r.name || r.tag_name,
+      body: r.body ?? '',
+      prerelease: r.prerelease,
+    }));
+}
+
 export interface RepoStats {
   stars: number;
   releases: number;

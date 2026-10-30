@@ -6,9 +6,14 @@
 [data-tool='touchdown'] { --accent: #79e4b7; }
 
 @media (prefers-color-scheme: light) {
-  [data-tool='toolbox'] { --accent: #0779a6; }
-  [data-tool='boot'] { --accent: #7b2fc4; }
-  [data-tool='config-bible'] { --accent: #8e2fc0; }
-  [data-tool='webos-launcher'] { --accent: #2f63c9; }
-  [data-tool='touchdown'] { --accent: #17774f; }
+  :root:not([data-theme='dark']) [data-tool='toolbox'] { --accent: #0779a6; }
+  :root:not([data-theme='dark']) [data-tool='boot'] { --accent: #7b2fc4; }
+  :root:not([data-theme='dark']) [data-tool='config-bible'] { --accent: #8e2fc0; }
+  :root:not([data-theme='dark']) [data-tool='webos-launcher'] { --accent: #2f63c9; }
+  :root:not([data-theme='dark']) [data-tool='touchdown'] { --accent: #17774f; }
 }
+:root[data-theme='light'] [data-tool='toolbox'] { --accent: #0779a6; }
+:root[data-theme='light'] [data-tool='boot'] { --accent: #7b2fc4; }
+:root[data-theme='light'] [data-tool='config-bible'] { --accent: #8e2fc0; }
+:root[data-theme='light'] [data-tool='webos-launcher'] { --accent: #2f63c9; }
+:root[data-theme='light'] [data-tool='touchdown'] { --accent: #17774f; }
