@@ -172,8 +172,9 @@ img { max-width: 100%; height: auto; display: block; }
 /* Arriving into view: only once the motion script has started, so nothing
    hides when it does not run. Rises by default; "left" and "right" slide in
    from that side, "zoom" grows into place. Uses translate and scale rather
-   than transform, so hover effects on the same element still work. */
-[data-motion] [data-reveal] {
+   than transform, so hover effects on the same element still work. The html
+   prefix outranks an element's own transition, such as a card's hover. */
+html[data-motion] [data-reveal] {
   opacity: 0;
   translate: 0 3.5rem;
   transition:
@@ -182,17 +183,17 @@ img { max-width: 100%; height: auto; display: block; }
     scale 1.5s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: calc(var(--reveal-order, 0) * 160ms);
 }
-[data-motion] [data-reveal='left'] {
+html[data-motion] [data-reveal='left'] {
   translate: -5rem 0;
 }
-[data-motion] [data-reveal='right'] {
+html[data-motion] [data-reveal='right'] {
   translate: 5rem 0;
 }
-[data-motion] [data-reveal='zoom'] {
+html[data-motion] [data-reveal='zoom'] {
   translate: 0 2rem;
   scale: 0.9;
 }
-[data-motion] [data-reveal].is-in {
+html[data-motion] [data-reveal].is-in {
   opacity: 1;
   translate: none;
   scale: none;
