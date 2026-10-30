@@ -36,8 +36,12 @@ export interface Tool {
   repo?: string;
   /** Shown when the repository is private */
   availability?: string;
+  /** The kind of job the tool does, in a word or two */
+  category: string;
   pitch: string;
   summary: string;
+  /** Three short lines for the home page card of a tool without screenshots */
+  highlights?: string[];
   icon?: ImageMetadata;
   platforms: string;
   license?: string;
@@ -51,6 +55,7 @@ export const tools: Tool[] = [
   {
     slug: 'toolbox',
     name: 'Helix Toolbox',
+    category: 'Linux setup',
     repo: 'Commanderx-code/Helix-toolbox',
     pitch: 'Set up and look after a Linux machine from one menu in the terminal.',
     summary:
@@ -87,6 +92,7 @@ export const tools: Tool[] = [
   {
     slug: 'boot',
     name: 'Helix Boot',
+    category: 'Recovery',
     repo: 'Commanderx-code/helix-boot',
     pitch: 'A multiboot rescue USB that builds itself from upstream sources.',
     summary:
@@ -127,10 +133,16 @@ export const tools: Tool[] = [
   {
     slug: 'config-bible',
     name: 'Config Bible',
+    category: 'Documentation',
     availability: 'Not public yet. The repository is private while the handbook is personal; this page will link to it once it opens.',
     pitch: 'A handbook for your own workstation, with search, in a web site and a desktop app.',
     summary:
       'One folder of Markdown pages behind two viewers: a searchable web site and a desktop app with a command palette, live reload and pages you can mark as checked.',
+    highlights: [
+      'Ctrl-K palette, search, pins and backlinks',
+      'Live reload: edited pages show without a rebuild',
+      'Checks links and metadata so stale pages stand out',
+    ],
     icon: bibleIcon,
     platforms: 'Linux. The desktop app is a Tauri app, packaged for Arch.',
     features: [
@@ -147,10 +159,16 @@ export const tools: Tool[] = [
   {
     slug: 'webos-launcher',
     name: 'webOS Launcher',
+    category: 'TV',
     repo: 'Commanderx-code/webos-launcher',
     pitch: 'A minimal home screen for LG webOS TVs.',
     summary:
       'Favorites, Plex rows, inputs, moving themes and a screensaver, made for a stock TV in Developer Mode (webOS 5 and later). Plain HTML, CSS and JavaScript.',
+    highlights: [
+      'Favorites, Plex rows and named inputs',
+      'Six moving themes, or your own wallpaper',
+      'Syncs and updates itself every hour',
+    ],
     icon: webosIcon,
     platforms: 'An LG TV with webOS 5 or later in Developer Mode, or rooted with Homebrew Channel. Node.js 20 or later on a computer on the same network.',
     license: 'MIT',
@@ -182,6 +200,7 @@ export const tools: Tool[] = [
   {
     slug: 'touchdown',
     name: 'Touchdown',
+    category: 'Game day',
     repo: 'Commanderx-code/touchdown-cli',
     pitch: 'Live NFL scores and stats in your terminal.',
     summary:

@@ -1,15 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
 ---
-<Base title="Page not found: Helix" description="This page does not exist.">
+<Base title="Page not found: Helix Tech" description="This page does not exist.">
   <section class="wrap missing">
+    <p class="eyebrow">404</p>
     <h1>This page does not exist.</h1>
-    <p>The address may be mistyped, or the page has moved. <a href="/">Go to the Helix home page</a> to find the tool you were looking for.</p>
+    <p>The address may be mistyped, or the page has moved. Every tool is listed on the home page.</p>
+    <p><a class="button primary" href="/#tools">See all the tools <Icon name="arrow-right" /></a></p>
   </section>
 </Base>
 
 <style>
   .missing {
-    padding-block: 6rem 2rem;
+    padding-block: clamp(4rem, 10vw, 8rem) 2rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
   }
 </style>

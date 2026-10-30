@@ -1,0 +1,110 @@
+---
+// The double helix in its rings, for the top of the home page. One full
+// turn: the strands cross at the top, middle and bottom.
+const amp = 38;
+const steps = 40;
+const strand = (phase: number) =>
+  Array.from({ length: steps + 1 }, (_, i) => {
+    const t = i / steps;
+    const y = 14 + t * 172;
+    const x = 60 + amp * Math.sin(t * 2 * Math.PI + phase);
+    return `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
+  }).join(' ');
+
+const rungs = [0.1, 0.18, 0.32, 0.4, 0.6, 0.68, 0.82, 0.9].map((t) => {
+  const dx = Math.abs(amp * Math.sin(t * 2 * Math.PI));
+  return { y: (14 + t * 172).toFixed(1), x1: (60 - dx).toFixed(1), x2: (60 + dx).toFixed(1) };
+});
+---
+<div class="helix" aria-hidden="true">
+  <svg class="rings" viewBox="0 0 400 400">
+    <circle cx="200" cy="200" r="196" class="ring" />
+    <circle cx="200" cy="200" r="160" class="disc" />
+    <g class="orbit">
+      <circle cx="200" cy="200" r="178" class="dots" />
+      <circle cx="200" cy="22" r="4" class="a" />
+      <circle cx="200" cy="378" r="4" class="b" />
+    </g>
+  </svg>
+  <svg class="strands" viewBox="0 0 120 200">
+    <defs>
+      <linearGradient id="helix-a" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" class="stop-a" />
+        <stop offset="1" class="stop-b" />
+      </linearGradient>
+      <linearGradient id="helix-b" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" class="stop-b" />
+        <stop offset="1" class="stop-a" />
+      </linearGradient>
+    </defs>
+    <g class="rungs">
+      {rungs.map((r) => <line x1={r.x1} x2={r.x2} y1={r.y} y2={r.y} />)}
+    </g>
+    <path d={strand(0)} stroke="url(#helix-a)" />
+    <path d={strand(Math.PI)} stroke="url(#helix-b)" />
+  </svg>
+</div>
+
+<style>
+  .helix {
+    position: relative;
+    width: 100%;
+    max-width: 26rem;
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
+  svg {
+    position: absolute;
+  }
+  .rings {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .strands {
+    left: 30%;
+    top: 15%;
+    width: 40%;
+    height: 70%;
+    overflow: visible;
+  }
+  .ring {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1.5;
+  }
+  .disc {
+    fill: var(--deep);
+    stroke: var(--line);
+    stroke-width: 1.5;
+  }
+  .dots {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 10;
+  }
+  .a { fill: var(--mint); }
+  .b { fill: var(--violet); }
+  .stop-a { stop-color: var(--mint); }
+  .stop-b { stop-color: var(--violet); }
+  .rungs line {
+    stroke: var(--line-strong);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+  }
+  path {
+    fill: none;
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* The outer ring turns slowly; reduced motion stops it */
+  .orbit {
+    transform-origin: 200px 200px;
+    animation: orbit 60s linear infinite;
+  }
+  @keyframes orbit {
+    to { transform: rotate(360deg); }
+  }
+</style>

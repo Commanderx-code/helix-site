@@ -1,48 +1,55 @@
-@import '@fontsource-variable/unbounded';
-@import '@fontsource/atkinson-hyperlegible-next/400.css';
-@import '@fontsource/atkinson-hyperlegible-next/700.css';
+@import '@fontsource/fira-sans-condensed/700.css';
+@import '@fontsource/fira-sans-condensed/800.css';
+@import '@fontsource/fira-sans/400.css';
+@import '@fontsource/fira-sans/500.css';
+@import '@fontsource/fira-sans/600.css';
 @import '@fontsource-variable/jetbrains-mono';
 
-/* Colors from the Helix logo: navy tile, cyan and violet strands, chrome letters */
+/* Colors from the Helix strands: mint and violet on a near-black ground */
 :root {
   color-scheme: dark;
-  --ink: #0a0c24;
-  --deep: #141840;
-  --line: #262c63;
-  --cyan: #3bd2ff;
-  --violet: #c04cf0;
-  --chrome: #e6e8f4;
-  --text: #c3c6dc;
-  --muted: #8d91b3;
-  --metal: linear-gradient(180deg, #ffffff 0%, #d4d6e6 55%, #9ea2bd 100%);
+  --ink: #0b0d12;
+  --deep: #11141c;
+  --raised: #161a24;
+  --line: #232837;
+  --line-strong: #2e3446;
+  --mint: #5eead4;
+  --violet: #a78bfa;
+  --on-accent: #0b0d12;
+  --chrome: #eceef4;
+  --text: #b4b9c9;
+  --muted: #8b91a3;
 
-  --display: 'Unbounded Variable', 'Unbounded', system-ui, sans-serif;
-  --body: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --display: 'Fira Sans Condensed', system-ui, sans-serif;
+  --body: 'Fira Sans', system-ui, sans-serif;
   --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
 
   --step--1: 0.875rem;
   --step-0: 1.0625rem;
-  --step-1: 1.3125rem;
+  --step-1: 1.25rem;
   --step-2: 1.75rem;
-  --step-3: 2.5rem;
-  --step-4: clamp(2.5rem, 6vw, 4.25rem);
+  --step-3: clamp(2.25rem, 5vw, 3.75rem);
+  --step-4: clamp(3rem, 8vw, 6.5rem);
 
   --gutter: clamp(1rem, 4vw, 2.5rem);
   --measure: 66ch;
+  --radius: 16px;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
     color-scheme: light;
-    --ink: #f3f4fb;
+    --ink: #f6f7fb;
     --deep: #ffffff;
-    --line: #d6d9ee;
-    --cyan: #0779a6;
-    --violet: #8e2fc0;
-    --chrome: #10133a;
-    --text: #2a2e57;
-    --muted: #5b6089;
-    --metal: linear-gradient(180deg, #2a3570 0%, #10133a 100%);
+    --raised: #eef0f6;
+    --line: #dde1ec;
+    --line-strong: #c9cede;
+    --mint: #0f766e;
+    --violet: #6d28d9;
+    --on-accent: #ffffff;
+    --chrome: #0f1220;
+    --text: #3a4054;
+    --muted: #5b6178;
   }
 }
 
@@ -63,23 +70,23 @@ body {
 h1, h2, h3 {
   font-family: var(--display);
   color: var(--chrome);
-  line-height: 1.15;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5em;
   text-wrap: balance;
 }
-h1 { font-size: var(--step-4); font-weight: 750; }
+h1 { font-size: var(--step-4); line-height: 0.95; letter-spacing: -0.03em; }
 h2 { font-size: var(--step-3); }
-h3 { font-size: var(--step-1); }
+h3 { font-size: var(--step-2); font-weight: 700; letter-spacing: -0.01em; }
 
 p { margin: 0 0 1em; max-width: var(--measure); }
 
-a { color: var(--cyan); text-underline-offset: 0.2em; }
-a:hover { color: var(--violet); }
+a { color: var(--violet); text-underline-offset: 0.2em; }
+a:hover { color: var(--chrome); }
 
 :focus-visible {
-  outline: 3px solid var(--cyan);
+  outline: 2px solid var(--mint);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -89,8 +96,63 @@ code, pre, kbd { font-family: var(--mono); font-size: 0.9em; }
 img { max-width: 100%; height: auto; display: block; }
 
 .wrap {
-  width: min(72rem, 100% - 2 * var(--gutter));
+  width: min(75rem, 100% - 2 * var(--gutter));
   margin-inline: auto;
+}
+
+/* Small capitals label above a heading */
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0 1.375rem;
+  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  color: var(--chrome);
+  font-weight: 600;
+  text-decoration: none;
+}
+.button:hover {
+  color: var(--chrome);
+  border-color: var(--muted);
+  background: var(--raised);
+}
+.button.primary {
+  background: var(--accent, var(--mint));
+  border-color: var(--accent, var(--mint));
+  color: var(--on-accent);
+}
+.button.primary:hover {
+  filter: brightness(1.08);
+}
+.button svg {
+  flex: none;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--step--1);
+}
+.chips li {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
 }
 
 .skip {

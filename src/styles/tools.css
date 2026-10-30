@@ -1,7 +1,7 @@
-/* Each tool's accent, from its own logo or theme. */
+/* Each tool's accent, from its own logo or theme, at 4.5:1 or more on the page. */
 [data-tool='toolbox'] { --accent: #3bd2ff; }
-[data-tool='boot'] { --accent: #b55eff; }
-[data-tool='config-bible'] { --accent: #d040ff; }
+[data-tool='boot'] { --accent: #c084fc; }
+[data-tool='config-bible'] { --accent: #e879f9; }
 [data-tool='webos-launcher'] { --accent: #7fb4ff; }
 [data-tool='touchdown'] { --accent: #79e4b7; }
 
@@ -10,5 +10,5 @@
   [data-tool='boot'] { --accent: #7b2fc4; }
   [data-tool='config-bible'] { --accent: #8e2fc0; }
   [data-tool='webos-launcher'] { --accent: #2f63c9; }
-  [data-tool='touchdown'] { --accent: #1f8a5f; }
+  [data-tool='touchdown'] { --accent: #17774f; }
 }
