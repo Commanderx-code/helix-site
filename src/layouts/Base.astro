@@ -7,6 +7,10 @@ import Helix from '../components/Helix.astro';
 import logoOnDark from '../assets/brand/logo-on-dark.png';
 import logoOnLight from '../assets/brand/logo-on-light.png';
 import { tools } from '../data/tools';
+// The two fonts every page shows first, fetched before the stylesheet asks
+// for them so the text does not swap and shift
+import displayFont from '@fontsource/fira-sans-condensed/files/fira-sans-condensed-latin-800-normal.woff2?url';
+import bodyFont from '@fontsource/fira-sans/files/fira-sans-latin-400-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -48,6 +52,8 @@ const gallery = (
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#0b0d12" />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="sitemap" href="/sitemap-index.xml" />
