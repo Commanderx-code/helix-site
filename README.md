@@ -35,6 +35,21 @@ The pages load no third-party scripts, fonts or images, so the server can
 send a strict Content-Security-Policy. The one outside address is the form's
 target, so `form-action` must allow `https://api.web3forms.com`.
 
+## Standby pages
+
+Two pages stand in for the site and are built with it, linked from nowhere
+and kept out of search.
+
+`/coming-soon/` announces something that is not out yet. Its words, and the
+instant it counts down to, are in `src/data/soon.ts`; without a date it
+says so instead of counting.
+
+`/maintenance/` is what the server shows while the site is being worked on.
+The switch is a file on the VPS: `sudo touch /srv/helix/MAINTENANCE` makes
+Caddy answer every page with it and a 503, and `sudo rm` of the same file
+brings the site back, with no reload either way. The Caddyfile block that
+does this lives with the server's config in the homelab repository.
+
 ## Checks
 
 Two more workflows watch the site. Quality runs Lighthouse on every push and

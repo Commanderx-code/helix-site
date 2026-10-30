@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /contact/sent/
+Disallow: /coming-soon/
+Disallow: /maintenance/
 
 Sitemap: https://helixtech.app/sitemap-index.xml

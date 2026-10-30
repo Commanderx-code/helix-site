@@ -1,0 +1,130 @@
+---
+// A page to stand in front of something that is not out yet. What it says,
+// and the date it counts down to, live in src/data/soon.ts.
+import Base from '../layouts/Base.astro';
+import Standby from '../components/Standby.astro';
+import Icon from '../components/Icon.astro';
+import { soon } from '../data/soon';
+
+const when =
+  soon.date &&
+  new Date(soon.date).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+  });
+const units = [
+  ['days', 'Days'],
+  ['hours', 'Hours'],
+  ['minutes', 'Min'],
+  ['seconds', 'Sec'],
+] as const;
+---
+<Base title={`${soon.eyebrow}: Helix Tech`} description={soon.text} noindex bare>
+  <Standby eyebrow={soon.eyebrow} title={soon.title}>
+    <p class="lede" data-reveal>{soon.text}</p>
+    {
+      soon.date ? (
+        <div data-reveal>
+          <ul class="count" data-countdown data-until={soon.date} aria-label={`Time left until ${when}`}>
+            {units.map(([unit, label]) => (
+              <li>
+                <span class="num" data-unit={unit}>
+                  00
+                </span>
+                <span class="unit">{label}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="arrived" data-arrived hidden>
+            It's here. <a href="/news/">See what's new</a>
+          </p>
+          <p class="when">
+            <time datetime={soon.date}>{when}</time>
+          </p>
+        </div>
+      ) : (
+        <p class="when" data-reveal>
+          No date yet. It ships when it is ready.
+        </p>
+      )
+    }
+    <div class="follow" data-reveal>
+      <p class="heading">Hear about it first</p>
+      <p class="actions">
+        <a class="button primary" href="/feed.xml"><Icon name="rss" /> RSS feed</a>
+        <a class="button" href="https://github.com/Commanderx-code">Watch on GitHub <Icon name="external" size={14} /></a>
+        <a class="button" href="/contact/">Contact</a>
+      </p>
+    </div>
+  </Standby>
+</Base>
+
+<script>
+  import '../scripts/countdown';
+</script>
+
+<style>
+  .lede {
+    margin-bottom: 1.75rem;
+    font-size: var(--step-1);
+    color: var(--muted);
+  }
+  .count {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    max-width: 30rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+  .count li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--deep);
+  }
+  .num {
+    font-family: var(--display);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--chrome);
+  }
+  .unit {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .when,
+  .arrived {
+    margin: 0 0 2rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .arrived {
+    font-size: var(--step-1);
+    color: var(--chrome);
+  }
+  .heading {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+    color: var(--chrome);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin: 0;
+    max-width: none;
+  }
+</style>
