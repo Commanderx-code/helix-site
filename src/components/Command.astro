@@ -15,31 +15,33 @@ const { code, label = 'Command' } = Astro.props;
     position: relative;
     background: var(--deep);
     border: 1px solid var(--line);
-    border-left: 3px solid var(--accent, var(--cyan));
-    border-radius: 6px;
+    border-radius: 10px;
   }
   pre {
     margin: 0;
-    padding: 0.9rem 5rem 0.9rem 1rem;
+    padding: 0.9rem 5.5rem 0.9rem 1rem;
     overflow-x: auto;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--chrome);
   }
   button {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 0.375rem;
+    right: 0.375rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
     font: inherit;
     font-size: var(--step--1);
+    font-weight: 500;
     color: var(--text);
-    background: var(--ink);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 0.2rem 0.6rem;
+    background: var(--raised);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 0 0.75rem;
     cursor: pointer;
   }
   button:hover {
-    border-color: var(--accent, var(--cyan));
+    border-color: var(--accent, var(--mint));
     color: var(--chrome);
   }
 </style>

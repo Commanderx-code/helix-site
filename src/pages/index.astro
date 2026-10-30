@@ -1,189 +1,521 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Strand from '../components/Strand.astro';
+import Helix from '../components/Helix.astro';
+import Command from '../components/Command.astro';
+import Icon from '../components/Icon.astro';
 import { tools, latestRelease } from '../data/tools';
-
 const releases = await Promise.all(tools.map((t) => latestRelease(t.repo)));
+
+// The command in the hero is the featured tool's first install entry
+const [featured] = tools;
+const tryIt = featured.install.find((step) => step.code);
+
+const named = (...slugs: string[]) => tools.filter((t) => slugs.includes(t.slug));
+const principles = [
+  {
+    icon: 'list',
+    title: 'See the plan first',
+    text: 'The Install Plan lists every step with its risk and any password prompt before anything runs, and every command takes --dry-run.',
+    tools: named('toolbox'),
+  },
+  {
+    icon: 'shield',
+    title: 'Verified downloads',
+    text: 'Downloads are checked against the publisher’s checksum, release binaries come with SHA-256 sums, and backups are test-restored.',
+    tools: named('boot', 'touchdown', 'toolbox'),
+  },
+  {
+    icon: 'code',
+    title: 'Open source',
+    text: 'MIT licensed and built in the open on GitHub. Read the code, file an issue, or take what helps.',
+    tools: tools.filter((t) => t.repo),
+  },
+] as const;
+
+const homelab = [
+  { icon: 'network', name: 'Networking', stack: 'OPNsense · WireGuard' },
+  { icon: 'server', name: 'Self-hosting', stack: 'Docker · ZimaBoard' },
+  { icon: 'home', name: 'Home automation', stack: 'Home Assistant · Zigbee' },
+  { icon: 'pulse', name: 'Monitoring', stack: 'Uptime Kuma · Checkmk' },
+] as const;
 ---
 <Base
-  title="Helix: tools for Linux machines, rescue drives, TVs and game day"
+  title="Helix Tech: tools for setting up, rescuing and enjoying your machines"
   description="Helix Toolbox, Helix Boot, Config Bible, webOS Launcher and Touchdown: open tools for setting up, rescuing and enjoying your machines."
 >
-  <section class="intro wrap">
-    <h1>Tools for setting up, rescuing and enjoying your machines.</h1>
-    <p>
-      A Linux setup toolbox, a rescue USB that builds itself, a handbook for your own workstation, a home screen for LG TVs and a
-      scoreboard for the terminal. Each one shows you what it will do before it does it.
-    </p>
+  <section class="hero wrap">
+    <div class="pitch">
+      <p class="eyebrow">Independent tools · one home</p>
+      <h1>Build. Configure. <span class="lit">Optimize.</span></h1>
+      <p class="lede">
+        Tools for setting up, rescuing and enjoying your machines: a Linux setup toolbox, a rescue USB that builds itself, a
+        handbook for your own workstation, a home screen for LG TVs and a scoreboard for the terminal.
+      </p>
+      <p class="actions">
+        <a class="button primary" href="#tools">Explore the tools <Icon name="arrow-down" /></a>
+        <a class="button" href="https://github.com/Commanderx-code">Visit GitHub <Icon name="external" /></a>
+      </p>
+      {
+        tryIt?.code && (
+          <div class="try">
+            <p>{featured.name}: {tryIt.title.toLowerCase()}</p>
+            <Command code={tryIt.code} label={`${featured.name}: ${tryIt.title}`} />
+          </div>
+        )
+      }
+    </div>
+    <div class="art">
+      <Helix />
+    </div>
   </section>
 
-  <section id="tools" class="helix wrap" aria-label="Tools">
-    {
-      tools.map((tool, i) => {
-        const release = releases[i];
-        return (
-          <article class:list={['turn', i % 2 ? 'right' : 'left']} data-tool={tool.slug}>
-            <div class="spine">
-              <Strand index={i} />
-              <span class="node" aria-hidden="true" />
+  <section id="tools" class="band" aria-labelledby="tools-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The tools</p>
+          <h2 id="tools-h">Tools with a purpose.</h2>
+        </div>
+        <p>Different tools, connected by the same curiosity for making technology more useful.</p>
+      </div>
+
+      <div class="bento">
+        {
+          tools.map((tool, i) => {
+            const release = releases[i];
+            const [shot] = tool.shots;
+            return (
+              <article class:list={['card', { featured: i === 0 }]}>
+                <div class="card-text">
+                  <div class="card-top">
+                    {tool.icon && <Image src={tool.icon} alt="" width={44} height={44} class="icon" />}
+                    <span class="category">
+                      {String(i + 1).padStart(2, '0')} / {tool.category}
+                    </span>
+                  </div>
+                  <h3>
+                    <a href={`/tools/${tool.slug}/`}>{tool.name}</a>
+                  </h3>
+                  <p>{tool.pitch}</p>
+                  <ul class="chips">
+                    {release && <li>Version {release.tag.replace(/^v/, '')}</li>}
+                    {tool.availability && <li class="private">Not public yet</li>}
+                    {tool.license && <li>{tool.license}</li>}
+                  </ul>
+                  {!shot && tool.highlights && (
+                    <ul class="highlights">
+                      {tool.highlights.map((h) => (
+                        <li>
+                          <Icon name="check" size={18} />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {shot && i > 0 && <Image class="shot" src={shot.src} alt={shot.alt} widths={[480, 800]} sizes="(max-width: 40rem) 100vw, (max-width: 64rem) 50vw, 24rem" />}
+                  <p class="links">
+                    <a href={`/tools/${tool.slug}/`}>
+                      {tool.install.length ? 'Features and install' : 'Features'}
+                      <span class="visually-hidden"> for {tool.name}</span>
+                      <Icon name="arrow-right" />
+                    </a>
+                    {tool.repo && (
+                      <a class="quiet" href={`https://github.com/${tool.repo}`}>
+                        GitHub<span class="visually-hidden">: {tool.name}</span> <Icon name="external" size={14} />
+                      </a>
+                    )}
+                  </p>
+                </div>
+                {shot && i === 0 && (
+                  <Image class="shot" src={shot.src} alt={shot.alt} widths={[480, 800, 1100]} sizes="(max-width: 64rem) 100vw, 40rem" />
+                )}
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="band tint" aria-labelledby="how-h">
+    <div class="wrap">
+      <p class="eyebrow">How they work</p>
+      <h2 id="how-h">Careful by design.</h2>
+      <div class="trio">
+        {
+          principles.map((p) => (
+            <div class="principle">
+              <Icon name={p.icon} size={28} />
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+              <ul class="chips">
+                {p.tools.map((t) => (
+                  <li>
+                    <a href={`/tools/${t.slug}/`}>{t.name}</a>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div class="entry">
-              <div class="title">
-                {tool.icon && <Image src={tool.icon} alt="" width={48} height={48} class="icon" />}
-                <h2>
-                  <a href={`/tools/${tool.slug}/`}>{tool.name}</a>
-                </h2>
-              </div>
-              <p class="pitch">{tool.pitch}</p>
-              <p class="meta">
-                {release ? <span>Version {release.tag.replace(/^v/, '')}</span> : null}
-                {tool.availability ? <span>Not public yet</span> : null}
-              </p>
-              <p class="summary">{tool.summary}</p>
-              <p class="more">
-                <a href={`/tools/${tool.slug}/`}>
-                  {tool.shots.length ? 'Screenshots, features and install' : 'Features and install'}
-                  <span class="visually-hidden"> for {tool.name}</span>
-                </a>
-              </p>
-            </div>
-          </article>
-        );
-      })
-    }
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="homelab" class="band" aria-labelledby="lab-h">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">The homelab</p>
+        <h2 id="lab-h">Learning by building.</h2>
+        <p>
+          The Helix Tech homelab is where networking, self-hosted services and home automation come together, and where the
+          tools are put to work.
+        </p>
+      </div>
+      <ul class="lab">
+        {
+          homelab.map((row) => (
+            <li>
+              <Icon name={row.icon} size={24} />
+              <span class="lab-name">{row.name}</span>
+              <span class="lab-stack">{row.stack}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap open" aria-labelledby="open-h">
+    <div>
+      <p class="eyebrow">Built in the open</p>
+      <h2 id="open-h">Follow along as it grows.</h2>
+      <p>Explore the code and see what’s taking shape.</p>
+    </div>
+    <a class="button primary" href="https://github.com/Commanderx-code">Find Helix Tech on GitHub <Icon name="external" /></a>
   </section>
 </Base>
 
 <style>
-  .intro {
-    padding-block: clamp(3rem, 10vw, 7rem) clamp(2rem, 6vw, 4rem);
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding-block: clamp(3rem, 8vw, 7rem) clamp(3rem, 6vw, 5.5rem);
   }
-  .intro h1 {
-    max-width: 18ch;
-  }
-  .intro p {
-    font-size: var(--step-1);
-    max-width: 52ch;
-    color: var(--text);
-  }
-
-  .helix {
-    display: grid;
-  }
-  .turn {
-    --spine: clamp(7rem, 14vw, 10rem);
-    --gap: clamp(1rem, 3vw, 2.5rem);
-    display: grid;
-    grid-template-columns: 1fr var(--spine) 1fr;
-    column-gap: var(--gap);
-    min-height: 21rem;
-  }
-  .spine {
-    grid-column: 2;
-    grid-row: 1;
-    position: relative;
-  }
-  .node {
-    position: absolute;
-    top: 50%;
-    width: 0.9rem;
-    height: 0.9rem;
-    margin-top: -0.45rem;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 4px var(--ink);
-    left: calc(50% - 0.45rem);
-  }
-  .node::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    height: 2px;
-    /* From the node to the edge of the text column */
-    width: calc(var(--spine) / 2 + var(--gap) - 1rem);
-    background: var(--accent);
-  }
-  .left .node::after { right: 100%; }
-  .right .node::after { left: 100%; }
-
-  .entry {
-    grid-row: 1;
-    align-self: center;
-    padding-block: 2rem;
+  .pitch {
+    flex: 1 1 32rem;
     min-width: 0;
   }
-  .left .entry { grid-column: 1; }
-  .right .entry { grid-column: 3; }
+  .art {
+    flex: 1 1 18rem;
+    min-width: 0;
+  }
+  .hero h1 {
+    margin-bottom: 1.5rem;
+  }
+  .lit {
+    background: linear-gradient(90deg, var(--mint), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lede {
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+    max-width: 34em;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-block: 1.5rem;
+  }
+  .try {
+    max-width: 40rem;
+  }
+  .try p {
+    margin-bottom: 0.5rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .try :global(pre) {
+    white-space: pre;
+  }
 
-  .title {
+  .band {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+  .tint {
+    background: var(--deep);
+  }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .section-head h2 {
+    margin: 0;
+  }
+  .section-head > p {
+    max-width: 26em;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  /* Six columns: the first tool takes four, the rest two. Fewer as the screen narrows. */
+  .bento {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .card {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.25rem, 2.4vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--deep);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+  }
+  .card.featured {
+    grid-column: span 4;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.75rem;
+  }
+  .card-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+  .featured .card-text {
+    flex: 1 1 16rem;
+  }
+  .card-top {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    margin-bottom: 0.6rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.375rem;
   }
-  .title h2 {
+  .card .icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 10px;
+  }
+  .category {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card h3 {
     margin: 0;
-    font-size: var(--step-2);
+    font-size: 1.625rem;
   }
-  .title a {
+  .featured h3 {
+    font-size: 1.875rem;
+  }
+  .card h3 a {
     color: var(--chrome);
     text-decoration: none;
   }
-  .title a:hover {
-    color: var(--accent);
+  .card h3 a:hover {
+    color: var(--mint);
   }
-  .icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 12px;
+  .card p {
+    margin: 0;
+  }
+  .private {
+    color: var(--violet);
+  }
+  .highlights {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+  }
+  .highlights li {
+    display: flex;
+    gap: 0.625rem;
+  }
+  .highlights :global(svg) {
     flex: none;
+    margin-top: 0.2rem;
+    color: var(--mint);
   }
-  .pitch {
-    font-size: var(--step-1);
-    line-height: 1.4;
+  .card .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin-top: auto;
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .links a.quiet {
+    color: var(--text);
+  }
+  .links a:hover {
     color: var(--chrome);
-    margin-bottom: 0.4rem;
   }
-  .meta {
-    color: var(--accent);
-    font-size: var(--step--1);
-    margin-bottom: 0.75rem;
+  .card :global(.shot) {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
   }
-  .meta:empty {
-    display: none;
+  .featured :global(.shot) {
+    flex: 1.4 1 20rem;
+    min-width: 0;
+    width: auto;
   }
-  .summary {
-    margin-bottom: 0;
+  @media (max-width: 64rem) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .card {
+      grid-column: span 1;
+    }
+    .card.featured {
+      grid-column: span 2;
+    }
   }
-  .more {
-    margin: 1rem 0 0;
-  }
-  .more a {
-    color: var(--accent);
+  @media (max-width: 40rem) {
+    .bento {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .card,
+    .card.featured {
+      grid-column: auto;
+    }
   }
 
-  @media (max-width: 48rem) {
-    .turn,
-    .turn.right {
-      --spine: 4.5rem;
-      --gap: 1.25rem;
-      grid-template-columns: var(--spine) 1fr;
-      min-height: 19rem;
-    }
-    .spine {
-      grid-column: 1;
-    }
-    .left .entry,
-    .right .entry {
-      grid-column: 2;
-    }
-    .left .node::after {
-      right: auto;
-      left: 100%;
-    }
-    .title h2 {
-      font-size: var(--step-1);
-    }
+  .trio {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+  }
+  .principle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink);
+  }
+  .principle > :global(svg) {
+    color: var(--mint);
+  }
+  .principle h3 {
+    margin: 0;
+    font-family: var(--body);
+    font-size: var(--step-1);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .principle p {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .principle .chips {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  .principle .chips a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .principle .chips a:hover {
+    color: var(--chrome);
+  }
+
+  .split {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+  .split > div {
+    flex: 1 1 24rem;
+    min-width: 0;
+  }
+  .lab {
+    flex: 1 1 27rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  }
+  .lab li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.375rem;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--deep);
+  }
+  .lab :global(svg) {
+    color: var(--violet);
+  }
+  .lab-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--chrome);
+  }
+  .lab-stack {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .open {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem;
+    margin-bottom: clamp(4rem, 8vw, 7rem);
+    padding: clamp(1.75rem, 5vw, 4rem);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    background: var(--deep);
+  }
+  .open > div {
+    flex: 1 1 24rem;
+  }
+  .open h2 {
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
+  }
+  .open p:last-child {
+    margin: 0;
   }
 </style>
