@@ -297,8 +297,18 @@ const next = tools[(index + 1) % tools.length];
     border-radius: 12px;
     background: var(--deep);
   }
-  .thumbs a:hover {
-    border-color: var(--accent);
+  .thumbs a {
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  @media (hover: hover) {
+    .thumbs a:hover {
+      border-color: var(--accent);
+      transform: scale(1.04);
+    }
+  }
+  .thumbs a:active {
+    transform: scale(0.97);
+    transition-duration: 0.08s;
   }
 
   .band {
@@ -409,9 +419,19 @@ const next = tools[(index + 1) % tools.length];
     color: var(--text);
     text-decoration: none;
   }
-  .next:hover {
-    border-color: var(--line-strong);
-    color: var(--text);
+  .next {
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  @media (hover: hover) {
+    .next:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      transform: scale(1.015);
+    }
+  }
+  .next:active {
+    transform: scale(0.985);
+    transition-duration: 0.08s;
   }
   .next > :global(svg) {
     color: var(--accent);
