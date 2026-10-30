@@ -105,7 +105,14 @@ const jsonLd = {
         <section class="shots wrap" aria-label="Screenshots">
           <figure class="lead" data-reveal="zoom">
             <a href={lead.src.src}>
-              <Image src={lead.src} alt={lead.alt} widths={[640, 1100, 1600]} sizes="(max-width: 75rem) 100vw, 75rem" />
+              <Image
+                src={lead.src}
+                alt={lead.alt}
+                widths={[640, 1100, 1600]}
+                sizes="(max-width: 75rem) 100vw, 75rem"
+                loading="eager"
+                fetchpriority="high"
+              />
             </a>
             <figcaption>{lead.alt}</figcaption>
           </figure>
