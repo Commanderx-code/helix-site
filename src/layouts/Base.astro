@@ -22,8 +22,10 @@ interface Props {
   image?: string;
   /** Structured data for search engines, as a schema.org object */
   jsonLd?: Record<string, unknown>;
+  /** No header or footer: the page stands alone, as the coming-soon and maintenance pages do */
+  bare?: boolean;
 }
-const { title, description, tool, noindex = false, image = '/og/home.png', jsonLd } = Astro.props;
+const { title, description, tool, noindex = false, image = '/og/home.png', jsonLd, bare = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // The copyright runs from the first year to the year of the build
 const year = new Date().getFullYear();
@@ -72,6 +74,7 @@ const gallery = (
   </head>
   <body data-tool={tool}>
     <a class="skip" href="#main">Skip to content</a>
+    {!bare && (
     <header class="site-head" data-header>
       <div class="wrap bar">
         <a class="wordmark" href="/" aria-label="Helix Tech home">
@@ -92,9 +95,11 @@ const gallery = (
         </nav>
       </div>
     </header>
+    )}
     <main id="main">
       <slot />
     </main>
+    {!bare && (
     <footer class="site-foot">
       <div class="wrap">
         <section class="cta" aria-labelledby="cta-h" data-reveal>
@@ -174,6 +179,7 @@ const gallery = (
         </div>
       </div>
     </footer>
+    )}
     <a class="to-top" href="#top" aria-label="Back to top" data-top>
       <Icon name="arrow-up" size={20} />
     </a>

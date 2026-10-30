@@ -1,0 +1,122 @@
+---
+// The frame of a page that stands in for the site: text on the left, the
+// helix in its orbit on the right, nothing else. The last words of the
+// title are lit.
+import { Image } from 'astro:assets';
+import Helix from './Helix.astro';
+import logoOnDark from '../assets/brand/logo-on-dark.png';
+import logoOnLight from '../assets/brand/logo-on-light.png';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  /** How many words at the end of the title are lit */
+  lit?: number;
+}
+const { eyebrow, title, lit = 1 } = Astro.props;
+const words = title.split(' ');
+const plain = words.slice(0, -lit).join(' ');
+const bright = words.slice(-lit).join(' ');
+---
+<div class="standby">
+  <div class="text">
+    <a class="wordmark" href="/" aria-label="Helix Tech home" data-reveal>
+      <Image class="on-dark" src={logoOnDark} alt="" height={40} densities={[1, 2]} loading="eager" />
+      <Image class="on-light" src={logoOnLight} alt="" height={40} densities={[1, 2]} loading="eager" />
+    </a>
+    <div class="copy">
+      <p class="eyebrow" data-reveal>{eyebrow}</p>
+      <h1 data-reveal>{plain} <span class="lit">{bright}</span></h1>
+      <slot />
+    </div>
+    <p class="foot" data-reveal>© Helix Tech LLC</p>
+  </div>
+  <div class="scene" data-dark aria-hidden="true">
+    <div class="orbit-wrap">
+      <Helix />
+    </div>
+  </div>
+</div>
+
+<style>
+  .standby {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+  @media (max-width: 56rem) {
+    .standby {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto minmax(16rem, 38vh);
+    }
+    .standby .scene {
+      order: -1;
+    }
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.25rem, 6vw, 6rem);
+  }
+  .wordmark {
+    display: inline-flex;
+    width: fit-content;
+  }
+  .wordmark :global(img) {
+    height: 2.5rem;
+    width: auto;
+  }
+  .copy {
+    margin-block: auto;
+    max-width: 34rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+    margin-bottom: 1rem;
+  }
+  .lit {
+    background: linear-gradient(90deg, var(--mint), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .foot {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  /* The right half: the orbit on a mint-to-ink field, with a dotted grid */
+  .scene {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(70% 60% at 70% 40%, color-mix(in srgb, var(--mint) 45%, transparent), transparent 70%),
+      radial-gradient(50% 50% at 20% 90%, color-mix(in srgb, var(--violet) 35%, transparent), transparent 70%),
+      linear-gradient(160deg, #0b1a20, #0b0d12);
+  }
+  .scene::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(color-mix(in srgb, var(--mint) 45%, transparent) 1px, transparent 1.5px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(60% 60% at 60% 50%, #000, transparent);
+    opacity: 0.6;
+  }
+  .orbit-wrap {
+    position: relative;
+    width: min(70%, 32rem);
+    animation: hover 9s ease-in-out infinite;
+  }
+  .orbit-wrap :global(.orbit) {
+    max-width: none;
+  }
+  @keyframes hover {
+    50% { translate: 0 -1rem; }
+  }
+</style>
