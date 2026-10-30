@@ -1,0 +1,105 @@
+---
+// Days, hours, minutes and seconds until an instant. The instant is either
+// known at build time (`until`) or read when the page opens from a text
+// file on the server (`from`), as the maintenance page does; in that case
+// the boxes stay hidden until the file has been read and holds a date.
+// scripts/countdown.ts runs it.
+interface Props {
+  until?: string;
+  from?: string;
+  /** Shown once the instant has passed */
+  after?: string;
+  /** A line above the boxes, shown with them */
+  heading?: string;
+}
+const { until, from, after = 'It’s here.', heading } = Astro.props;
+const known = until && new Date(until).toLocaleString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+  timeZone: 'UTC',
+  timeZoneName: 'short',
+});
+const units = [
+  ['days', 'Days'],
+  ['hours', 'Hours'],
+  ['minutes', 'Min'],
+  ['seconds', 'Sec'],
+] as const;
+---
+<div class="countdown" data-countdown data-until={until} data-until-from={from} hidden={!until}>
+  {heading && <p class="heading">{heading}</p>}
+  <ul aria-label="Time left">
+    {
+      units.map(([unit, label]) => (
+        <li>
+          <span class="num" data-unit={unit}>
+            00
+          </span>
+          <span class="unit">{label}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="when">
+    <time data-when datetime={until}>{known}</time>
+  </p>
+  <p class="arrived" data-arrived hidden>{after} <slot /></p>
+</div>
+
+<style>
+  .countdown {
+    margin-bottom: 2rem;
+  }
+  .heading {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+    color: var(--chrome);
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    max-width: 30rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--deep);
+  }
+  .num {
+    font-family: var(--display);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--chrome);
+  }
+  .unit {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .when {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .when:empty {
+    display: none;
+  }
+  .arrived {
+    margin: 0;
+    font-size: var(--step-1);
+    color: var(--chrome);
+  }
+</style>

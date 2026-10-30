@@ -5,6 +5,7 @@
 import Base from '../layouts/Base.astro';
 import Standby from '../components/Standby.astro';
 import Icon from '../components/Icon.astro';
+import Countdown from '../components/Countdown.astro';
 import { tools } from '../data/tools';
 
 const onGitHub = tools.filter((t) => t.repo);
@@ -19,6 +20,11 @@ const onGitHub = tools.filter((t) => t.repo);
     <p class="lede" data-reveal>
       The site is being worked on and will be back shortly. Nothing is wrong on your side, and nothing you have is affected.
     </p>
+    <div data-reveal>
+      <Countdown heading="Expected back in" from="/maintenance/until" after="Any moment now.">
+        <a href="/">Try again</a>
+      </Countdown>
+    </div>
     <div class="meanwhile" data-reveal>
       <p class="heading">Meanwhile, the tools are where they always are</p>
       <ul>
@@ -39,6 +45,10 @@ const onGitHub = tools.filter((t) => t.repo);
     </p>
   </Standby>
 </Base>
+
+<script>
+  import '../scripts/countdown';
+</script>
 
 <style>
   .lede {

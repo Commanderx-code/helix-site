@@ -45,10 +45,18 @@ instant it counts down to, are in `src/data/soon.ts`; without a date it
 says so instead of counting.
 
 `/maintenance/` is what the server shows while the site is being worked on.
-The switch is a file on the VPS: `sudo touch /srv/helix/MAINTENANCE` makes
-Caddy answer every page with it and a 503, and `sudo rm` of the same file
-brings the site back, with no reload either way. The Caddyfile block that
-does this lives with the server's config in the homelab repository.
+The switch is a file on the VPS: while `/srv/helix/MAINTENANCE` exists,
+Caddy answers every page with it and a 503. Put a date in the file and the
+page counts down to it:
+
+```sh
+echo 2026-11-01T03:00:00Z | sudo tee /srv/helix/MAINTENANCE   # on, back at that time
+sudo touch /srv/helix/MAINTENANCE                              # on, no time given
+sudo rm /srv/helix/MAINTENANCE                                 # off
+```
+
+No reload either way. The Caddyfile block that does this lives with the
+server's config in the homelab repository.
 
 ## Checks
 

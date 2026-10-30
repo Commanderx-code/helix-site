@@ -4,25 +4,9 @@
 import Base from '../layouts/Base.astro';
 import Standby from '../components/Standby.astro';
 import Icon from '../components/Icon.astro';
+import Countdown from '../components/Countdown.astro';
 import { soon } from '../data/soon';
 
-const when =
-  soon.date &&
-  new Date(soon.date).toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'UTC',
-    timeZoneName: 'short',
-  });
-const units = [
-  ['days', 'Days'],
-  ['hours', 'Hours'],
-  ['minutes', 'Min'],
-  ['seconds', 'Sec'],
-] as const;
 ---
 <Base title={`${soon.eyebrow}: Helix Tech`} description={soon.text} noindex bare>
   <Standby eyebrow={soon.eyebrow} title={soon.title}>
@@ -30,22 +14,9 @@ const units = [
     {
       soon.date ? (
         <div data-reveal>
-          <ul class="count" data-countdown data-until={soon.date} aria-label={`Time left until ${when}`}>
-            {units.map(([unit, label]) => (
-              <li>
-                <span class="num" data-unit={unit}>
-                  00
-                </span>
-                <span class="unit">{label}</span>
-              </li>
-            ))}
-          </ul>
-          <p class="arrived" data-arrived hidden>
-            It's here. <a href="/news/">See what's new</a>
-          </p>
-          <p class="when">
-            <time datetime={soon.date}>{when}</time>
-          </p>
+          <Countdown until={soon.date}>
+            <a href="/news/">See what’s new</a>
+          </Countdown>
         </div>
       ) : (
         <p class="when" data-reveal>
@@ -74,46 +45,10 @@ const units = [
     font-size: var(--step-1);
     color: var(--muted);
   }
-  .count {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.75rem;
-    max-width: 30rem;
-    margin: 0 0 0.75rem;
-    padding: 0;
-    list-style: none;
-  }
-  .count li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 1rem 0.5rem;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--deep);
-  }
-  .num {
-    font-family: var(--display);
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-    font-weight: 800;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-    color: var(--chrome);
-  }
-  .unit {
-    font-size: var(--step--1);
-    color: var(--muted);
-  }
-  .when,
-  .arrived {
+  .when {
     margin: 0 0 2rem;
     font-size: var(--step--1);
     color: var(--muted);
-  }
-  .arrived {
-    font-size: var(--step-1);
-    color: var(--chrome);
   }
   .heading {
     margin: 0 0 0.75rem;
