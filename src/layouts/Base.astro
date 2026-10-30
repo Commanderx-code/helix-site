@@ -1,0 +1,86 @@
+---
+import '../styles/global.css';
+import '../styles/tools.css';
+
+interface Props {
+  title: string;
+  description: string;
+  tool?: string;
+}
+const { title, description, tool } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0a0c24" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body data-tool={tool}>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-head wrap">
+      <a class="wordmark" href="/" aria-label="Helix home">HELIX</a>
+      <nav aria-label="Site">
+        <a href="/#tools">Tools</a>
+        <a href="https://github.com/Commanderx-code">GitHub</a>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-foot wrap">
+      <p>Helix is built by Matt (<a href="https://github.com/Commanderx-code">Commanderx-code</a>). The public tools are open source under the MIT license.</p>
+    </footer>
+    <script>
+      import '../scripts/copy.ts';
+    </script>
+  </body>
+</html>
+
+<style>
+  .site-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.25rem;
+  }
+  .wordmark {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.375rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    background: var(--metal);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+  nav a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--cyan);
+  }
+  .site-foot {
+    border-top: 1px solid var(--line);
+    margin-top: 6rem;
+    padding-block: 2rem 3rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

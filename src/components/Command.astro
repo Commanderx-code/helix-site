@@ -1,0 +1,45 @@
+---
+interface Props {
+  code: string;
+  label?: string;
+}
+const { code, label = 'Command' } = Astro.props;
+---
+<div class="command">
+  <pre aria-label={label}><code>{code}</code></pre>
+  <button type="button" data-copy hidden>Copy</button>
+</div>
+
+<style>
+  .command {
+    position: relative;
+    background: var(--deep);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent, var(--cyan));
+    border-radius: 6px;
+  }
+  pre {
+    margin: 0;
+    padding: 0.9rem 5rem 0.9rem 1rem;
+    overflow-x: auto;
+    line-height: 1.55;
+    color: var(--chrome);
+  }
+  button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font: inherit;
+    font-size: var(--step--1);
+    color: var(--text);
+    background: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.2rem 0.6rem;
+    cursor: pointer;
+  }
+  button:hover {
+    border-color: var(--accent, var(--cyan));
+    color: var(--chrome);
+  }
+</style>

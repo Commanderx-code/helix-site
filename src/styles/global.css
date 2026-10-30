@@ -1,0 +1,109 @@
+@import '@fontsource-variable/unbounded';
+@import '@fontsource/atkinson-hyperlegible-next/400.css';
+@import '@fontsource/atkinson-hyperlegible-next/700.css';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* Colors from the Helix logo: navy tile, cyan and violet strands, chrome letters */
+:root {
+  color-scheme: dark;
+  --ink: #0a0c24;
+  --deep: #141840;
+  --line: #262c63;
+  --cyan: #3bd2ff;
+  --violet: #c04cf0;
+  --chrome: #e6e8f4;
+  --text: #c3c6dc;
+  --muted: #8d91b3;
+  --metal: linear-gradient(180deg, #ffffff 0%, #d4d6e6 55%, #9ea2bd 100%);
+
+  --display: 'Unbounded Variable', 'Unbounded', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3125rem;
+  --step-2: 1.75rem;
+  --step-3: 2.5rem;
+  --step-4: clamp(2.5rem, 6vw, 4.25rem);
+
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --measure: 66ch;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    color-scheme: light;
+    --ink: #f3f4fb;
+    --deep: #ffffff;
+    --line: #d6d9ee;
+    --cyan: #0779a6;
+    --violet: #8e2fc0;
+    --chrome: #10133a;
+    --text: #2a2e57;
+    --muted: #5b6089;
+    --metal: linear-gradient(180deg, #2a3570 0%, #10133a 100%);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--display);
+  color: var(--chrome);
+  line-height: 1.15;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+h1 { font-size: var(--step-4); font-weight: 750; }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-1); }
+
+p { margin: 0 0 1em; max-width: var(--measure); }
+
+a { color: var(--cyan); text-underline-offset: 0.2em; }
+a:hover { color: var(--violet); }
+
+:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+code, pre, kbd { font-family: var(--mono); font-size: 0.9em; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+.wrap {
+  width: min(72rem, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+}
+.skip:focus { left: var(--gutter); top: 0.75rem; background: var(--deep); padding: 0.5rem 0.75rem; z-index: 10; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
