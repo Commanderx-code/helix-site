@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/tools.css';
 import { Image } from 'astro:assets';
 import Icon from '../components/Icon.astro';
+import Helix from '../components/Helix.astro';
 import logoOnDark from '../assets/brand/logo-on-dark.png';
 import logoOnLight from '../assets/brand/logo-on-light.png';
 import { tools } from '../data/tools';
@@ -17,6 +18,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // The copyright runs from the first year to the year of the build
 const year = new Date().getFullYear();
 const years = year > 2026 ? `2026–${year}` : '2026';
+
+// A few screenshots in the footer, each opening its tool
+const gallery = (
+  [
+    ['toolbox', 4],
+    ['boot', 1],
+    ['touchdown', 1],
+    ['boot', 2],
+  ] as const
+).flatMap(([slug, n]) => {
+  const tool = tools.find((t) => t.slug === slug);
+  const shot = tool?.shots[n];
+  return tool && shot ? [{ tool, shot }] : [];
+});
 ---
 <!doctype html>
 <html lang="en">
@@ -35,7 +50,7 @@ const years = year > 2026 ? `2026–${year}` : '2026';
   </head>
   <body data-tool={tool}>
     <a class="skip" href="#main">Skip to content</a>
-    <header class="site-head">
+    <header class="site-head" data-header>
       <div class="wrap bar">
         <a class="wordmark" href="/" aria-label="Helix Tech home">
           <Image class="on-dark" src={logoOnDark} alt="" height={40} densities={[1, 2]} loading="eager" />
@@ -44,6 +59,7 @@ const years = year > 2026 ? `2026–${year}` : '2026';
         <nav aria-label="Site">
           <a href="/#tools">Tools</a>
           <a href="/#homelab">Homelab</a>
+          <a href="/#faq">FAQ</a>
           <a href="https://github.com/Commanderx-code">GitHub <Icon name="external" size={14} /></a>
         </nav>
       </div>
@@ -53,39 +69,99 @@ const years = year > 2026 ? `2026–${year}` : '2026';
     </main>
     <footer class="site-foot">
       <div class="wrap">
-        <div class="columns">
-          <div class="about">
-            <p class="name">HELIX TECH</p>
-            <p>Tools for your machines, and the homelab behind them.</p>
+        <section class="cta" aria-labelledby="cta-h" data-reveal>
+          <div class="cta-text">
+            <p class="eyebrow">Built in the open</p>
+            <h2 id="cta-h">Follow along as it grows.</h2>
+            <p>New releases, new tools and what’s taking shape, all on GitHub.</p>
           </div>
-          <nav aria-label="Tools">
+          <a class="button primary" href="https://github.com/Commanderx-code">
+            Follow along on GitHub <Icon name="external" />
+          </a>
+          <div class="cta-mark">
+            <Helix />
+          </div>
+        </section>
+
+        <div class="grid">
+          <div class="brand" data-reveal>
+            <Image class="on-dark" src={logoOnDark} alt="Helix Tech" height={36} densities={[1, 2]} />
+            <Image class="on-light" src={logoOnLight} alt="Helix Tech" height={36} densities={[1, 2]} />
+            <p>Tools for setting up, rescuing and enjoying your machines, and the homelab behind them.</p>
+            <p>Built by Helix Tech LLC.</p>
+            <a class="brand-link" href="https://github.com/Commanderx-code">
+              <Icon name="code" size={18} /> github.com/Commanderx-code
+            </a>
+          </div>
+          <nav aria-label="Tools" data-reveal>
             <p class="heading">Tools</p>
-            {tools.map((t) => <a href={`/tools/${t.slug}/`}>{t.name}</a>)}
+            {
+              tools.map((t) => (
+                <a href={`/tools/${t.slug}/`}>
+                  <Icon name="arrow-right" size={14} />
+                  {t.name}
+                </a>
+              ))
+            }
           </nav>
-          <nav aria-label="More">
+          <nav aria-label="More" data-reveal>
             <p class="heading">More</p>
-            <a href="/#homelab">Homelab</a>
-            <a href="https://github.com/Commanderx-code">GitHub</a>
+            <a href="/#homelab"><Icon name="arrow-right" size={14} />Homelab</a>
+            <a href="/#faq"><Icon name="arrow-right" size={14} />FAQ</a>
+            <a href="https://github.com/Commanderx-code"><Icon name="arrow-right" size={14} />GitHub</a>
           </nav>
+          <div class="shots" data-reveal>
+            <p class="heading">From the tools</p>
+            <ul>
+              {
+                gallery.map(({ tool, shot }) => (
+                  <li>
+                    <a href={`/tools/${tool.slug}/`} aria-label={tool.name}>
+                      <Image src={shot.src} alt="" widths={[240, 400]} sizes="8rem" />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
         </div>
+
         <div class="legal">
-          <p>
-            Built by Helix Tech LLC. The public tools are open source under the MIT license, on{' '}
-            <a href="https://github.com/Commanderx-code">GitHub</a>.
-          </p>
-          <p>© {years} Helix Tech LLC. Helix Tech™ is a trademark of Helix Tech LLC.</p>
+          <div>
+            <p>© {years} Helix Tech LLC. Helix Tech™ is a trademark of Helix Tech LLC.</p>
+            <p>The public tools are open source under the MIT license.</p>
+          </div>
+          <div class="legal-links">
+            <a class="round" href="https://github.com/Commanderx-code" aria-label="Helix Tech on GitHub">
+              <Icon name="code" size={18} />
+            </a>
+            <a class="round" href="#main" aria-label="Back to top">
+              <Icon name="arrow-up" size={18} />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
     <script>
       import '../scripts/copy.ts';
+      import '../scripts/motion.ts';
     </script>
   </body>
 </html>
 
 <style>
   .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     border-bottom: 1px solid var(--line);
+    background: var(--ink);
+    transition: background-color 0.3s ease;
+  }
+  /* Once the page scrolls, the header turns frosted and settles lower */
+  .site-head[data-scrolled] {
+    background: color-mix(in srgb, var(--ink) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
   }
   .bar {
     display: flex;
@@ -94,6 +170,10 @@ const years = year > 2026 ? `2026–${year}` : '2026';
     justify-content: space-between;
     gap: 0.5rem;
     padding-block: 0.625rem;
+    transition: padding 0.3s ease;
+  }
+  [data-scrolled] .bar {
+    padding-block: 0.25rem;
   }
   .wordmark {
     display: inline-flex;
@@ -103,16 +183,20 @@ const years = year > 2026 ? `2026–${year}` : '2026';
   .wordmark :global(img) {
     width: auto;
     height: 2.5rem;
+    transition: height 0.3s ease;
+  }
+  [data-scrolled] .wordmark :global(img) {
+    height: 2.125rem;
   }
   /* The lettering is pale on dark pages and dark on light ones */
-  .wordmark :global(.on-light) {
+  :global(.on-light) {
     display: none;
   }
   @media (prefers-color-scheme: light) {
-    :root:not([data-theme='dark']) .wordmark :global(.on-dark) {
+    :root:not([data-theme='dark']) :global(.on-dark) {
       display: none;
     }
-    :root:not([data-theme='dark']) .wordmark :global(.on-light) {
+    :root:not([data-theme='dark']) :global(.on-light) {
       display: block;
     }
   }
@@ -135,61 +219,158 @@ const years = year > 2026 ? `2026–${year}` : '2026';
     color: var(--chrome);
     background: var(--raised);
   }
-  @media (max-width: 26rem) {
+  @media (max-width: 30rem) {
     .bar nav a {
-      padding: 0 0.625rem;
+      padding: 0 0.5rem;
     }
-    .wordmark :global(img) {
+    .wordmark :global(img),
+    [data-scrolled] .wordmark :global(img) {
       height: 1.75rem;
     }
   }
 
   .site-foot {
     border-top: 1px solid var(--line);
-    padding-block: 3rem 2rem;
+    padding-block: clamp(3rem, 7vw, 5rem) 1.5rem;
+    background: var(--deep);
     font-size: 0.9375rem;
   }
-  .columns {
+  .cta {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem 4rem;
+    align-items: center;
+    gap: 1.5rem 2rem;
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    border-bottom: 1px solid var(--line);
   }
-  .about {
-    flex: 1 1 16rem;
+  .cta-text {
+    flex: 1 1 24rem;
   }
-  .about p {
-    color: var(--muted);
-  }
-  .about .name {
+  .cta h2 {
     margin-bottom: 0.5rem;
-    font-family: var(--mono);
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    color: var(--chrome);
+    font-size: clamp(2rem, 4.4vw, 3.25rem);
   }
-  .site-foot nav {
+  .cta p:last-child {
+    margin: 0;
+  }
+  .cta-mark {
+    flex: none;
+    width: 8.5rem;
+  }
+  @media (max-width: 40rem) {
+    .cta-mark {
+      display: none;
+    }
+  }
+
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+    grid-template-columns: minmax(16rem, 1.4fr) repeat(2, minmax(9rem, 0.8fr)) minmax(14rem, 1.2fr);
+    padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  @media (max-width: 64rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 36rem) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink);
+  }
+  .brand :global(img) {
+    width: auto;
+    height: 2.25rem;
+    margin-bottom: 0.25rem;
+  }
+  .brand p {
+    margin: 0;
+    color: var(--text);
+  }
+  .brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    color: var(--chrome);
+    text-decoration: none;
+  }
+  .brand-link :global(svg) {
+    color: var(--mint);
+  }
+  .brand-link:hover {
+    color: var(--mint);
+  }
+  .heading {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-strong);
+    font-family: var(--display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--mint);
+  }
+  .grid nav {
     display: flex;
     flex-direction: column;
   }
-  .site-foot .heading {
-    margin-bottom: 0.375rem;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .site-foot nav a {
-    padding-block: 0.25rem;
+  .grid nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
     color: var(--text);
     text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
   }
-  .site-foot nav a:hover {
+  .grid nav a :global(svg) {
+    color: var(--mint);
+  }
+  .grid nav a:hover {
     color: var(--chrome);
+    transform: translateX(3px);
   }
+  .shots ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .shots a {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .shots :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top left;
+    transition: transform 0.4s ease;
+  }
+  .shots a:hover :global(img) {
+    transform: scale(1.06);
+  }
+
   .legal {
-    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--line);
     font-size: var(--step--1);
@@ -197,6 +378,24 @@ const years = year > 2026 ? `2026–${year}` : '2026';
   }
   .legal p {
     max-width: none;
-    margin-bottom: 0.25rem;
+    margin: 0;
+  }
+  .legal-links {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .round {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--text);
+  }
+  .round:hover {
+    color: var(--on-accent);
+    background: var(--mint);
+    border-color: var(--mint);
   }
 </style>

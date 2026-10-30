@@ -17,6 +17,7 @@ const slides = tools
         <article
           class="slide"
           data-tool={tool.slug}
+          data-cursor="Open"
           aria-roledescription="slide"
           aria-label={`${i + 1} of ${slides.length}: ${tool.name}`}
         >
@@ -99,6 +100,17 @@ const slides = tools
   .shot {
     display: block;
     padding: 0.625rem 0.625rem 0;
+  }
+  /* Side by side where there is room: the screenshot, then its caption */
+  @media (min-width: 48rem) {
+    .slide {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(15rem, 1fr);
+      align-items: center;
+    }
+    .shot {
+      padding: 0.625rem;
+    }
   }
   .shot :global(img) {
     width: 100%;

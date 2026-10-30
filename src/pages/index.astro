@@ -1,16 +1,47 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Helix from '../components/Helix.astro';
 import Showcase from '../components/Showcase.astro';
 import Command from '../components/Command.astro';
 import Icon from '../components/Icon.astro';
-import { tools, latestRelease } from '../data/tools';
-const releases = await Promise.all(tools.map((t) => latestRelease(t.repo)));
+import { tools, latestRelease, repoStats } from '../data/tools';
+import { testimonials } from '../data/testimonials';
+import { faq } from '../data/faq';
+const [releases, stats] = await Promise.all([
+  Promise.all(tools.map((t) => latestRelease(t.repo))),
+  Promise.all(tools.map((t) => repoStats(t.repo))),
+]);
 
 // The command in the hero is the featured tool's first install entry
 const [featured] = tools;
 const tryIt = featured.install.find((step) => step.code);
+
+// One word for each tool, typed in turn after "Build. Configure."
+const words = ['Optimize.', 'Rescue.', 'Document.', 'Unwind.', 'Score.'];
+
+// Screenshots floating around the headline on wide screens
+const shot = (slug: string, n: number) => tools.find((t) => t.slug === slug)?.shots[n];
+const floating = [
+  { place: 'top-left', depth: 0.12, shot: shot('boot', 1) },
+  { place: 'bottom-left', depth: 0.22, shot: shot('toolbox', 1) },
+  { place: 'top-right', depth: 0.18, shot: shot('touchdown', 2) },
+  { place: 'bottom-right', depth: 0.1, shot: shot('boot', 2) },
+].filter((f) => f.shot);
+
+// Numbers read from GitHub at build time; one that could not be read is left out
+const known = stats.filter((s) => s !== undefined);
+const sum = (key: 'stars' | 'releases' | 'downloads') => known.reduce((n, s) => n + s[key], 0);
+const figures: { icon: 'download' | 'star' | 'tag' | 'grid'; value: number; label: string }[] = [
+  ...(known.length
+    ? [
+        { icon: 'download' as const, value: sum('downloads'), label: 'Release downloads' },
+        { icon: 'star' as const, value: sum('stars'), label: 'Stars on GitHub' },
+        { icon: 'tag' as const, value: sum('releases'), label: 'Releases shipped' },
+      ]
+    : []),
+  { icon: 'grid', value: tools.length, label: 'Tools, one home' },
+];
+const format = new Intl.NumberFormat('en-US');
 
 const named = (...slugs: string[]) => tools.filter((t) => slugs.includes(t.slug));
 const principles = [
@@ -46,34 +77,71 @@ const homelab = [
   description="Helix Toolbox, Helix Boot, Config Bible, webOS Launcher and Touchdown: open tools for setting up, rescuing and enjoying your machines."
 >
   <section class="hero wrap">
+    {
+      floating.map((f) => (
+        <figure class:list={['float', f.place]} data-reveal aria-hidden="true">
+          <div class="drift" data-depth={f.depth}>
+            <Image src={f.shot!.src} alt="" widths={[320, 560]} sizes="16rem" />
+          </div>
+        </figure>
+      ))
+    }
     <div class="pitch">
-      <p class="eyebrow">Independent tools · one home</p>
-      <h1>Build. Configure. <span class="lit">Optimize.</span></h1>
-      <p class="lede">
+      <p class="eyebrow" data-reveal>Independent tools · one home</p>
+      <h1 data-reveal>
+        <span class="visually-hidden">Build. Configure. Optimize.</span>
+        <span aria-hidden="true">
+          Build. Configure.<br />
+          <span class="lit"><span data-typed={words.join('|')}>{words[0]}</span></span><span class="caret"></span>
+        </span>
+      </h1>
+      <p class="lede" data-reveal>
         Tools for setting up, rescuing and enjoying your machines: a Linux setup toolbox, a rescue USB that builds itself, a
         handbook for your own workstation, a home screen for LG TVs and a scoreboard for the terminal.
       </p>
-      <p class="actions">
+      <p class="actions" data-reveal>
         <a class="button primary" href="#tools">Explore the tools <Icon name="arrow-down" /></a>
         <a class="button" href="https://github.com/Commanderx-code">Visit GitHub <Icon name="external" /></a>
       </p>
       {
         tryIt?.code && (
-          <div class="try">
+          <div class="try" data-reveal>
             <p>{featured.name}: {tryIt.title.toLowerCase()}</p>
             <Command code={tryIt.code} label={`${featured.name}: ${tryIt.title}`} />
           </div>
         )
       }
     </div>
-    <div class="art">
-      <Showcase />
+  </section>
+
+  <div class="wrap laptop-wrap" data-reveal>
+    <div class="laptop">
+      <div class="screen">
+        <Showcase />
+      </div>
+      <div class="base" aria-hidden="true"></div>
     </div>
+  </div>
+
+  <section class="wrap stats" aria-label="Helix Tech in numbers">
+    <ul>
+      {
+        figures.map((f) => (
+          <li data-reveal>
+            <Icon name={f.icon} size={26} />
+            <span class="figure" data-count={f.value}>
+              {format.format(f.value)}
+            </span>
+            <span class="figure-label">{f.label}</span>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <section id="tools" class="band" aria-labelledby="tools-h">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <div>
           <p class="eyebrow">The tools</p>
           <h2 id="tools-h">Tools with a purpose.</h2>
@@ -85,9 +153,9 @@ const homelab = [
         {
           tools.map((tool, i) => {
             const release = releases[i];
-            const [shot] = tool.shots;
+            const [lead] = tool.shots;
             return (
-              <article class:list={['card', { featured: i === 0 }]}>
+              <article class:list={['card', { featured: i === 0 }]} data-reveal data-cursor="Open">
                 <div class="card-text">
                   <div class="card-top">
                     {tool.icon && <Image src={tool.icon} alt="" width={44} height={44} class="icon" />}
@@ -104,7 +172,7 @@ const homelab = [
                     {tool.availability && <li class="private">Not public yet</li>}
                     {tool.license && <li>{tool.license}</li>}
                   </ul>
-                  {!shot && tool.highlights && (
+                  {!lead && tool.highlights && (
                     <ul class="highlights">
                       {tool.highlights.map((h) => (
                         <li>
@@ -114,7 +182,15 @@ const homelab = [
                       ))}
                     </ul>
                   )}
-                  {shot && i > 0 && <Image class="shot" src={shot.src} alt={shot.alt} widths={[480, 800]} sizes="(max-width: 40rem) 100vw, (max-width: 64rem) 50vw, 24rem" />}
+                  {lead && i > 0 && (
+                    <Image
+                      class="shot"
+                      src={lead.src}
+                      alt={lead.alt}
+                      widths={[480, 800]}
+                      sizes="(max-width: 40rem) 100vw, (max-width: 64rem) 50vw, 24rem"
+                    />
+                  )}
                   <p class="links">
                     <a href={`/tools/${tool.slug}/`}>
                       {tool.install.length ? 'Features and install' : 'Features'}
@@ -128,8 +204,8 @@ const homelab = [
                     )}
                   </p>
                 </div>
-                {shot && i === 0 && (
-                  <Image class="shot" src={shot.src} alt={shot.alt} widths={[480, 800, 1100]} sizes="(max-width: 64rem) 100vw, 40rem" />
+                {lead && i === 0 && (
+                  <Image class="shot" src={lead.src} alt={lead.alt} widths={[480, 800, 1100]} sizes="(max-width: 64rem) 100vw, 40rem" />
                 )}
               </article>
             );
@@ -141,12 +217,14 @@ const homelab = [
 
   <section class="band tint" aria-labelledby="how-h">
     <div class="wrap">
-      <p class="eyebrow">How they work</p>
-      <h2 id="how-h">Careful by design.</h2>
+      <div data-reveal>
+        <p class="eyebrow">How they work</p>
+        <h2 id="how-h">Careful by design.</h2>
+      </div>
       <div class="trio">
         {
           principles.map((p) => (
-            <div class="principle">
+            <div class="principle" data-reveal>
               <Icon name={p.icon} size={28} />
               <h3>{p.title}</h3>
               <p>{p.text}</p>
@@ -164,9 +242,51 @@ const homelab = [
     </div>
   </section>
 
+  {
+    testimonials.length > 0 && (
+      <section class="band" aria-labelledby="praise-h">
+        <div class="wrap">
+          <div data-reveal>
+            <p class="eyebrow">In their words</p>
+            <h2 id="praise-h">What people are saying.</h2>
+          </div>
+          <ul class="praise">
+            {testimonials.map((t) => {
+              const about = t.tool && tools.find((x) => x.slug === t.tool);
+              return (
+                <li data-reveal>
+                  <figure>
+                    <blockquote>
+                      <p>{t.quote}</p>
+                    </blockquote>
+                    <figcaption>
+                      <span class="avatar" aria-hidden="true">
+                        {t.name.charAt(0)}
+                      </span>
+                      <span>
+                        <span class="who">{t.name}</span>
+                        {(t.role || about) && (
+                          <span class="role">
+                            {t.role}
+                            {t.role && about && ' · '}
+                            {about && <a href={`/tools/${about.slug}/`}>{about.name}</a>}
+                          </span>
+                        )}
+                      </span>
+                    </figcaption>
+                  </figure>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
   <section id="homelab" class="band" aria-labelledby="lab-h">
     <div class="wrap split">
-      <div>
+      <div data-reveal>
         <p class="eyebrow">The homelab</p>
         <h2 id="lab-h">Learning by building.</h2>
         <p>
@@ -177,7 +297,7 @@ const homelab = [
       <ul class="lab">
         {
           homelab.map((row) => (
-            <li>
+            <li data-reveal>
               <Icon name={row.icon} size={24} />
               <span class="lab-name">{row.name}</span>
               <span class="lab-stack">{row.stack}</span>
@@ -188,38 +308,50 @@ const homelab = [
     </div>
   </section>
 
-  <section class="wrap open" aria-labelledby="open-h">
-    <div>
-      <p class="eyebrow">Built in the open</p>
-      <h2 id="open-h">Follow along as it grows.</h2>
-      <p>Explore the code and see what’s taking shape.</p>
-    </div>
-    <a class="button primary" href="https://github.com/Commanderx-code">Find Helix Tech on GitHub <Icon name="external" /></a>
-    <div class="mark">
-      <Helix />
+  <section id="faq" class="band tint" aria-labelledby="faq-h">
+    <div class="wrap split faq">
+      <div data-reveal>
+        <p class="eyebrow">Questions</p>
+        <h2 id="faq-h">Asked and answered.</h2>
+        <p>Something not covered here? Open an issue on the tool’s GitHub page and ask.</p>
+      </div>
+      <div class="answers">
+        {
+          faq.map((q, i) => (
+            <details name="faq" open={i === 0} data-reveal>
+              <summary>
+                <span>{q.question}</span>
+                <span class="sign" aria-hidden="true">
+                  <Icon name="plus" size={18} />
+                </span>
+              </summary>
+              <p>{q.answer}</p>
+            </details>
+          ))
+        }
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
+  /* The headline, centred, with screenshots floating around it on wide screens */
   .hero {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: clamp(2rem, 5vw, 4.5rem);
-    padding-block: clamp(3rem, 8vw, 7rem) clamp(3rem, 6vw, 5.5rem);
+    position: relative;
+    padding-block: clamp(3rem, 9vw, 7.5rem) clamp(2.5rem, 5vw, 4rem);
   }
   .pitch {
-    flex: 1 1 32rem;
-    min-width: 0;
-  }
-  .art {
-    flex: 1 1 26rem;
-    min-width: 0;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 46rem;
+    margin-inline: auto;
+    text-align: center;
   }
   .hero h1 {
     margin-bottom: 1.5rem;
-    font-size: clamp(3rem, 6vw, 5.5rem);
   }
   .lit {
     background: linear-gradient(90deg, var(--mint), var(--violet));
@@ -227,18 +359,33 @@ const homelab = [
     background-clip: text;
     color: transparent;
   }
+  .caret {
+    display: inline-block;
+    width: 0.06em;
+    height: 0.8em;
+    margin-left: 0.06em;
+    background: var(--mint);
+    vertical-align: -0.04em;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
   .lede {
     font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
-    max-width: 34em;
+    max-width: 38em;
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
     margin-block: 1.5rem;
   }
   .try {
+    width: 100%;
     max-width: 40rem;
+    text-align: left;
   }
   .try p {
     margin-bottom: 0.5rem;
@@ -247,6 +394,93 @@ const homelab = [
   }
   .try :global(pre) {
     white-space: pre;
+  }
+
+  .float {
+    display: none;
+    position: absolute;
+    width: 15rem;
+    margin: 0;
+  }
+  .drift {
+    transform: translate3d(0, calc(var(--drift, 0px) * -1), 0) rotate(var(--tilt));
+  }
+  .float :global(img) {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    box-shadow: 0 1.5rem 3rem -1.5rem rgb(0 0 0 / 0.6);
+  }
+  .top-left { top: 4rem; left: -3rem; --tilt: -7deg; }
+  .bottom-left { bottom: 3rem; left: 0; --tilt: 5deg; }
+  .top-right { top: 5rem; right: -3rem; --tilt: 6deg; }
+  .bottom-right { bottom: 2rem; right: 0; --tilt: -5deg; }
+  @media (min-width: 80rem) {
+    .float {
+      display: block;
+    }
+  }
+
+  /* The slider in a laptop */
+  .laptop-wrap {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .laptop {
+    max-width: 66rem;
+    margin-inline: auto;
+  }
+  .screen {
+    padding: clamp(0.5rem, 1.4vw, 1rem);
+    border: 1px solid var(--line-strong);
+    border-radius: 22px 22px 0 0;
+    background: #05060a;
+  }
+  .screen :global(.track),
+  .screen :global(.slide) {
+    border-radius: 12px;
+  }
+  .screen :global(.controls) {
+    padding-inline: 0.25rem;
+  }
+  .base {
+    height: clamp(0.75rem, 1.6vw, 1.25rem);
+    margin-inline: -4%;
+    border: 1px solid var(--line-strong);
+    border-radius: 0 0 18px 18px;
+    background: linear-gradient(var(--raised), var(--deep));
+  }
+
+  .stats ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+    gap: 1rem;
+    margin: 0 0 clamp(3rem, 6vw, 5rem);
+    padding: 0;
+    list-style: none;
+  }
+  .stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--deep);
+  }
+  .stats li > :global(svg) {
+    margin-bottom: 0.5rem;
+    color: var(--mint);
+  }
+  .figure {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    line-height: 1;
+    color: var(--chrome);
+    font-variant-numeric: tabular-nums;
+  }
+  .figure-label {
+    color: var(--muted);
   }
 
   .band {
@@ -460,7 +694,8 @@ const homelab = [
   .principle > :global(svg) {
     color: var(--mint);
   }
-  .principle h3 {
+  .principle h3,
+  .lab-name {
     margin: 0;
     font-family: var(--body);
     font-size: var(--step-1);
@@ -483,13 +718,74 @@ const homelab = [
     color: var(--chrome);
   }
 
+  .praise {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    margin: clamp(1.75rem, 4vw, 2.75rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .praise figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 100%;
+    margin: 0;
+    padding: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--deep);
+  }
+  .praise blockquote {
+    margin: 0;
+  }
+  .praise blockquote p {
+    margin: 0;
+    font-size: 1.0625rem;
+    color: var(--chrome);
+  }
+  .praise blockquote p::before {
+    content: '“';
+  }
+  .praise blockquote p::after {
+    content: '”';
+  }
+  .praise figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+  .avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mint), var(--violet));
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+  .who {
+    display: block;
+    font-weight: 600;
+    color: var(--chrome);
+  }
+  .role {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
   .split {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: clamp(2rem, 5vw, 4.5rem);
   }
-  .split > div {
+  .split > div:first-child {
     flex: 1 1 24rem;
     min-width: 0;
   }
@@ -517,7 +813,6 @@ const homelab = [
   }
   .lab-name {
     font-size: 1.125rem;
-    font-weight: 600;
     color: var(--chrome);
   }
   .lab-stack {
@@ -526,34 +821,72 @@ const homelab = [
     color: var(--muted);
   }
 
-  .open {
+  /* Questions open one at a time; the answer slides open where the browser can */
+  .faq {
+    align-items: flex-start;
+  }
+  .answers {
+    flex: 1.4 1 30rem;
+    min-width: 0;
+    display: grid;
+    gap: 0.75rem;
+    interpolate-size: allow-keywords;
+  }
+  details {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--ink);
+    transition: border-color 0.2s ease;
+  }
+  details[open] {
+    border-color: var(--line-strong);
+  }
+  summary {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1.75rem;
-    margin-bottom: clamp(4rem, 8vw, 7rem);
-    padding: clamp(1.75rem, 5vw, 4rem);
-    border: 1px solid var(--line-strong);
-    border-radius: 20px;
-    background: var(--deep);
+    gap: 1rem;
+    min-height: 3.5rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    color: var(--chrome);
+    cursor: pointer;
+    list-style: none;
   }
-  .open > div:first-child {
-    flex: 1 1 24rem;
+  summary::-webkit-details-marker {
+    display: none;
   }
-  .mark {
+  summary:hover {
+    color: var(--mint);
+  }
+  .sign {
+    display: grid;
+    place-items: center;
     flex: none;
-    width: 9rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--raised);
+    color: var(--mint);
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
   }
-  @media (max-width: 40rem) {
-    .mark {
-      display: none;
-    }
+  details[open] .sign {
+    transform: rotate(45deg);
+    background: var(--mint);
+    color: var(--on-accent);
   }
-  .open h2 {
-    font-size: clamp(2rem, 4.4vw, 3.25rem);
+  details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.35s ease,
+      content-visibility 0.35s allow-discrete;
   }
-  .open p:last-child {
+  details[open]::details-content {
+    block-size: auto;
+  }
+  details p {
     margin: 0;
+    padding: 0 1.25rem 1.25rem;
   }
 </style>
