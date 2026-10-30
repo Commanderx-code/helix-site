@@ -31,26 +31,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLIC_WEB3FORMS_KEY: ${{ vars.PUBLIC_WEB3FORMS_KEY }}
+      - name: Fetch lychee
+        # The binary straight from its release, checked against the sum
+        # recorded here, as the repository allows no third-party actions
+        env:
+          VERSION: lychee-v0.24.2
+          SHA256: 1f4e0ef7f6554a6ed33dd7ac144fb2e1bbed98598e7af973042fc5cd43951c9a
+        run: |
+          curl -sSL -o lychee.tar.gz \
+            "https://github.com/lycheeverse/lychee/releases/download/$VERSION/lychee-x86_64-unknown-linux-gnu.tar.gz"
+          echo "$SHA256  lychee.tar.gz" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/lychee"
+          tar -xzf lychee.tar.gz -C "$RUNNER_TEMP/lychee"
+          echo "$RUNNER_TEMP/lychee" >> "$GITHUB_PATH"
       - name: Follow every link
         id: lychee
-        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
-        with:
-          args: >-
-            --no-progress
-            --root-dir "${{ github.workspace }}/dist"
-            --base-url https://helixtech.app
-            --max-concurrency 4
-            --max-retries 2
-            --accept 200..=299,429
-            --exclude '^https://api\.web3forms\.com/'
-            'dist/**/*.html'
-            https://helixtech.app/
-            https://helixtech.app/sitemap-index.xml
-            https://helixtech.app/feed.xml
-          fail: false
-          output: lychee.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          code=0
+          lychee --no-progress \
+            --root-dir "$GITHUB_WORKSPACE/dist" \
+            --base-url https://helixtech.app \
+            --max-concurrency 4 \
+            --max-retries 2 \
+            --accept '200..=299,429' \
+            --exclude '^https://api\.web3forms\.com/' \
+            --format markdown \
+            --output lychee.md \
+            'dist/**/*.html' \
+            https://helixtech.app/ \
+            https://helixtech.app/sitemap-index.xml \
+            https://helixtech.app/feed.xml || code=$?
+          cat lychee.md
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
       - name: Report what broke
         if: steps.lychee.outputs.exit_code != 0
         env:
