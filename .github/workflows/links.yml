@@ -1,0 +1,73 @@
+name: Check links
+
+# Builds the site and follows every link in every page, local and external,
+# including the download URLs that come from GitHub releases. Also checks
+# that the live site answers. A broken link opens an issue, or adds to the
+# one already open.
+on:
+  schedule:
+    - cron: '41 10 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: links
+  cancel-in-progress: true
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLIC_WEB3FORMS_KEY: ${{ vars.PUBLIC_WEB3FORMS_KEY }}
+      - name: Follow every link
+        id: lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --no-progress
+            --root-dir "${{ github.workspace }}/dist"
+            --base-url https://helixtech.app
+            --max-concurrency 4
+            --max-retries 2
+            --accept 200..=299,429
+            --exclude '^https://api\.web3forms\.com/'
+            'dist/**/*.html'
+            https://helixtech.app/
+            https://helixtech.app/sitemap-index.xml
+            https://helixtech.app/feed.xml
+          fail: false
+          output: lychee.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Report what broke
+        if: steps.lychee.outputs.exit_code != 0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          {
+            echo "The link check on $(date -u +%Y-%m-%d) found links that do not answer. Run: $RUN_URL"
+            echo
+            cat lychee.md
+          } > body.md
+          gh label create 'broken links' --color d73a4a --description 'A link on the site stopped working' --force
+          open=$(gh issue list --label 'broken links' --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body-file body.md
+          else
+            gh issue create --title 'Broken links on the site' --label 'broken links' --body-file body.md
+          fi
+          exit 1
