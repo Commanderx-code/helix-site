@@ -34,6 +34,16 @@ const pages: Record<string, Card> = {
     title: 'Nothing to track.',
     text: 'No cookies, no analytics, no third-party scripts. What the site keeps, and why.',
   },
+  'coming-soon': {
+    eyebrow: 'Coming soon',
+    title: 'On its way.',
+    text: 'Something new from Helix Tech is almost ready. Follow the feed or watch GitHub to hear first.',
+  },
+  maintenance: {
+    eyebrow: 'Maintenance',
+    title: 'Back in a moment.',
+    text: 'The site is being worked on. The tools and their downloads stay where they always are, on GitHub.',
+  },
   ...Object.fromEntries(
     tools.map((tool, i) => [
       tool.slug,
