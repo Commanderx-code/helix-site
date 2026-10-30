@@ -42,9 +42,11 @@ if (!still) {
   document.documentElement.setAttribute('data-motion', '');
   reveals.forEach((el) => rise.observe(el));
 
-  // Counters run from zero to their number the first time they are seen
+  // Counters show zero from the start and run up to their number once they
+  // are seen, after a beat so the page has painted first
   const counters = [...document.querySelectorAll<HTMLElement>('[data-count]')];
   const format = new Intl.NumberFormat('en-US');
+  counters.forEach((el) => (el.textContent = '0'));
   const count = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -52,17 +54,19 @@ if (!still) {
         const el = entry.target as HTMLElement;
         count.unobserve(el);
         const target = Number(el.dataset.count);
-        const start = performance.now();
-        const step = (now: number) => {
-          const t = Math.min((now - start) / 3200, 1);
-          el.textContent = format.format(Math.round(target * (1 - (1 - t) ** 3)));
-          if (t < 1) requestAnimationFrame(step);
+        const run = () => {
+          const start = performance.now();
+          const step = (now: number) => {
+            const t = Math.min((now - start) / 3200, 1);
+            el.textContent = format.format(Math.round(target * (1 - (1 - t) ** 3)));
+            if (t < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
         };
-        el.textContent = '0';
-        requestAnimationFrame(step);
+        setTimeout(run, 400);
       }
     },
-    { threshold: 0.6 },
+    { threshold: 0.3 },
   );
   counters.forEach((el) => count.observe(el));
 
