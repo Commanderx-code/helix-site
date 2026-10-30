@@ -109,5 +109,7 @@ export async function card({ eyebrow, title, text, accent = '#5eead4' }: Card): 
     },
   );
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng();
-  return new Uint8Array(png.buffer.slice(png.byteOffset, png.byteOffset + png.byteLength));
+  const bytes = new Uint8Array(png.byteLength);
+  bytes.set(png);
+  return bytes;
 }
