@@ -1,6 +1,6 @@
 # Helix website
 
-The source of [helix.helixstack.io](https://helix.helixstack.io): a static
+The source of [helixtech.app](https://helixtech.app): a static
 [Astro](https://astro.build) site with a page for each Helix tool.
 
 ```sh

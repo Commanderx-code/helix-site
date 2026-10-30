@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://helix.helixstack.io',
+  site: 'https://helixtech.app',
   trailingSlash: 'ignore',
   build: {
     // Stylesheets as files, so the Content-Security-Policy needs no inline styles
