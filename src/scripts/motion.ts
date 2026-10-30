@@ -34,7 +34,7 @@ if (!still) {
           el.classList.remove('is-in');
         };
         const order = Number(el.style.getPropertyValue('--reveal-order')) || 0;
-        setTimeout(settle, 1100 + order * 120);
+        setTimeout(settle, 1700 + order * 160);
       }
     },
     { rootMargin: '0px 0px -8% 0px' },
@@ -54,7 +54,7 @@ if (!still) {
         const target = Number(el.dataset.count);
         const start = performance.now();
         const step = (now: number) => {
-          const t = Math.min((now - start) / 1600, 1);
+          const t = Math.min((now - start) / 3200, 1);
           el.textContent = format.format(Math.round(target * (1 - (1 - t) ** 3)));
           if (t < 1) requestAnimationFrame(step);
         };
