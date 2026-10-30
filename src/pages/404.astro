@@ -1,21 +1,163 @@
 ---
+// The not-found page: a large, glitching 404 over a glow, the way back, and
+// the tools in case the address was one of theirs
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import { tools } from '../data/tools';
 ---
 <Base title="Page not found: Helix Tech" description="This page does not exist.">
-  <section class="wrap missing">
-    <p class="eyebrow" data-reveal>404</p>
-    <h1 data-reveal>This page does not exist.</h1>
-    <p data-reveal>The address may be mistyped, or the page has moved. Every tool is listed on the home page.</p>
-    <p data-reveal><a class="button primary" href="/#tools">See all the tools <Icon name="arrow-right" /></a></p>
+  <section class="missing">
+    <div class="wrap">
+      <p class="code" data-text="404" data-reveal="zoom" aria-hidden="true">404</p>
+      <h1 data-reveal>
+        <span class="visually-hidden">404: </span>Oops, page <span class="lit">not found.</span>
+      </h1>
+      <p class="lede" data-reveal>The address may be mistyped, or the page has moved. Nothing here is lost: everything lives one click away.</p>
+      <p class="actions" data-reveal>
+        <a class="button primary" href="/">Back to home <Icon name="arrow-right" /></a>
+        <a class="button" href="/#tools">See the tools</a>
+      </p>
+      <nav class="looking" aria-label="The tools" data-reveal>
+        <p>Looking for one of these?</p>
+        <ul>
+          {
+            tools.map((t) => (
+              <li data-tool={t.slug}>
+                <a href={`/tools/${t.slug}/`}>{t.name}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
   </section>
 </Base>
 
 <style>
   .missing {
-    padding-block: clamp(4rem, 10vw, 8rem) 2rem;
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100vh - 4.5rem);
+    min-height: calc(100svh - 4.5rem);
+    display: grid;
+    place-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    text-align: center;
   }
+  /* The glow rising from below, and faint columns like a terminal grid */
+  .missing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(60% 50% at 50% 100%, color-mix(in srgb, var(--mint) 22%, transparent), transparent 70%),
+      repeating-linear-gradient(90deg, transparent 0 calc(100% / 7 - 1px), var(--line) 0 calc(100% / 7));
+  }
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* The number: a gradient, a shadow, and two slices that twitch */
+  .code {
+    position: relative;
+    margin: 0 0 0.5rem;
+    font-family: var(--display);
+    font-size: clamp(7rem, 26vw, 18rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    background: linear-gradient(180deg, var(--mint), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 40px color-mix(in srgb, var(--mint) 35%, transparent));
+  }
+  .code::before,
+  .code::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+  }
+  .code::before {
+    animation: slice-a 4s steps(1) infinite;
+  }
+  .code::after {
+    animation: slice-b 4s steps(1) infinite;
+  }
+  @keyframes slice-a {
+    0%, 92%, 100% { opacity: 0; }
+    93% { opacity: 1; clip-path: inset(20% 0 65% 0); translate: -0.6rem 0; }
+    95% { opacity: 1; clip-path: inset(55% 0 20% 0); translate: 0.5rem 0; }
+    97% { opacity: 1; clip-path: inset(5% 0 85% 0); translate: -0.3rem 0; }
+  }
+  @keyframes slice-b {
+    0%, 93%, 100% { opacity: 0; }
+    94% { opacity: 1; clip-path: inset(60% 0 10% 0); translate: 0.7rem 0; filter: hue-rotate(60deg); }
+    96% { opacity: 1; clip-path: inset(30% 0 50% 0); translate: -0.5rem 0; filter: hue-rotate(-40deg); }
+  }
+
   h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    margin: 0 0 1rem;
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+  }
+  .lit {
+    background: linear-gradient(90deg, var(--mint), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lede {
+    max-width: 44ch;
+    margin: 0 auto 1.75rem;
+    font-size: var(--step-1);
+    color: var(--muted);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .looking p {
+    margin: 0 0 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .looking ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .looking a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .looking a:hover {
+    border-color: var(--accent, var(--mint));
+    color: var(--accent, var(--mint));
   }
 </style>
