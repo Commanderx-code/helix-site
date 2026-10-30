@@ -1,0 +1,57 @@
+---
+// Release notes from GitHub, rendered from Markdown and cut down to plain
+// formatting (see data/notes.ts), in the site's type
+import { renderNotes } from '../data/notes';
+
+interface Props {
+  markdown: string;
+}
+const { markdown } = Astro.props;
+---
+{
+  markdown.trim() ? (
+    <div class="notes" set:html={renderNotes(markdown)} />
+  ) : (
+    <p class="notes empty">No notes were written for this release.</p>
+  )
+}
+
+<style>
+  .notes {
+    font-size: var(--step-0);
+  }
+  .empty {
+    color: var(--muted);
+  }
+  .notes :global(h1),
+  .notes :global(h2),
+  .notes :global(h3),
+  .notes :global(h4) {
+    margin: 1.25em 0 0.4em;
+    font-family: var(--body);
+    font-size: var(--step-0);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .notes :global(p),
+  .notes :global(ul),
+  .notes :global(ol) {
+    max-width: var(--measure);
+  }
+  .notes :global(code) {
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background: var(--raised);
+  }
+  .notes :global(pre) {
+    overflow-x: auto;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--deep);
+  }
+  .notes :global(pre code) {
+    padding: 0;
+    background: none;
+  }
+</style>

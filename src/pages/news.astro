@@ -4,7 +4,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { tools, releaseNotes } from '../data/tools';
-import { renderNotes } from '../data/notes';
+import Notes from '../components/Notes.astro';
 
 const entries = (
   await Promise.all(tools.map(async (tool) => (await releaseNotes(tool.repo)).map((release) => ({ tool, release }))))
@@ -48,11 +48,7 @@ const when = (date: string) =>
                 <h2>
                   <a href={release.url}>{release.name}</a>
                 </h2>
-                {release.body.trim() ? (
-                  <div class="notes" set:html={renderNotes(release.body)} />
-                ) : (
-                  <p class="notes">No notes were written for this release.</p>
-                )}
+                <Notes markdown={release.body} />
                 <p class="links">
                   <a href={release.url}>
                     {release.tag} on GitHub <Icon name="external" size={14} />
@@ -162,40 +158,6 @@ const when = (date: string) =>
   }
   h2 a:hover {
     color: var(--accent, var(--mint));
-  }
-  .notes {
-    font-size: var(--step-0);
-  }
-  .notes :global(h1),
-  .notes :global(h2),
-  .notes :global(h3),
-  .notes :global(h4) {
-    margin: 1.25em 0 0.4em;
-    font-family: var(--body);
-    font-size: var(--step-0);
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-  .notes :global(p),
-  .notes :global(ul),
-  .notes :global(ol) {
-    max-width: var(--measure);
-  }
-  .notes :global(code) {
-    padding: 0.1em 0.35em;
-    border-radius: 4px;
-    background: var(--raised);
-  }
-  .notes :global(pre) {
-    overflow-x: auto;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--deep);
-  }
-  .notes :global(pre code) {
-    padding: 0;
-    background: none;
   }
   .links a {
     display: inline-flex;
