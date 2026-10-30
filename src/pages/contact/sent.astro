@@ -1,0 +1,22 @@
+---
+// Where the contact form lands after Web3Forms has taken the message
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+---
+<Base title="Message sent: Helix Tech" description="Your message to Helix Tech is on its way." noindex>
+  <section class="wrap sent">
+    <p class="eyebrow" data-reveal>Contact</p>
+    <h1 data-reveal>Message sent.</h1>
+    <p data-reveal>Thanks for writing. It has landed, and a reply will come from contact@helixstack.io.</p>
+    <p data-reveal><a class="button primary" href="/">Back to the home page <Icon name="arrow-right" /></a></p>
+  </section>
+</Base>
+
+<style>
+  .sent {
+    padding-block: clamp(4rem, 10vw, 8rem) clamp(4rem, 8vw, 7rem);
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+  }
+</style>

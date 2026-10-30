@@ -1,0 +1,248 @@
+---
+// The contact page: a form that sends mail through Web3Forms, plus the
+// direct routes. The form posts straight to the service, so it needs no
+// script; the key is public by design and comes from PUBLIC_WEB3FORMS_KEY.
+// Without a key the page offers email instead of a form that cannot send.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { tools } from '../data/tools';
+
+const email = 'contact@helixstack.io';
+const key = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+const sent = new URL('/contact/sent/', Astro.site).href;
+const withIssues = tools.filter((t) => t.repo);
+---
+<Base title="Contact Helix Tech" description={`Write to Helix Tech about the tools, the site or anything else, or email ${email}.`}>
+  <section class="wrap head">
+    <p class="eyebrow" data-reveal>Contact</p>
+    <h1 data-reveal>Say hello.</h1>
+    <p class="lede" data-reveal>
+      A question, an idea, something broken, or a tool you would like to see: write and it will be read.
+    </p>
+  </section>
+
+  <section class="band">
+    <div class="wrap split">
+      <div class="panel" data-reveal="left">
+        {
+          key ? (
+            <form method="post" action="https://api.web3forms.com/submit">
+              <input type="hidden" name="access_key" value={key} />
+              <input type="hidden" name="from_name" value="helixtech.app" />
+              <input type="hidden" name="redirect" value={sent} />
+              <input type="checkbox" name="botcheck" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
+              <div class="row">
+                <label>
+                  <span>Name</span>
+                  <input type="text" name="name" required autocomplete="name" />
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input type="email" name="email" required autocomplete="email" />
+                </label>
+              </div>
+              <label>
+                <span>About</span>
+                <select name="subject" required>
+                  <option value="A question">A question</option>
+                  <option value="A bug or a problem">A bug or a problem</option>
+                  <option value="An idea or a request">An idea or a request</option>
+                  <option value="The website">The website</option>
+                  <option value="Something else">Something else</option>
+                </select>
+              </label>
+              <label>
+                <span>Message</span>
+                <textarea name="message" rows="7" required></textarea>
+              </label>
+              <p class="actions">
+                <button class="button primary" type="submit">Send message <Icon name="arrow-right" /></button>
+                <span class="note">Replies come from {email}.</span>
+              </p>
+            </form>
+          ) : (
+            <div class="fallback">
+              <h2>Write to us</h2>
+              <p>The form is not switched on yet. Email works just as well.</p>
+              <a class="button primary" href={`mailto:${email}`}>
+                {email} <Icon name="arrow-right" />
+              </a>
+            </div>
+          )
+        }
+      </div>
+
+      <aside class="ways" data-reveal="right">
+        <div class="way">
+          <p class="heading">Email</p>
+          <a href={`mailto:${email}`}>{email}</a>
+        </div>
+        <div class="way">
+          <p class="heading">Found a bug?</p>
+          <p>Each tool keeps its own issues on GitHub. Filing it there gets it fixed fastest.</p>
+          <ul>
+            {
+              withIssues.map((t) => (
+                <li>
+                  <a href={`https://github.com/${t.repo}/issues/new`}>
+                    <Icon name="arrow-right" size={14} />
+                    {t.name} issues
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="way">
+          <p class="heading">GitHub</p>
+          <a href="https://github.com/Commanderx-code">
+            <Icon name="code" size={16} /> github.com/Commanderx-code
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 5vw, 3.5rem);
+  }
+  .head h1 {
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+  }
+  .lede {
+    max-width: 48ch;
+    font-size: var(--step-1);
+  }
+  .band {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+  }
+  .split {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 1fr);
+    align-items: start;
+  }
+  @media (max-width: 52rem) {
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .panel {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--deep);
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+  }
+  .row {
+    display: grid;
+    gap: 1.125rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-weight: 600;
+    color: var(--chrome);
+  }
+  label span {
+    font-size: var(--step--1);
+  }
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--ink);
+    color: var(--chrome);
+    font: inherit;
+    font-weight: 400;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid var(--mint);
+    outline-offset: 1px;
+    border-color: var(--mint);
+  }
+  /* A field only a bot would fill in */
+  .trap {
+    position: absolute;
+    left: -999px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    margin: 0.25rem 0 0;
+    max-width: none;
+  }
+  .button {
+    font: inherit;
+    cursor: pointer;
+  }
+  .note {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .fallback h2 {
+    font-size: var(--step-2);
+  }
+
+  .ways {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+  .way p {
+    margin: 0 0 0.5rem;
+  }
+  .heading {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-strong);
+    font-family: var(--display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--mint);
+  }
+  .way > a,
+  .way li a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    color: var(--chrome);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .way > a:hover,
+  .way li a:hover {
+    color: var(--mint);
+  }
+  .way a :global(svg) {
+    flex: none;
+    color: var(--mint);
+  }
+  .way ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>
