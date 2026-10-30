@@ -8,7 +8,7 @@ import Countdown from '../components/Countdown.astro';
 import { soon } from '../data/soon';
 
 ---
-<Base title={`${soon.eyebrow}: Helix Tech`} description={soon.text} noindex bare>
+<Base title={`${soon.eyebrow}: Helix Tech`} description={soon.text} image="/og/coming-soon.png" noindex bare>
   <Standby eyebrow={soon.eyebrow} title={soon.title}>
     <p class="lede" data-reveal>{soon.text}</p>
     {

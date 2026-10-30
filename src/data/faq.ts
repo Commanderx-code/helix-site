@@ -44,4 +44,14 @@ export const faq: Question[] = [
     question: 'When will Config Bible be public?',
     answer: 'Its repository is private while the handbook is personal. Its page will link to it once it opens.',
   },
+  {
+    question: 'Something broke. Where do I report it?',
+    answer:
+      'Each tool keeps its own issues on GitHub, and filing it there gets it fixed fastest; the contact page links to every tracker. Anything else can go through the contact form or to contact@helixstack.io.',
+  },
+  {
+    question: 'Does this site track me?',
+    answer:
+      'No. There are no cookies, no analytics and no third-party scripts. The only thing kept in your browser is the light-or-dark choice. The privacy page has the rest.',
+  },
 ];
