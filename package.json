@@ -1,7 +1,7 @@
 {
   "name": "helix-site",
   "version": "1.0.0",
-  "description": "The Helix website: helix.helixstack.io",
+  "description": "The Helix website: helixtech.app",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
