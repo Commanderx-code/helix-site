@@ -79,7 +79,7 @@ const homelab = [
   <section class="hero wrap">
     {
       floating.map((f) => (
-        <figure class:list={['float', f.place]} data-reveal aria-hidden="true">
+        <figure class:list={['float', f.place]} data-reveal={f.place.endsWith('left') ? 'left' : 'right'} aria-hidden="true">
           <div class="drift" data-depth={f.depth}>
             <Image src={f.shot!.src} alt="" widths={[320, 560]} sizes="16rem" />
           </div>
@@ -114,7 +114,7 @@ const homelab = [
     </div>
   </section>
 
-  <div class="wrap laptop-wrap" data-reveal>
+  <div class="wrap laptop-wrap" data-reveal="zoom">
     <div class="laptop">
       <div class="screen">
         <Showcase />
@@ -127,7 +127,7 @@ const homelab = [
     <ul>
       {
         figures.map((f) => (
-          <li data-reveal>
+          <li data-reveal="zoom">
             <Icon name={f.icon} size={26} />
             <span class="figure" data-count={f.value}>
               {format.format(f.value)}
@@ -141,7 +141,7 @@ const homelab = [
 
   <section id="tools" class="band" aria-labelledby="tools-h">
     <div class="wrap">
-      <div class="section-head" data-reveal>
+      <div class="section-head" data-reveal="left">
         <div>
           <p class="eyebrow">The tools</p>
           <h2 id="tools-h">Tools with a purpose.</h2>
@@ -217,7 +217,7 @@ const homelab = [
 
   <section class="band tint" aria-labelledby="how-h">
     <div class="wrap">
-      <div data-reveal>
+      <div data-reveal="left">
         <p class="eyebrow">How they work</p>
         <h2 id="how-h">Careful by design.</h2>
       </div>
@@ -246,7 +246,7 @@ const homelab = [
     testimonials.length > 0 && (
       <section class="band" aria-labelledby="praise-h">
         <div class="wrap">
-          <div data-reveal>
+          <div data-reveal="left">
             <p class="eyebrow">In their words</p>
             <h2 id="praise-h">What people are saying.</h2>
           </div>
@@ -254,7 +254,7 @@ const homelab = [
             {testimonials.map((t) => {
               const about = t.tool && tools.find((x) => x.slug === t.tool);
               return (
-                <li data-reveal>
+                <li data-reveal="zoom">
                   <figure>
                     <blockquote>
                       <p>{t.quote}</p>
@@ -286,7 +286,7 @@ const homelab = [
 
   <section id="homelab" class="band" aria-labelledby="lab-h">
     <div class="wrap split">
-      <div data-reveal>
+      <div data-reveal="left">
         <p class="eyebrow">The homelab</p>
         <h2 id="lab-h">Learning by building.</h2>
         <p>
@@ -297,7 +297,7 @@ const homelab = [
       <ul class="lab">
         {
           homelab.map((row) => (
-            <li data-reveal>
+            <li data-reveal="right">
               <Icon name={row.icon} size={24} />
               <span class="lab-name">{row.name}</span>
               <span class="lab-stack">{row.stack}</span>
@@ -310,7 +310,7 @@ const homelab = [
 
   <section id="faq" class="band tint" aria-labelledby="faq-h">
     <div class="wrap split faq">
-      <div data-reveal>
+      <div data-reveal="left">
         <p class="eyebrow">Questions</p>
         <h2 id="faq-h">Asked and answered.</h2>
         <p>Something not covered here? Open an issue on the tool’s GitHub page and ask.</p>
@@ -318,7 +318,7 @@ const homelab = [
       <div class="answers">
         {
           faq.map((q, i) => (
-            <details name="faq" open={i === 0} data-reveal>
+            <details name="faq" open={i === 0} data-reveal="right">
               <summary>
                 <span>{q.question}</span>
                 <span class="sign" aria-hidden="true">

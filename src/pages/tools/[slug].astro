@@ -22,7 +22,7 @@ const next = tools[(index + 1) % tools.length];
 <Base title={`${tool.name}: ${tool.pitch}`} description={`${tool.pitch} ${tool.summary}`} tool={tool.slug}>
   <article class="tool">
     <header class="head wrap">
-      <nav aria-label="Breadcrumb">
+      <nav aria-label="Breadcrumb" data-reveal>
         <ol>
           <li><a href="/#tools">Tools</a></li>
           <li aria-hidden="true">/</li>
@@ -30,16 +30,16 @@ const next = tools[(index + 1) % tools.length];
         </ol>
       </nav>
 
-      <div class="title">
+      <div class="title" data-reveal>
         {tool.icon && <Image src={tool.icon} alt="" width={72} height={72} class="icon" />}
         <div>
           <p class="eyebrow">{String(index + 1).padStart(2, '0')} / {tool.category}</p>
           <h1>{tool.name}</h1>
         </div>
       </div>
-      <p class="pitch">{tool.pitch}</p>
-      <p class="summary">{tool.summary}</p>
-      <ul class="chips">
+      <p class="pitch" data-reveal>{tool.pitch}</p>
+      <p class="summary" data-reveal>{tool.summary}</p>
+      <ul class="chips" data-reveal>
         {release && <li class="version">Version {release.tag.replace(/^v/, '')}</li>}
         {tool.availability && <li class="version">Not public yet</li>}
         {tool.license && <li>{tool.license}</li>}
@@ -47,7 +47,7 @@ const next = tools[(index + 1) % tools.length];
 
       {
         repoUrl ? (
-          <p class="actions">
+          <p class="actions" data-reveal>
             {release ? (
               <a class="button primary" href={release.url}>
                 Download {release.tag}
@@ -70,7 +70,7 @@ const next = tools[(index + 1) % tools.length];
             )}
           </p>
         ) : (
-          <p class="notice">{tool.availability}</p>
+          <p class="notice" data-reveal>{tool.availability}</p>
         )
       }
     </header>
@@ -78,7 +78,7 @@ const next = tools[(index + 1) % tools.length];
     {
       lead && (
         <section class="shots wrap" aria-label="Screenshots">
-          <figure class="lead">
+          <figure class="lead" data-reveal="zoom">
             <a href={lead.src.src}>
               <Image src={lead.src} alt={lead.alt} widths={[640, 1100, 1600]} sizes="(max-width: 75rem) 100vw, 75rem" />
             </a>
@@ -87,7 +87,7 @@ const next = tools[(index + 1) % tools.length];
           {rest.length > 0 && (
             <ul class="thumbs">
               {rest.map((s) => (
-                <li>
+                <li data-reveal>
                   <a href={s.src.src}>
                     <Image src={s.src} alt={s.alt} widths={[400, 640]} sizes="(max-width: 40rem) 50vw, 18rem" />
                   </a>
@@ -101,7 +101,7 @@ const next = tools[(index + 1) % tools.length];
 
     <section class="band" aria-labelledby="features-h">
       <div class="wrap body">
-        <div class="features">
+        <div class="features" data-reveal="left">
           <h2 id="features-h">What it does</h2>
           <ul>
             {
@@ -114,7 +114,7 @@ const next = tools[(index + 1) % tools.length];
             }
           </ul>
         </div>
-        <aside aria-labelledby="requirements-h">
+        <aside aria-labelledby="requirements-h" data-reveal="right">
           <h2 id="requirements-h" class="visually-hidden">Requirements</h2>
           <dl>
             <dt>Runs on</dt>
@@ -153,10 +153,10 @@ const next = tools[(index + 1) % tools.length];
       tool.install.length > 0 && (
         <section id="install" class="band tint" aria-labelledby="install-h">
           <div class="wrap">
-            <h2 id="install-h">Install</h2>
+            <h2 id="install-h" data-reveal="left">Install</h2>
             <div class="steps">
               {tool.install.map((step) => (
-                <div class="step">
+                <div class="step" data-reveal>
                   <h3>{step.title}</h3>
                   {step.note && <p>{step.note}</p>}
                   {step.code && <Command code={step.code} label={step.title} />}
@@ -168,7 +168,7 @@ const next = tools[(index + 1) % tools.length];
       )
     }
 
-    <nav class="wrap next-wrap" aria-label="Next tool">
+    <nav class="wrap next-wrap" aria-label="Next tool" data-reveal="zoom">
       <a class="next" href={`/tools/${next.slug}/`} data-tool={next.slug}>
         {next.icon && <Image src={next.icon} alt="" width={48} height={48} class="next-icon" />}
         <span class="next-text">

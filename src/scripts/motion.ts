@@ -24,8 +24,17 @@ if (!still) {
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        entry.target.classList.add('is-in');
-        rise.unobserve(entry.target);
+        const el = entry.target as HTMLElement;
+        el.classList.add('is-in');
+        rise.unobserve(el);
+        // Once in place, drop the reveal so the element's own transitions,
+        // like a card growing under the pointer, are not slowed by it
+        const settle = () => {
+          el.removeAttribute('data-reveal');
+          el.classList.remove('is-in');
+        };
+        const order = Number(el.style.getPropertyValue('--reveal-order')) || 0;
+        setTimeout(settle, 1100 + order * 120);
       }
     },
     { rootMargin: '0px 0px -8% 0px' },
