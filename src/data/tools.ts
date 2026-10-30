@@ -87,7 +87,7 @@ export const tools: Tool[] = [
       { title: 'Fedora', code: 'sudo dnf install ./helix-toolbox-*.x86_64.rpm' },
       { title: 'Any distribution, with Cargo', code: 'cargo install --locked helix-toolbox' },
     ],
-    docs: 'https://github.com/Commanderx-code/Helix-toolbox/tree/main/docs',
+    docs: 'https://docs.helixtech.app/toolbox/walkthrough/',
   },
   {
     slug: 'boot',
@@ -128,7 +128,7 @@ export const tools: Tool[] = [
         code: 'git clone https://github.com/Commanderx-code/helix-boot\ncd helix-boot\n./install.sh      # download and verify, pick a stick, type its name to confirm\n./refresh.sh      # later: update the stick in place\n./check.sh        # read the stick back: any damaged files?',
       },
     ],
-    docs: 'https://github.com/Commanderx-code/helix-boot/tree/main/docs',
+    docs: 'https://docs.helixtech.app/boot/',
   },
   {
     slug: 'config-bible',
@@ -196,6 +196,7 @@ export const tools: Tool[] = [
         code: 'npm run sync\nnpm run deploy',
       },
     ],
+    docs: 'https://docs.helixtech.app/webos-launcher/',
   },
   {
     slug: 'touchdown',
@@ -227,6 +228,7 @@ export const tools: Tool[] = [
       { title: 'From a clone', code: 'git clone https://github.com/Commanderx-code/touchdown-cli.git\ncd touchdown-cli\nmake install\ntd' },
       { title: 'Pick your team', code: 'td -set-favorite BUF' },
     ],
+    docs: 'https://docs.helixtech.app/touchdown/',
   },
 ];
 
