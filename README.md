@@ -35,6 +35,18 @@ The pages load no third-party scripts, fonts or images, so the server can
 send a strict Content-Security-Policy. The one outside address is the form's
 target, so `form-action` must allow `https://api.web3forms.com`.
 
+## Checks
+
+Two more workflows watch the site. Quality runs Lighthouse on every push and
+pull request against the thresholds in `lighthouserc.json`, and keeps the
+reports as an artifact. Check links runs weekly: it builds the site, follows
+every link on every page, local and external, and opens an issue labelled
+"broken links" (or adds to the open one) when something stops answering.
+Both can also be started by hand from the Actions tab.
+
+Visitor numbers come from the server's access log, read by GoAccess on the
+VPS; the site itself runs no analytics.
+
 ## License
 
 The site's code is MIT licensed. Screenshots and logos belong to their
