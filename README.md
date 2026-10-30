@@ -13,6 +13,12 @@ Tool details live in `src/data/tools.ts`; screenshots and icons in
 `src/assets/tools/`. Release versions are read from GitHub at build time;
 a `GITHUB_TOKEN` in `.env` keeps the dev server within the API limits.
 
+Each page's share picture (the `og:image` under `/og/`) is drawn at build
+time by `src/og/card.ts` from the site's own fonts and logo. The "What's new"
+page and `/feed.xml` list the tools' releases, read from GitHub like the
+versions. `@astrojs/sitemap` writes the sitemap; `public/robots.txt` points
+to it.
+
 The contact form posts to [Web3Forms](https://web3forms.com). Its access
 key, which is public by design, comes from `PUBLIC_WEB3FORMS_KEY`: in `.env`
 locally and in a repository variable of the same name for the build. Without

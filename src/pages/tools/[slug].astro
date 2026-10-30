@@ -18,8 +18,32 @@ const released =
 const [lead, ...rest] = tool.shots;
 const index = tools.indexOf(tool);
 const next = tools[(index + 1) % tools.length];
+
+// What search engines may show about the tool
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: tool.name,
+  description: `${tool.pitch} ${tool.summary}`,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  image: new URL(`/og/${tool.slug}.png`, Astro.site).href,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: tool.platforms,
+  ...(release && { softwareVersion: release.tag.replace(/^v/, ''), downloadUrl: release.url, dateModified: release.date }),
+  ...(tool.license === 'MIT' && { license: 'https://opensource.org/license/mit' }),
+  ...(lead && { screenshot: new URL(lead.src.src, Astro.site).href }),
+  ...(repoUrl && { sameAs: repoUrl }),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@type': 'Organization', name: 'Helix Tech LLC', url: String(Astro.site) },
+};
 ---
-<Base title={`${tool.name}: ${tool.pitch}`} description={`${tool.pitch} ${tool.summary}`} tool={tool.slug}>
+<Base
+  title={`${tool.name}: ${tool.pitch}`}
+  description={`${tool.pitch} ${tool.summary}`}
+  tool={tool.slug}
+  image={`/og/${tool.slug}.png`}
+  jsonLd={jsonLd}
+>
   <article class="tool">
     <header class="head wrap">
       <nav aria-label="Breadcrumb" data-reveal>
