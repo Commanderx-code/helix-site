@@ -1,7 +1,10 @@
 ---
 import '../styles/global.css';
 import '../styles/tools.css';
+import { Image } from 'astro:assets';
 import Icon from '../components/Icon.astro';
+import logoOnDark from '../assets/brand/logo-on-dark.png';
+import logoOnLight from '../assets/brand/logo-on-light.png';
 import { tools } from '../data/tools';
 
 interface Props {
@@ -35,11 +38,8 @@ const years = year > 2026 ? `2026–${year}` : '2026';
     <header class="site-head">
       <div class="wrap bar">
         <a class="wordmark" href="/" aria-label="Helix Tech home">
-          <svg width="22" height="28" viewBox="0 0 120 200" aria-hidden="true">
-            <path class="a" d="M60 14 C98 57 98 57 60 100 C22 143 22 143 60 186" />
-            <path class="b" d="M60 14 C22 57 22 57 60 100 C98 143 98 143 60 186" />
-          </svg>
-          HELIX TECH
+          <Image class="on-dark" src={logoOnDark} alt="" height={40} densities={[1, 2]} loading="eager" />
+          <Image class="on-light" src={logoOnLight} alt="" height={40} densities={[1, 2]} loading="eager" />
         </a>
         <nav aria-label="Site">
           <a href="/#tools">Tools</a>
@@ -98,22 +98,24 @@ const years = year > 2026 ? `2026–${year}` : '2026';
   .wordmark {
     display: inline-flex;
     align-items: center;
-    gap: 0.625rem;
     min-height: 2.75rem;
-    font-family: var(--mono);
-    font-weight: 500;
-    font-size: 0.875rem;
-    letter-spacing: 0.18em;
-    color: var(--chrome);
-    text-decoration: none;
   }
-  .wordmark path {
-    fill: none;
-    stroke-width: 16;
-    stroke-linecap: round;
+  .wordmark :global(img) {
+    width: auto;
+    height: 2.5rem;
   }
-  .wordmark .a { stroke: var(--mint); }
-  .wordmark .b { stroke: var(--violet); }
+  /* The lettering is pale on dark pages and dark on light ones */
+  .wordmark :global(.on-light) {
+    display: none;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='dark']) .wordmark :global(.on-dark) {
+      display: none;
+    }
+    :root:not([data-theme='dark']) .wordmark :global(.on-light) {
+      display: block;
+    }
+  }
   .bar nav {
     display: flex;
     gap: 0.25rem;
@@ -136,6 +138,9 @@ const years = year > 2026 ? `2026–${year}` : '2026';
   @media (max-width: 26rem) {
     .bar nav a {
       padding: 0 0.625rem;
+    }
+    .wordmark :global(img) {
+      height: 1.75rem;
     }
   }
 
