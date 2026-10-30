@@ -10,7 +10,13 @@ npm run build     # into dist/
 ```
 
 Tool details live in `src/data/tools.ts`; screenshots and icons in
-`src/assets/tools/`. Release versions are read from GitHub at build time.
+`src/assets/tools/`. Release versions are read from GitHub at build time;
+a `GITHUB_TOKEN` in `.env` keeps the dev server within the API limits.
+
+The contact form posts to [Web3Forms](https://web3forms.com). Its access
+key, which is public by design, comes from `PUBLIC_WEB3FORMS_KEY`: in `.env`
+locally and in a repository variable of the same name for the build. Without
+it the page offers the email address instead of a form.
 
 ## Publishing
 
@@ -20,7 +26,8 @@ server pulls that branch every two minutes and switches to the new build in
 one step, so nothing on it accepts a push.
 
 The pages load no third-party scripts, fonts or images, so the server can
-send a strict Content-Security-Policy.
+send a strict Content-Security-Policy. The one outside address is the form's
+target, so `form-action` must allow `https://api.web3forms.com`.
 
 ## License
 

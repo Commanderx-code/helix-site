@@ -30,6 +30,7 @@ jobs:
       - run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLIC_WEB3FORMS_KEY: ${{ vars.PUBLIC_WEB3FORMS_KEY }}
       - name: Push to the deploy branch when the build changed
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

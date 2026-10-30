@@ -12,8 +12,10 @@ interface Props {
   title: string;
   description: string;
   tool?: string;
+  /** Keep the page out of search results, as for the form's landing page */
+  noindex?: boolean;
 }
-const { title, description, tool } = Astro.props;
+const { title, description, tool, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // The copyright runs from the first year to the year of the build
 const year = new Date().getFullYear();
@@ -43,6 +45,7 @@ const gallery = (
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0b0d12" />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -60,6 +63,7 @@ const gallery = (
           <a href="/#tools">Tools</a>
           <a href="/#homelab">Homelab</a>
           <a href="/#faq">FAQ</a>
+          <a href="/contact/">Contact</a>
           <a href="https://github.com/Commanderx-code">GitHub <Icon name="external" size={14} /></a>
         </nav>
       </div>
@@ -108,6 +112,7 @@ const gallery = (
             <p class="heading">More</p>
             <a href="/#homelab"><Icon name="arrow-right" size={14} />Homelab</a>
             <a href="/#faq"><Icon name="arrow-right" size={14} />FAQ</a>
+            <a href="/contact/"><Icon name="arrow-right" size={14} />Contact</a>
             <a href="https://github.com/Commanderx-code"><Icon name="arrow-right" size={14} />GitHub</a>
           </nav>
           <div class="shots" data-reveal>
