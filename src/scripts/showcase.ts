@@ -64,3 +64,5 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
 
   setPaused(paused);
 }
+
+export {};
