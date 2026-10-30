@@ -19,6 +19,8 @@ const released = release && when(release.date);
 const [lead, ...rest] = tool.shots;
 const index = tools.indexOf(tool);
 const next = tools[(index + 1) % tools.length];
+// "Helix Boot: a multiboot rescue USB …", the pitch read on from the name
+const title = `${tool.name}: ${tool.pitch.charAt(0).toLowerCase()}${tool.pitch.slice(1).replace(/\.$/, '')}`;
 
 // What search engines may show about the tool
 const jsonLd = {
@@ -39,7 +41,7 @@ const jsonLd = {
 };
 ---
 <Base
-  title={`${tool.name}: ${tool.pitch}`}
+  title={title}
   description={`${tool.pitch} ${tool.summary}`}
   tool={tool.slug}
   image={`/og/${tool.slug}.png`}
