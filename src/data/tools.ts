@@ -239,7 +239,9 @@ export interface Release {
 /** A GET from the GitHub API at build time; undefined when it fails. */
 async function github(path: string): Promise<any> {
   const headers: Record<string, string> = { Accept: 'application/vnd.github+json' };
-  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  // From .env in development, from the environment in CI
+  const token = import.meta.env.GITHUB_TOKEN || process.env.GITHUB_TOKEN;
+  if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch(`https://api.github.com/${path}`, { headers, signal: AbortSignal.timeout(10_000) });
     return res.ok ? await res.json() : undefined;
