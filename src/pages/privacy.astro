@@ -4,27 +4,29 @@ import Icon from '../components/Icon.astro';
 ---
 <Base
   title="Privacy: Helix Tech"
-  description="What helixtech.app keeps about its visitors, which is next to nothing, and where the contact form sends what you write."
+  description="What helixtech.app and docs.helixtech.app keep about their visitors, which is next to nothing, and where the contact form sends what you write."
   image="/og/privacy.png"
 >
   <article class="wrap privacy">
     <p class="eyebrow" data-reveal>Privacy</p>
     <h1 data-reveal>Nothing to track.</h1>
     <p class="lede" data-reveal>
-      This site is a set of static pages. It sets no cookies, runs no analytics and loads nothing from anyone else: no
-      scripts, no fonts, no images, no trackers.
+      This site and the docs at <a href="https://docs.helixtech.app/">docs.helixtech.app</a> are static pages. They set
+      no cookies, run no analytics and load nothing from anyone else: no scripts, no fonts, no images, no trackers.
     </p>
 
     <div class="sections">
       <section data-reveal>
-        <h2>What the site keeps</h2>
+        <h2>What the sites keep</h2>
         <p>
           If you pick a theme with the switch in the header, that choice is kept in your own browser’s storage so the
-          page opens the same way next time. It never leaves your browser, and clearing site data removes it.
+          page opens the same way next time. The docs also keep which sidebar sections you opened, for as long as the
+          tab is open. None of it leaves your browser, and clearing site data removes it.
         </p>
         <p>
           The server writes the usual access log: the requested page, the time, your IP address and your browser’s
-          name. It exists to spot and block abuse, and is read by nothing else.
+          name. It is used to spot and block abuse, and for a private report of how many visits each page gets. It is
+          not shared with anyone.
         </p>
       </section>
 
