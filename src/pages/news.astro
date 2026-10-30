@@ -1,10 +1,10 @@
 ---
 // The latest releases of every public tool, newest first, with their notes
 // as written on GitHub
-import { marked } from 'marked';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { tools, releaseNotes } from '../data/tools';
+import { renderNotes } from '../data/notes';
 
 const entries = (
   await Promise.all(tools.map(async (tool) => (await releaseNotes(tool.repo)).map((release) => ({ tool, release }))))
@@ -13,18 +13,6 @@ const entries = (
   .sort((a, b) => b.release.date.localeCompare(a.release.date));
 const anyPublic = tools.some((t) => t.repo);
 
-// Release notes are Markdown. Pictures in them would come from GitHub, which
-// this site's policy does not load, so they become links, and raw HTML is
-// shown as text.
-const escape = (s: string) =>
-  s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
-marked.use({
-  renderer: {
-    image: ({ href, text }) => `<a href="${escape(href)}">${escape(text || 'image')}</a>`,
-    html: ({ text }) => escape(text),
-  },
-});
-const render = (markdown: string) => marked.parse(markdown, { async: false, gfm: true });
 const when = (date: string) =>
   new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
@@ -61,7 +49,7 @@ const when = (date: string) =>
                   <a href={release.url}>{release.name}</a>
                 </h2>
                 {release.body.trim() ? (
-                  <div class="notes" set:html={render(release.body)} />
+                  <div class="notes" set:html={renderNotes(release.body)} />
                 ) : (
                   <p class="notes">No notes were written for this release.</p>
                 )}

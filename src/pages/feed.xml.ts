@@ -2,6 +2,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { tools, releaseNotes } from '../data/tools';
+import { plainNotes, renderNotes } from '../data/notes';
 
 export async function GET(context: APIContext) {
   const entries = (
@@ -18,7 +19,8 @@ export async function GET(context: APIContext) {
       title: `${tool.name} ${release.tag}${release.name !== release.tag ? `: ${release.name}` : ''}`,
       link: release.url,
       pubDate: new Date(release.date),
-      description: release.body.trim() || `${tool.name} ${release.tag} is out.`,
+      description: plainNotes(release.body) || `${tool.name} ${release.tag} is out.`,
+      content: renderNotes(release.body),
       categories: [tool.name],
     })),
     customData: '<language>en-us</language>',
