@@ -1,0 +1,221 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Command from '../../components/Command.astro';
+import { tools, latestRelease, type Tool } from '../../data/tools';
+
+export function getStaticPaths() {
+  return tools.map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
+}
+
+const { tool } = Astro.props as { tool: Tool };
+const release = await latestRelease(tool.repo);
+const repoUrl = tool.repo && `https://github.com/${tool.repo}`;
+const released =
+  release &&
+  new Date(release.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const [lead, ...rest] = tool.shots;
+---
+<Base title={`${tool.name}: ${tool.pitch}`} description={`${tool.pitch} ${tool.summary}`} tool={tool.slug}>
+  <article class="tool wrap">
+    <p class="back"><a href="/#tools">All tools</a></p>
+
+    <header class="head">
+      {tool.icon && <Image src={tool.icon} alt="" width={72} height={72} class="icon" />}
+      <div>
+        <h1>{tool.name}</h1>
+        <p class="pitch">{tool.pitch}</p>
+      </div>
+    </header>
+
+    <p class="summary">{tool.summary}</p>
+
+    {
+      repoUrl ? (
+        <p class="actions">
+          {release && (
+            <a class="primary" href={release.url}>
+              Download {release.tag}
+            </a>
+          )}
+          <a href={repoUrl}>Source on GitHub</a>
+          {tool.docs && <a href={tool.docs}>Documentation</a>}
+        </p>
+      ) : (
+        <p class="notice">{tool.availability}</p>
+      )
+    }
+    {released && <p class="released">Released {released}.</p>}
+
+    {
+      lead && (
+        <section class="shots" aria-label="Screenshots">
+          <figure class="lead">
+            <Image src={lead.src} alt={lead.alt} widths={[640, 1100, 1600]} sizes="(max-width: 72rem) 100vw, 72rem" />
+            <figcaption>{lead.alt}</figcaption>
+          </figure>
+          {rest.length > 0 && (
+            <div class="rest">
+              {rest.map((s) => (
+                <figure>
+                  <Image src={s.src} alt={s.alt} widths={[480, 800]} sizes="(max-width: 48rem) 100vw, 36rem" />
+                  <figcaption>{s.alt}</figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    <div class="body">
+      <section>
+        <h2>What it does</h2>
+        <ul class="features">
+          {tool.features.map((f) => <li>{f}</li>)}
+        </ul>
+      </section>
+
+      {
+        tool.install.length > 0 && (
+          <section>
+            <h2>Install</h2>
+            {tool.install.map((step) => (
+              <div class="step">
+                <h3>{step.title}</h3>
+                {step.note && <p>{step.note}</p>}
+                {step.code && <Command code={step.code} label={step.title} />}
+              </div>
+            ))}
+          </section>
+        )
+      }
+
+      <section>
+        <h2>Requirements</h2>
+        <p>{tool.platforms}</p>
+        {tool.license && <p>{tool.license} license.</p>}
+      </section>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .tool {
+    padding-top: 1.5rem;
+  }
+  .back a {
+    color: var(--muted);
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+  .head h1 {
+    margin: 0;
+  }
+  .icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 16px;
+    flex: none;
+  }
+  .pitch {
+    font-size: var(--step-1);
+    color: var(--accent);
+    margin: 0.35rem 0 0;
+  }
+  .summary {
+    font-size: var(--step-1);
+    line-height: 1.5;
+    margin-top: 1.5rem;
+    max-width: 58ch;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .actions a {
+    padding: 0.6rem 1.1rem;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    color: var(--chrome);
+    text-decoration: none;
+  }
+  .actions a:hover {
+    border-color: var(--accent);
+  }
+  .actions a.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .released {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+  .notice {
+    border-left: 3px solid var(--accent);
+    padding: 0.75rem 1rem;
+    background: var(--deep);
+    margin-top: 1.75rem;
+  }
+
+  .shots {
+    margin-block: 3rem;
+  }
+  figure {
+    margin: 0;
+  }
+  figure :global(img) {
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    width: 100%;
+  }
+  figcaption {
+    color: var(--muted);
+    font-size: var(--step--1);
+    margin-top: 0.5rem;
+  }
+  .rest {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .body {
+    display: grid;
+    gap: 3rem;
+    margin-top: 3rem;
+    max-width: 48rem;
+  }
+  .body h2 {
+    font-size: var(--step-2);
+  }
+  .features {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+  .features li {
+    margin-bottom: 0.6rem;
+    max-width: var(--measure);
+  }
+  .features li::marker {
+    color: var(--accent);
+  }
+  .step {
+    margin-bottom: 1.75rem;
+  }
+  .step h3 {
+    margin-bottom: 0.4rem;
+  }
+  .step p {
+    margin-bottom: 0.6rem;
+  }
+</style>

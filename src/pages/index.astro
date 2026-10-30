@@ -1,0 +1,189 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Strand from '../components/Strand.astro';
+import { tools, latestRelease } from '../data/tools';
+
+const releases = await Promise.all(tools.map((t) => latestRelease(t.repo)));
+---
+<Base
+  title="Helix: tools for Linux machines, rescue drives, TVs and game day"
+  description="Helix Toolbox, Helix Boot, Config Bible, webOS Launcher and Touchdown: open tools for setting up, rescuing and enjoying your machines."
+>
+  <section class="intro wrap">
+    <h1>Tools for setting up, rescuing and enjoying your machines.</h1>
+    <p>
+      A Linux setup toolbox, a rescue USB that builds itself, a handbook for your own workstation, a home screen for LG TVs and a
+      scoreboard for the terminal. Each one shows you what it will do before it does it.
+    </p>
+  </section>
+
+  <section id="tools" class="helix wrap" aria-label="Tools">
+    {
+      tools.map((tool, i) => {
+        const release = releases[i];
+        return (
+          <article class:list={['turn', i % 2 ? 'right' : 'left']} data-tool={tool.slug}>
+            <div class="spine">
+              <Strand index={i} />
+              <span class="node" aria-hidden="true" />
+            </div>
+            <div class="entry">
+              <div class="title">
+                {tool.icon && <Image src={tool.icon} alt="" width={48} height={48} class="icon" />}
+                <h2>
+                  <a href={`/tools/${tool.slug}/`}>{tool.name}</a>
+                </h2>
+              </div>
+              <p class="pitch">{tool.pitch}</p>
+              <p class="meta">
+                {release ? <span>Version {release.tag.replace(/^v/, '')}</span> : null}
+                {tool.availability ? <span>Not public yet</span> : null}
+              </p>
+              <p class="summary">{tool.summary}</p>
+              <p class="more">
+                <a href={`/tools/${tool.slug}/`}>
+                  {tool.shots.length ? 'Screenshots, features and install' : 'Features and install'}
+                  <span class="visually-hidden"> for {tool.name}</span>
+                </a>
+              </p>
+            </div>
+          </article>
+        );
+      })
+    }
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-block: clamp(3rem, 10vw, 7rem) clamp(2rem, 6vw, 4rem);
+  }
+  .intro h1 {
+    max-width: 18ch;
+  }
+  .intro p {
+    font-size: var(--step-1);
+    max-width: 52ch;
+    color: var(--text);
+  }
+
+  .helix {
+    display: grid;
+  }
+  .turn {
+    --spine: clamp(7rem, 14vw, 10rem);
+    --gap: clamp(1rem, 3vw, 2.5rem);
+    display: grid;
+    grid-template-columns: 1fr var(--spine) 1fr;
+    column-gap: var(--gap);
+    min-height: 21rem;
+  }
+  .spine {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+  }
+  .node {
+    position: absolute;
+    top: 50%;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-top: -0.45rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--ink);
+    left: calc(50% - 0.45rem);
+  }
+  .node::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    /* From the node to the edge of the text column */
+    width: calc(var(--spine) / 2 + var(--gap) - 1rem);
+    background: var(--accent);
+  }
+  .left .node::after { right: 100%; }
+  .right .node::after { left: 100%; }
+
+  .entry {
+    grid-row: 1;
+    align-self: center;
+    padding-block: 2rem;
+    min-width: 0;
+  }
+  .left .entry { grid-column: 1; }
+  .right .entry { grid-column: 3; }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+  .title h2 {
+    margin: 0;
+    font-size: var(--step-2);
+  }
+  .title a {
+    color: var(--chrome);
+    text-decoration: none;
+  }
+  .title a:hover {
+    color: var(--accent);
+  }
+  .icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 12px;
+    flex: none;
+  }
+  .pitch {
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--chrome);
+    margin-bottom: 0.4rem;
+  }
+  .meta {
+    color: var(--accent);
+    font-size: var(--step--1);
+    margin-bottom: 0.75rem;
+  }
+  .meta:empty {
+    display: none;
+  }
+  .summary {
+    margin-bottom: 0;
+  }
+  .more {
+    margin: 1rem 0 0;
+  }
+  .more a {
+    color: var(--accent);
+  }
+
+  @media (max-width: 48rem) {
+    .turn,
+    .turn.right {
+      --spine: 4.5rem;
+      --gap: 1.25rem;
+      grid-template-columns: var(--spine) 1fr;
+      min-height: 19rem;
+    }
+    .spine {
+      grid-column: 1;
+    }
+    .left .entry,
+    .right .entry {
+      grid-column: 2;
+    }
+    .left .node::after {
+      right: auto;
+      left: 100%;
+    }
+    .title h2 {
+      font-size: var(--step-1);
+    }
+  }
+</style>
