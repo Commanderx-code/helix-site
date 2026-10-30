@@ -158,7 +158,7 @@ const homelab = [
             const release = releases[i];
             const [lead] = tool.shots;
             return (
-              <article class:list={['card', { featured: i === 0 }]} data-reveal data-cursor="Open">
+              <article class:list={['card', { featured: i === 0 }]} data-reveal={i === 0 ? 'left' : 'zoom'} data-cursor="Open">
                 <div class="card-text">
                   <div class="card-top">
                     {tool.icon && <Image src={tool.icon} alt="" width={44} height={44} class="icon" />}
@@ -188,6 +188,7 @@ const homelab = [
                   {lead && i > 0 && (
                     <Image
                       class="shot"
+                      data-reveal="zoom"
                       src={lead.src}
                       alt={lead.alt}
                       widths={[480, 800]}
@@ -208,7 +209,7 @@ const homelab = [
                   </p>
                 </div>
                 {lead && i === 0 && (
-                  <Image class="shot" src={lead.src} alt={lead.alt} widths={[480, 800, 1100]} sizes="(max-width: 64rem) 100vw, 40rem" />
+                  <Image class="shot" data-reveal="right" src={lead.src} alt={lead.alt} widths={[480, 800, 1100]} sizes="(max-width: 64rem) 100vw, 40rem" />
                 )}
               </article>
             );
@@ -511,6 +512,10 @@ const homelab = [
   }
 
   /* Six columns: the first tool takes four, the rest two. Fewer as the screen narrows. */
+  /* A card's screenshot arrives a beat after the card itself */
+  .card :global(.shot[data-reveal]) {
+    transition-delay: calc(var(--reveal-order, 0) * 160ms + 300ms);
+  }
   .bento {
     display: grid;
     gap: 1rem;
