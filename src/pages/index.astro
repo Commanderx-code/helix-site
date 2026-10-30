@@ -46,15 +46,18 @@ const floating = [
 ].filter((f) => f.shot);
 
 // Numbers read from GitHub at build time; one that could not be read is left
-// out, and without any the section is not shown
+// out, and without any the section is not shown. Stars join once there are
+// enough of them to say something.
 const known = stats.filter((s) => s !== undefined);
-const sum = (key: 'stars' | 'releases' | 'downloads') => known.reduce((n, s) => n + s[key], 0);
-const figures: { icon: 'download' | 'star' | 'tag' | 'grid'; value: number; label: string }[] = [
+const sum = (key: 'stars' | 'releases' | 'commits' | 'downloads') => known.reduce((n, s) => n + s[key], 0);
+const enoughStars = 25;
+const figures: { icon: 'download' | 'star' | 'tag' | 'commit' | 'grid'; value: number; label: string }[] = [
   ...(known.length
     ? [
         { icon: 'download' as const, value: sum('downloads'), label: 'Release downloads' },
-        { icon: 'star' as const, value: sum('stars'), label: 'Stars on GitHub' },
         { icon: 'tag' as const, value: sum('releases'), label: 'Releases shipped' },
+        { icon: 'commit' as const, value: sum('commits'), label: 'Commits on GitHub' },
+        ...(sum('stars') >= enoughStars ? [{ icon: 'star' as const, value: sum('stars'), label: 'Stars on GitHub' }] : []),
       ]
     : []),
   { icon: 'grid', value: tools.length, label: 'Tools, one home' },
