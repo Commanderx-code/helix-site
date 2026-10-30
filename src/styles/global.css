@@ -68,6 +68,23 @@
   --muted: #5b6178;
 }
 
+/* A surface that stays dark in the light theme too, such as the laptop screen */
+[data-dark] {
+  color-scheme: dark;
+  --ink: #0b0d12;
+  --deep: #11141c;
+  --raised: #161a24;
+  --line: #232837;
+  --line-strong: #2e3446;
+  --mint: #5eead4;
+  --violet: #a78bfa;
+  --on-accent: #0b0d12;
+  --chrome: #eceef4;
+  --text: #b4b9c9;
+  --muted: #8b91a3;
+  color: var(--text);
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }

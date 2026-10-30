@@ -17,3 +17,10 @@
 :root[data-theme='light'] [data-tool='config-bible'] { --accent: #8e2fc0; }
 :root[data-theme='light'] [data-tool='webos-launcher'] { --accent: #2f63c9; }
 :root[data-theme='light'] [data-tool='touchdown'] { --accent: #17774f; }
+
+/* Inside a surface that stays dark (data-dark), the dark accents in both themes */
+:root [data-dark] [data-tool='toolbox'] { --accent: #3bd2ff; }
+:root [data-dark] [data-tool='boot'] { --accent: #c084fc; }
+:root [data-dark] [data-tool='config-bible'] { --accent: #e879f9; }
+:root [data-dark] [data-tool='webos-launcher'] { --accent: #7fb4ff; }
+:root [data-dark] [data-tool='touchdown'] { --accent: #79e4b7; }
