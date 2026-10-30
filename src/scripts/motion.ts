@@ -5,13 +5,16 @@
 // part of the page is simply there.
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// The header turns frosted and shorter once the page leaves the top
+// The header turns frosted and shorter once the page leaves the top, and
+// the back-to-top button appears once a screen has gone by
 const header = document.querySelector<HTMLElement>('[data-header]');
-if (header) {
-  const update = () => header.toggleAttribute('data-scrolled', scrollY > 8);
-  update();
-  addEventListener('scroll', update, { passive: true });
-}
+const top = document.querySelector<HTMLElement>('[data-top]');
+const update = () => {
+  header?.toggleAttribute('data-scrolled', scrollY > 8);
+  top?.toggleAttribute('data-show', scrollY > innerHeight * 0.8);
+};
+update();
+addEventListener('scroll', update, { passive: true });
 
 if (!still) {
   // Each [data-reveal] rises into view, a beat after the one before it in the same parent

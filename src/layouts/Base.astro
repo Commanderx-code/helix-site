@@ -135,13 +135,16 @@ const gallery = (
             <a class="round" href="https://github.com/Commanderx-code" aria-label="Helix Tech on GitHub">
               <Icon name="code" size={18} />
             </a>
-            <a class="round" href="#main" aria-label="Back to top">
+            <a class="round" href="#top" aria-label="Back to top">
               <Icon name="arrow-up" size={18} />
             </a>
           </div>
         </div>
       </div>
     </footer>
+    <a class="to-top" href="#top" aria-label="Back to top" data-top>
+      <Icon name="arrow-up" size={20} />
+    </a>
     <script>
       import '../scripts/copy.ts';
       import '../scripts/motion.ts';
@@ -398,5 +401,37 @@ const gallery = (
     color: var(--on-accent);
     background: var(--mint);
     border-color: var(--mint);
+  }
+
+  /* Floating back-to-top button, shown once the page has scrolled a screen */
+  .to-top {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    color: var(--on-accent);
+    background: var(--mint);
+    box-shadow: 0 0.75rem 1.5rem -0.5rem rgb(0 0 0 / 0.6);
+    opacity: 0;
+    translate: 0 1rem;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      translate 0.3s ease,
+      scale 0.2s ease;
+  }
+  .to-top[data-show] {
+    opacity: 1;
+    translate: none;
+    pointer-events: auto;
+  }
+  .to-top:hover {
+    color: var(--on-accent);
+    scale: 1.08;
   }
 </style>
