@@ -1,8 +1,10 @@
 ---
-// The contact page: a form that sends mail through Web3Forms, plus the
-// direct routes. The form posts straight to the service, so it needs no
-// script; the key is public by design and comes from PUBLIC_WEB3FORMS_KEY.
-// Without a key the page offers email instead of a form that cannot send.
+// The contact page: the ways to reach Helix Tech, a form that sends mail
+// through Web3Forms, and each tool's issue tracker. The form posts straight
+// to the service, so it needs no script; the key is public by design and
+// comes from PUBLIC_WEB3FORMS_KEY. Without a key the page offers email
+// instead of a form that cannot send.
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { tools } from '../data/tools';
@@ -10,7 +12,34 @@ import { tools } from '../data/tools';
 const email = 'contact@helixstack.io';
 const key = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
 const sent = new URL('/contact/sent/', Astro.site).href;
-const withIssues = tools.filter((t) => t.repo);
+
+// The picture beside the form: the featured tool at work
+const [featured] = tools;
+const [picture] = featured.shots;
+
+const ways = [
+  {
+    icon: 'mail',
+    title: 'General questions',
+    text: 'A question about a tool, the site, or anything else.',
+    label: 'Write an email',
+    href: `mailto:${email}`,
+  },
+  {
+    icon: 'bug',
+    title: 'Something broken',
+    text: 'Each tool keeps its own issues on GitHub. Filing it there gets it fixed fastest.',
+    label: 'Open an issue',
+    href: '#issues',
+  },
+  {
+    icon: 'chat',
+    title: 'Ideas and requests',
+    text: 'A feature you miss, a tool you would like to see, or a distribution to support.',
+    label: 'Send a message',
+    href: '#message',
+  },
+] as const;
 ---
 <Base
   title="Contact Helix Tech"
@@ -19,91 +48,149 @@ const withIssues = tools.filter((t) => t.repo);
 >
   <section class="wrap head">
     <p class="eyebrow" data-reveal>Contact</p>
-    <h1 data-reveal>Say hello.</h1>
-    <p class="lede" data-reveal>
-      A question, an idea, something broken, or a tool you would like to see: write and it will be read.
-    </p>
+    <h1 data-reveal>We're here to <span class="lit">help.</span></h1>
+    <p class="lede" data-reveal>A question, an idea, something broken, or a tool you would like to see: write and it will be read.</p>
   </section>
 
-  <section class="band">
-    <div class="wrap split">
-      <div class="panel" data-reveal="left">
-        {
-          key ? (
-            <form method="post" action="https://api.web3forms.com/submit">
-              <input type="hidden" name="access_key" value={key} />
-              <input type="hidden" name="from_name" value="helixtech.app" />
-              <input type="hidden" name="redirect" value={sent} />
-              <input type="checkbox" name="botcheck" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
-              <div class="row">
-                <label>
-                  <span>Name</span>
-                  <input type="text" name="name" required autocomplete="name" />
-                </label>
-                <label>
-                  <span>Email</span>
-                  <input type="email" name="email" required autocomplete="email" />
-                </label>
-              </div>
-              <label>
-                <span>About</span>
-                <select name="subject" required>
-                  <option value="A question">A question</option>
-                  <option value="A bug or a problem">A bug or a problem</option>
-                  <option value="An idea or a request">An idea or a request</option>
-                  <option value="The website">The website</option>
-                  <option value="Something else">Something else</option>
-                </select>
-              </label>
-              <label>
-                <span>Message</span>
-                <textarea name="message" rows="7" required></textarea>
-              </label>
-              <p class="actions">
-                <button class="button primary" type="submit">Send message <Icon name="arrow-right" /></button>
-                <span class="note">Replies come from {email}.</span>
-              </p>
-            </form>
-          ) : (
-            <div class="fallback">
-              <h2>Write to us</h2>
-              <p>The form is not switched on yet. Email works just as well.</p>
-              <a class="button primary" href={`mailto:${email}`}>
-                {email} <Icon name="arrow-right" />
-              </a>
-            </div>
-          )
-        }
-      </div>
+  <section class="wrap" aria-label="Ways to get in touch">
+    <ul class="ways">
+      {
+        ways.map((w) => (
+          <li class="way" data-reveal="zoom">
+            <span class="tile">
+              <Icon name={w.icon} size={24} />
+            </span>
+            <h2>{w.title}</h2>
+            <p>{w.text}</p>
+            <a href={w.href}>
+              {w.label} <Icon name="arrow-right" size={14} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
-      <aside class="ways" data-reveal="right">
-        <div class="way">
-          <p class="heading">Email</p>
-          <a href={`mailto:${email}`}>{email}</a>
+  <section id="message" class="band tint">
+    <div class="wrap touch">
+      <figure class="picture" data-reveal="left">
+        <Image src={picture.src} alt={picture.alt} widths={[640, 1000, 1400]} sizes="(max-width: 60rem) 100vw, 44rem" />
+      </figure>
+      <div class="side" data-reveal="right">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Send us a <span class="lit">message.</span></h2>
+        <div class="panel">
+          {
+            key ? (
+              <form method="post" action="https://api.web3forms.com/submit">
+                <input type="hidden" name="access_key" value={key} />
+                <input type="hidden" name="from_name" value="helixtech.app" />
+                <input type="hidden" name="redirect" value={sent} />
+                <input type="checkbox" name="botcheck" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
+                <div class="row">
+                  <label>
+                    <span>Name</span>
+                    <input type="text" name="name" required autocomplete="name" placeholder="Your name" />
+                  </label>
+                  <label>
+                    <span>Email</span>
+                    <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+                  </label>
+                </div>
+                <div class="row">
+                  <label>
+                    <span>About</span>
+                    <select name="subject" required>
+                      <option value="A question">A question</option>
+                      <option value="A bug or a problem">A bug or a problem</option>
+                      <option value="An idea or a request">An idea or a request</option>
+                      <option value="The website">The website</option>
+                      <option value="Something else">Something else</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Tool</span>
+                    <select name="tool">
+                      <option value="">Not about one tool</option>
+                      {tools.map((t) => (
+                        <option value={t.name}>{t.name}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  <span>Message</span>
+                  <textarea name="message" rows="6" required placeholder="What's on your mind?"></textarea>
+                </label>
+                <p class="actions">
+                  <button class="button primary" type="submit">
+                    Send message <Icon name="arrow-right" />
+                  </button>
+                  <span class="note">Replies come from {email}.</span>
+                </p>
+              </form>
+            ) : (
+              <div class="fallback">
+                <p>The form is not switched on yet. Email works just as well.</p>
+                <a class="button primary" href={`mailto:${email}`}>
+                  {email} <Icon name="arrow-right" />
+                </a>
+              </div>
+            )
+          }
         </div>
-        <div class="way">
-          <p class="heading">Found a bug?</p>
-          <p>Each tool keeps its own issues on GitHub. Filing it there gets it fixed fastest.</p>
-          <ul>
-            {
-              withIssues.map((t) => (
-                <li>
+      </div>
+    </div>
+  </section>
+
+  <section id="issues" class="band" aria-labelledby="issues-h">
+    <div class="wrap centre">
+      <div data-reveal>
+        <p class="eyebrow">Issue trackers</p>
+        <h2 id="issues-h">One per <span class="lit">tool.</span></h2>
+      </div>
+      <ul class="trackers">
+        {
+          tools.map((t, i) => (
+            <li data-tool={t.slug} data-reveal="zoom">
+              <span class="category">
+                {String(i + 1).padStart(2, '0')} / {t.category}
+              </span>
+              <h3>{t.name}</h3>
+              <p>{t.pitch}</p>
+              {t.repo ? (
+                <p class="links">
                   <a href={`https://github.com/${t.repo}/issues/new`}>
-                    <Icon name="arrow-right" size={14} />
-                    {t.name} issues
+                    Open an issue <Icon name="arrow-right" size={14} />
                   </a>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        <div class="way">
-          <p class="heading">GitHub</p>
-          <a href="https://github.com/Commanderx-code">
-            <Icon name="code" size={16} /> github.com/Commanderx-code
-          </a>
-        </div>
-      </aside>
+                  <a class="quiet" href={`https://github.com/${t.repo}/issues`}>
+                    Browse <Icon name="external" size={14} />
+                  </a>
+                </p>
+              ) : (
+                <p class="links">
+                  <a href={`mailto:${email}`}>
+                    Not public yet: email instead <Icon name="arrow-right" size={14} />
+                  </a>
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="news-h">
+    <div class="cta" data-reveal="zoom">
+      <div>
+        <h2 id="news-h">See what's shipping.</h2>
+        <p>Every release of every tool, with its notes, on one page. Or follow along by RSS.</p>
+      </div>
+      <p class="actions">
+        <a class="button primary" href="/news/">What's new <Icon name="arrow-right" /></a>
+        <a class="button" href="/feed.xml"><Icon name="rss" /> RSS feed</a>
+      </p>
     </div>
   </section>
 </Base>
@@ -111,35 +198,140 @@ const withIssues = tools.filter((t) => t.repo);
 <style>
   .head {
     padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
   }
   .head h1 {
     font-size: clamp(2.75rem, 7vw, 5.5rem);
   }
   .lede {
     max-width: 48ch;
+    margin-inline: auto;
     font-size: var(--step-1);
+  }
+  .lit {
+    background: linear-gradient(90deg, var(--mint), var(--violet));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .band {
     border-top: 1px solid var(--line);
-    padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+    padding-block: clamp(3rem, 6vw, 5rem);
   }
-  .split {
-    display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
-    grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 1fr);
-    align-items: start;
+  .tint {
+    background: var(--deep);
   }
-  @media (max-width: 52rem) {
-    .split {
-      grid-template-columns: minmax(0, 1fr);
-    }
+  .centre {
+    text-align: center;
+  }
+  .head .eyebrow,
+  .centre .eyebrow {
+    max-width: none;
+  }
+  .centre h2 {
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
   }
 
-  .panel {
-    padding: clamp(1.25rem, 3vw, 2rem);
+  /* The three routes */
+  .ways {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    margin: 0 0 clamp(3rem, 6vw, 5rem);
+    padding: 0;
+    list-style: none;
+  }
+  .way {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.75rem;
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--deep);
+  }
+  .tile {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.5rem;
+    border-radius: 10px;
+    background: var(--mint);
+    color: var(--on-accent);
+  }
+  .way h2,
+  .trackers h3 {
+    margin: 0;
+    font-family: var(--body);
+    font-size: var(--step-1);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .way p,
+  .trackers p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--muted);
+  }
+  .way > a,
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-weight: 600;
+    color: var(--mint);
+    text-decoration: none;
+  }
+  .way > a:hover,
+  .links a:hover {
+    color: var(--chrome);
+  }
+
+  /* The picture and the form, the form riding over the picture's edge on wide screens */
+  .touch {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .touch {
+      grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+      gap: 0;
+    }
+    .picture {
+      margin-right: -5rem;
+    }
+    .side {
+      position: relative;
+      z-index: 1;
+      padding-left: 0;
+    }
+  }
+  .picture {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.6);
+  }
+  .picture :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .side h2 {
+    margin-bottom: 1.25rem;
+  }
+  .panel {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--ink);
+    box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.7);
   }
   form {
     display: flex;
@@ -149,7 +341,7 @@ const withIssues = tools.filter((t) => t.repo);
   .row {
     display: grid;
     gap: 1.125rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   }
   label {
     display: flex;
@@ -169,14 +361,18 @@ const withIssues = tools.filter((t) => t.repo);
     padding: 0.625rem 0.875rem;
     border: 1px solid var(--line-strong);
     border-radius: 10px;
-    background: var(--ink);
+    background: var(--deep);
     color: var(--chrome);
     font: inherit;
     font-weight: 400;
   }
+  ::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
   textarea {
     resize: vertical;
-    min-height: 9rem;
+    min-height: 8rem;
   }
   input:focus,
   select:focus,
@@ -205,47 +401,72 @@ const withIssues = tools.filter((t) => t.repo);
     font-size: var(--step--1);
     color: var(--muted);
   }
-  .fallback h2 {
-    font-size: var(--step-2);
+  .fallback p {
+    margin-bottom: 1rem;
   }
 
-  .ways {
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
-  }
-  .way p {
-    margin: 0 0 0.5rem;
-  }
-  .heading {
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--line-strong);
-    font-family: var(--display);
-    font-size: 1.375rem;
-    font-weight: 700;
-    color: var(--mint);
-  }
-  .way > a,
-  .way li a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2.25rem;
-    color: var(--chrome);
-    text-decoration: none;
-    overflow-wrap: anywhere;
-  }
-  .way > a:hover,
-  .way li a:hover {
-    color: var(--mint);
-  }
-  .way a :global(svg) {
-    flex: none;
-    color: var(--mint);
-  }
-  .way ul {
+  /* One card per tool, in its own colour */
+  .trackers {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
     margin: 0;
     padding: 0;
     list-style: none;
+    text-align: left;
+  }
+  .trackers li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent, var(--mint));
+    border-radius: var(--radius);
+    background: var(--deep);
+  }
+  .category {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent, var(--mint));
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+  }
+  .links a {
+    color: var(--accent, var(--mint));
+  }
+  .links .quiet {
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* The closing invitation */
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-block: 0 clamp(3rem, 6vw, 5rem);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--deep);
+  }
+  .cta h2 {
+    margin: 0 0 0.5rem;
+    font-size: var(--step-2);
+  }
+  .cta p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .cta .actions {
+    margin: 0;
   }
 </style>
