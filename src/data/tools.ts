@@ -250,6 +250,23 @@ async function github(path: string): Promise<any> {
   }
 }
 
+/** How many items a paged GitHub listing holds, from its last page number; undefined when it fails. */
+async function githubCount(path: string): Promise<number | undefined> {
+  const headers: Record<string, string> = { Accept: 'application/vnd.github+json' };
+  const token = import.meta.env.GITHUB_TOKEN || process.env.GITHUB_TOKEN;
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const res = await fetch(`https://api.github.com/${path}?per_page=1`, { headers, signal: AbortSignal.timeout(10_000) });
+    if (!res.ok) return undefined;
+    const last = res.headers.get('link')?.match(/[?&]page=(\d+)>; rel="last"/);
+    if (last) return Number(last[1]);
+    const list = await res.json();
+    return Array.isArray(list) ? list.length : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Latest release of each public repository, read from GitHub at build time. */
 export async function latestRelease(repo?: string): Promise<Release | undefined> {
   if (!repo) return undefined;
@@ -285,18 +302,25 @@ export async function releaseNotes(repo?: string, count = 3): Promise<ReleaseNot
 export interface RepoStats {
   stars: number;
   releases: number;
+  /** Commits on the default branch */
+  commits: number;
   /** Downloads of every file attached to every release */
   downloads: number;
 }
 
-/** Stars, releases and release downloads of a public repository, read at build time. */
+/** Stars, releases, commits and release downloads of a public repository, read at build time. */
 export async function repoStats(repo?: string): Promise<RepoStats | undefined> {
   if (!repo) return undefined;
-  const [info, releases] = await Promise.all([github(`repos/${repo}`), github(`repos/${repo}/releases?per_page=100`)]);
+  const [info, releases, commits] = await Promise.all([
+    github(`repos/${repo}`),
+    github(`repos/${repo}/releases?per_page=100`),
+    githubCount(`repos/${repo}/commits`),
+  ]);
   if (!info || !Array.isArray(releases)) return undefined;
   return {
     stars: info.stargazers_count,
     releases: releases.length,
+    commits: commits ?? 0,
     downloads: releases.reduce(
       (sum: number, r: any) => sum + r.assets.reduce((n: number, a: any) => n + a.download_count, 0),
       0,
