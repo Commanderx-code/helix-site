@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Helix from '../components/Helix.astro';
+import Showcase from '../components/Showcase.astro';
 import Command from '../components/Command.astro';
 import Icon from '../components/Icon.astro';
 import { tools, latestRelease } from '../data/tools';
@@ -66,7 +67,7 @@ const homelab = [
       }
     </div>
     <div class="art">
-      <Helix />
+      <Showcase />
     </div>
   </section>
 
@@ -194,6 +195,9 @@ const homelab = [
       <p>Explore the code and see what’s taking shape.</p>
     </div>
     <a class="button primary" href="https://github.com/Commanderx-code">Find Helix Tech on GitHub <Icon name="external" /></a>
+    <div class="mark">
+      <Helix />
+    </div>
   </section>
 </Base>
 
@@ -210,11 +214,12 @@ const homelab = [
     min-width: 0;
   }
   .art {
-    flex: 1 1 18rem;
+    flex: 1 1 26rem;
     min-width: 0;
   }
   .hero h1 {
     margin-bottom: 1.5rem;
+    font-size: clamp(3rem, 6vw, 5.5rem);
   }
   .lit {
     background: linear-gradient(90deg, var(--mint), var(--violet));
@@ -509,8 +514,17 @@ const homelab = [
     border-radius: 20px;
     background: var(--deep);
   }
-  .open > div {
+  .open > div:first-child {
     flex: 1 1 24rem;
+  }
+  .mark {
+    flex: none;
+    width: 9rem;
+  }
+  @media (max-width: 40rem) {
+    .mark {
+      display: none;
+    }
   }
   .open h2 {
     font-size: clamp(2rem, 4.4vw, 3.25rem);
