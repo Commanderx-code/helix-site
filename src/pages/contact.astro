@@ -181,10 +181,9 @@ const withIssues = tools.filter((t) => t.repo);
     outline-offset: 1px;
     border-color: var(--mint);
   }
-  /* A field only a bot would fill in */
+  /* A field only a bot would fill in: not shown, not focusable */
   .trap {
-    position: absolute;
-    left: -999px;
+    display: none;
   }
   .actions {
     display: flex;
