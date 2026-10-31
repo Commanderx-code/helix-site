@@ -369,7 +369,8 @@ const homelab = [
 
 <style>
   /* The backdrop fills the first screen, behind the see-through header and
-     the hero, and fades into the page colour before the showcase */
+     the hero, and fades into the page colour before the showcase. It is
+     solid page colour behind the header, so the bar never takes its tint. */
   .sky {
     position: absolute;
     inset: 0 0 auto;
@@ -396,7 +397,8 @@ const homelab = [
       radial-gradient(60% 50% at 50% 45%, transparent, color-mix(in srgb, var(--ink) 40%, transparent)),
       linear-gradient(
         to bottom,
-        color-mix(in srgb, var(--ink) 34%, transparent),
+        var(--ink),
+        color-mix(in srgb, var(--ink) 34%, transparent) 9rem,
         color-mix(in srgb, var(--ink) 46%, transparent) 55%,
         var(--ink)
       );
