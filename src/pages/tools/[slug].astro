@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Command from '../../components/Command.astro';
 import Icon from '../../components/Icon.astro';
 import Notes from '../../components/Notes.astro';
+import Gallery from '../../components/Gallery.astro';
 import { tools, latestRelease, releaseNotes, type Tool } from '../../data/tools';
 
 export function getStaticPaths() {
@@ -16,7 +17,7 @@ const when = (date: string) =>
   new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const repoUrl = tool.repo && `https://github.com/${tool.repo}`;
 const released = release && when(release.date);
-const [lead, ...rest] = tool.shots;
+const [lead] = tool.shots;
 const index = tools.indexOf(tool);
 const next = tools[(index + 1) % tools.length];
 // "Helix Boot: a multiboot rescue USB …", the pitch read on from the name
@@ -104,32 +105,9 @@ const jsonLd = {
 
     {
       lead && (
-        <section class="shots wrap" aria-label="Screenshots">
-          <figure class="lead" data-reveal="zoom">
-            <a href={lead.src.src}>
-              <Image
-                src={lead.src}
-                alt={lead.alt}
-                widths={[640, 1100, 1600]}
-                sizes="(max-width: 75rem) 100vw, 75rem"
-                loading="eager"
-                fetchpriority="high"
-              />
-            </a>
-            <figcaption>{lead.alt}</figcaption>
-          </figure>
-          {rest.length > 0 && (
-            <ul class="thumbs">
-              {rest.map((s) => (
-                <li data-reveal>
-                  <a href={s.src.src}>
-                    <Image src={s.src} alt={s.alt} widths={[400, 640]} sizes="(max-width: 40rem) 50vw, 18rem" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <div class="shots wrap" data-reveal="zoom">
+          <Gallery shots={tool.shots} />
+        </div>
       )
     }
 
@@ -341,51 +319,6 @@ const jsonLd = {
 
   .shots {
     padding-bottom: clamp(3.5rem, 7vw, 6rem);
-  }
-  figure {
-    margin: 0;
-    padding: clamp(0.5rem, 1.2vw, 0.875rem);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: var(--deep);
-  }
-  figure :global(img),
-  .thumbs :global(img) {
-    width: 100%;
-    border-radius: 10px;
-  }
-  figcaption {
-    padding: 0.75rem 0.375rem 0.25rem;
-    color: var(--muted);
-    font-size: var(--step--1);
-  }
-  .thumbs {
-    display: grid;
-    gap: 0.75rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr));
-    margin: 0.75rem 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  .thumbs a {
-    display: block;
-    padding: 0.25rem;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--deep);
-  }
-  .thumbs a {
-    transition: border-color 0.2s ease, transform 0.2s ease;
-  }
-  @media (hover: hover) {
-    .thumbs a:hover {
-      border-color: var(--accent);
-      transform: scale(1.04);
-    }
-  }
-  .thumbs a:active {
-    transform: scale(0.97);
-    transition-duration: 0.08s;
   }
 
   .band {

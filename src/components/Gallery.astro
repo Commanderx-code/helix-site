@@ -1,0 +1,160 @@
+---
+// A tool's screenshots as a carousel: one large slide each, with its
+// caption, opening the full-size image. Without JavaScript it is a row
+// you swipe or scroll; scripts/showcase.ts adds the buttons, the dots and
+// the timed advance, as it does for the slider on the home page.
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { Shot } from '../data/tools';
+
+interface Props {
+  shots: Shot[];
+}
+const { shots } = Astro.props;
+---
+<section class="gallery" aria-roledescription="carousel" aria-label="Screenshots" data-showcase>
+  <div class="track" data-track>
+    {
+      shots.map((shot, i) => (
+        <figure class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${shots.length}`}>
+          <a href={shot.src.src}>
+            <Image
+              src={shot.src}
+              alt={shot.alt}
+              widths={[640, 1100, 1600]}
+              sizes="(max-width: 75rem) 100vw, 75rem"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'auto'}
+            />
+          </a>
+          <figcaption>{shot.alt}</figcaption>
+        </figure>
+      ))
+    }
+  </div>
+  <div class="controls" data-controls hidden>
+    <button type="button" class="round" data-prev aria-label="Previous screenshot">
+      <Icon name="arrow-left" size={18} />
+    </button>
+    <div class="dots">
+      {
+        shots.map((shot, i) => (
+          <button type="button" class="dot" data-dot={i} aria-label={`Show: ${shot.alt}`}>
+            <span />
+          </button>
+        ))
+      }
+    </div>
+    <button type="button" class="round" data-next aria-label="Next screenshot">
+      <Icon name="arrow-right" size={18} />
+    </button>
+    <button type="button" class="pause" data-pause>Pause</button>
+  </div>
+</section>
+
+<script>
+  import '../scripts/showcase.ts';
+</script>
+
+<style>
+  .gallery {
+    width: 100%;
+    min-width: 0;
+  }
+  .track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    border-radius: 18px;
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  .slide {
+    scroll-snap-align: start;
+    margin: 0;
+    padding: clamp(0.5rem, 1.2vw, 0.875rem);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--deep);
+  }
+  .slide a {
+    display: block;
+  }
+  .slide :global(img) {
+    width: 100%;
+    border-radius: 10px;
+  }
+  figcaption {
+    padding: 0.75rem 0.375rem 0.25rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  .controls[hidden] {
+    display: none;
+  }
+  button {
+    font: inherit;
+    color: var(--text);
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .round,
+  .pause {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+  }
+  .pause {
+    margin-left: auto;
+    padding: 0 1rem;
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+  .round:hover,
+  .pause:hover {
+    color: var(--chrome);
+    background: var(--raised);
+  }
+  .dots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.75rem;
+  }
+  .dot span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--line-strong);
+    transition: width 0.25s ease, background-color 0.25s ease;
+  }
+  .dot[aria-current='true'] span {
+    width: 1.5rem;
+    background: var(--accent, var(--mint));
+  }
+</style>
