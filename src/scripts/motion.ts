@@ -6,12 +6,17 @@
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // The header turns frosted and shorter once the page leaves the top, and
-// the back-to-top button appears once a screen has gone by
+// the back-to-top button appears once a screen has gone by. Its ring fills
+// with how far down the page the reader is (--progress, 0 to 1).
 const header = document.querySelector<HTMLElement>('[data-header]');
 const top = document.querySelector<HTMLElement>('[data-top]');
 const update = () => {
   header?.toggleAttribute('data-scrolled', scrollY > 8);
-  top?.toggleAttribute('data-show', scrollY > innerHeight * 0.8);
+  if (!top) return;
+  top.toggleAttribute('data-show', scrollY > innerHeight * 0.8);
+  const room = document.documentElement.scrollHeight - innerHeight;
+  const progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
+  top.style.setProperty('--progress', progress.toFixed(3));
 };
 update();
 addEventListener('scroll', update, { passive: true });
