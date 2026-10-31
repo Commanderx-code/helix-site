@@ -491,7 +491,9 @@ const gallery = (
     border-color: var(--mint);
   }
 
-  /* Floating back-to-top button, shown once the page has scrolled a screen */
+  /* Floating back-to-top button, shown once the page has scrolled a screen.
+     The ring around it fills clockwise with how far down the page the
+     reader is; scripts/motion.ts keeps --progress up to date. */
   .to-top {
     position: fixed;
     right: clamp(1rem, 3vw, 2rem);
@@ -502,8 +504,8 @@ const gallery = (
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    color: var(--on-accent);
-    background: var(--mint);
+    color: var(--chrome);
+    background: var(--deep);
     box-shadow: 0 0.75rem 1.5rem -0.5rem rgb(0 0 0 / 0.6);
     opacity: 0;
     translate: 0 1rem;
@@ -511,7 +513,18 @@ const gallery = (
     transition:
       opacity 0.3s ease,
       translate 0.3s ease,
-      scale 0.2s ease;
+      scale 0.2s ease,
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+  .to-top::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(var(--mint) calc(var(--progress, 0) * 1turn), var(--line-strong) 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
   }
   .to-top[data-show] {
     opacity: 1;
@@ -520,6 +533,7 @@ const gallery = (
   }
   .to-top:hover {
     color: var(--on-accent);
+    background: var(--mint);
     scale: 1.08;
   }
 </style>
