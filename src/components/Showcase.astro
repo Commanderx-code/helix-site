@@ -1,5 +1,5 @@
 ---
-// A slider of the tools that have screenshots, each slide opening the
+// A slider of every screenshot the tools have, each slide opening the
 // tool's page. Without JavaScript it is a row you swipe or scroll; the
 // script adds the buttons, the dots and the timed advance.
 import { Image } from 'astro:assets';
@@ -7,8 +7,8 @@ import Icon from './Icon.astro';
 import { tools } from '../data/tools';
 
 const slides = tools
-  .map((tool, i) => ({ tool, number: String(i + 1).padStart(2, '0'), shot: tool.shots[0] }))
-  .filter((s) => s.shot);
+  .flatMap((tool) => tool.shots.map((shot) => ({ tool, shot })))
+  .map((s, i) => ({ ...s, number: String(i + 1).padStart(2, '0') }));
 ---
 <section class="showcase" aria-roledescription="carousel" aria-label="Tools at a glance" data-showcase>
   <div class="track" data-track>
@@ -19,7 +19,7 @@ const slides = tools
           data-tool={tool.slug}
           data-cursor="Open"
           aria-roledescription="slide"
-          aria-label={`${i + 1} of ${slides.length}: ${tool.name}`}
+          aria-label={`${i + 1} of ${slides.length}: ${tool.name}, ${shot.alt}`}
         >
           <a class="shot" href={`/tools/${tool.slug}/`} tabindex="-1" aria-hidden="true">
             <Image
@@ -36,7 +36,7 @@ const slides = tools
               {number} / {tool.category}
             </p>
             <p class="name">{tool.name}</p>
-            <p class="pitch">{tool.pitch}</p>
+            <p class="pitch">{shot.alt}</p>
             <a class="open" href={`/tools/${tool.slug}/`}>
               Open {tool.name} <Icon name="arrow-right" />
             </a>
@@ -51,8 +51,8 @@ const slides = tools
     </button>
     <div class="dots">
       {
-        slides.map(({ tool }, i) => (
-          <button type="button" class="dot" data-dot={i} aria-label={`Show ${tool.name}`}>
+        slides.map(({ tool, shot }, i) => (
+          <button type="button" class="dot" data-dot={i} aria-label={`Show ${tool.name}: ${shot.alt}`}>
             <span />
           </button>
         ))
@@ -162,6 +162,7 @@ const slides = tools
 
   .controls {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.75rem;
@@ -200,12 +201,24 @@ const slides = tools
   }
   .dots {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  /* A dot per screenshot is a wide row: below the buttons on narrow screens */
+  @media (max-width: 48rem) {
+    .dots {
+      order: 1;
+      flex-basis: 100%;
+    }
+    .dot {
+      width: 1.5rem;
+    }
   }
   .dot {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
+    width: 1.75rem;
     height: 2.75rem;
   }
   .dot span {
@@ -216,7 +229,7 @@ const slides = tools
     transition: width 0.25s ease, background-color 0.25s ease;
   }
   .dot[aria-current='true'] span {
-    width: 1.5rem;
+    width: 1.25rem;
     background: var(--mint);
   }
 </style>
