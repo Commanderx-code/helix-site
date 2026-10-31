@@ -125,9 +125,9 @@ if (!still) {
     );
   }
 
-  // A small dot stands in for the mouse pointer. A soft disc trails it over
-  // links and buttons, and opens into a labelled disc over [data-cursor];
-  // over anything else only the dot shows
+  // A small dot trails the mouse pointer a little behind it. Over links
+  // and buttons it gives way to a soft disc, which opens into a labelled
+  // disc over [data-cursor]. The pointer itself stays as it is.
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const ring = document.createElement('div');
     ring.className = 'cursor-ring';
@@ -138,7 +138,6 @@ if (!still) {
     dot.className = 'cursor-dot';
     dot.setAttribute('aria-hidden', 'true');
     document.body.append(ring, dot);
-    document.documentElement.setAttribute('data-dot', '');
 
     let x = innerWidth / 2;
     let y = innerHeight / 2;
@@ -147,7 +146,9 @@ if (!still) {
     const follow = () => {
       rx += (x - rx) * 0.18;
       ry += (y - ry) * 0.18;
-      ring.style.transform = `translate(${rx.toFixed(1)}px, ${ry.toFixed(1)}px)`;
+      const at = `translate(${rx.toFixed(1)}px, ${ry.toFixed(1)}px)`;
+      ring.style.transform = at;
+      dot.style.transform = at;
       requestAnimationFrame(follow);
     };
     requestAnimationFrame(follow);
@@ -155,12 +156,12 @@ if (!still) {
     addEventListener('pointermove', (e) => {
       x = e.clientX;
       y = e.clientY;
-      dot.style.transform = `translate(${x}px, ${y}px)`;
-      dot.classList.add('is-visible');
       const target = e.target as Element;
       const labelled = target.closest<HTMLElement>('[data-cursor]');
+      const over = !!labelled || !!target.closest('a, button, summary, label, input, select, textarea');
       ring.classList.toggle('is-label', !!labelled);
-      ring.classList.toggle('is-visible', !!labelled || !!target.closest('a, button, summary, label, input, select, textarea'));
+      ring.classList.toggle('is-visible', over);
+      dot.classList.toggle('is-visible', !over);
       if (labelled) label.textContent = labelled.dataset.cursor!;
     });
     document.documentElement.addEventListener('pointerleave', () => {
