@@ -233,8 +233,31 @@ html[data-motion] [data-reveal].is-in {
   scale: none;
 }
 
-/* A soft disc that follows the mouse over links and buttons, and opens
-   into a labelled disc over [data-cursor]; nothing shows elsewhere */
+/* The dot that stands in for the mouse pointer once the script is running */
+html[data-dot],
+html[data-dot] * {
+  cursor: none !important;
+}
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 101;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: -0.25rem 0 0 -0.25rem;
+  border-radius: 50%;
+  background: var(--mint);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.cursor-dot.is-visible {
+  opacity: 1;
+}
+
+/* A soft disc that trails the dot over links and buttons, and opens into
+   a labelled disc over [data-cursor]; nothing shows elsewhere */
 .cursor-ring {
   position: fixed;
   top: 0;
