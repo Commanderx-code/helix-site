@@ -93,6 +93,8 @@ html { -webkit-text-size-adjust: 100%; }
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   background: var(--ink);
   color: var(--text);

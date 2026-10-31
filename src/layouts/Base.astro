@@ -77,6 +77,7 @@ const gallery = (
     <script is:inline src="/theme.js"></script>
   </head>
   <body data-tool={tool}>
+    <slot name="backdrop" />
     <a class="skip" href="#main">Skip to content</a>
     {!bare && (
     <header class="site-head" data-header>
@@ -199,16 +200,21 @@ const gallery = (
 </html>
 
 <style>
+  /* At the top of the page the header is see-through, so a page's backdrop
+     (the home page's, in the "backdrop" slot) shows behind it */
   .site-head {
     position: sticky;
     top: 0;
     z-index: 50;
-    border-bottom: 1px solid var(--line);
-    background: var(--ink);
-    transition: background-color 0.3s ease;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
   }
   /* Once the page scrolls, the header turns frosted and settles lower */
   .site-head[data-scrolled] {
+    border-color: var(--line);
     background: color-mix(in srgb, var(--ink) 78%, transparent);
     backdrop-filter: blur(14px) saturate(1.4);
   }
