@@ -125,7 +125,8 @@ if (!still) {
     );
   }
 
-  // A ring follows the mouse, and opens into a labelled disc over [data-cursor]
+  // A soft disc follows the mouse over links and buttons, and opens into a
+  // labelled disc over [data-cursor]; over anything else it stays hidden
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const ring = document.createElement('div');
     ring.className = 'cursor-ring';
@@ -149,11 +150,10 @@ if (!still) {
     addEventListener('pointermove', (e) => {
       x = e.clientX;
       y = e.clientY;
-      ring.classList.add('is-visible');
       const target = e.target as Element;
       const labelled = target.closest<HTMLElement>('[data-cursor]');
       ring.classList.toggle('is-label', !!labelled);
-      ring.classList.toggle('is-link', !labelled && !!target.closest('a, button, summary'));
+      ring.classList.toggle('is-visible', !!labelled || !!target.closest('a, button, summary, label, input, select, textarea'));
       if (labelled) label.textContent = labelled.dataset.cursor!;
     });
     document.documentElement.addEventListener('pointerleave', () => ring.classList.remove('is-visible'));
