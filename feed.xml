@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Helix Tech releases</title><description>New releases of Helix Toolbox, Helix Boot, webOS Launcher and Touchdown.</description><link>https://helixtech.app/</link><language>en-us</language><item><title>Helix Toolbox v1.25.8: Helix Toolbox v1.25.8</title><link>https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.8</link><guid isPermaLink="true">https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.8</guid><description>Helix Toolbox v1.25.8, built from commit 88403e865cc53a0390960756393d0434109e1771. Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer). Install the package for your distribution, or run the program directly: # x86_64 sudo pacman -U helix-toolbox-1.25.8-1-x86_64.pkg.tar.zst…</description><pubDate>Sun, 25 Oct 2026 21:09:19 GMT</pubDate><content:encoded>&lt;p&gt;Helix Toolbox v1.25.8, built from commit 88403e865cc53a0390960756393d0434109e1771.&lt;/p&gt;
+&lt;p&gt;Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer).&lt;/p&gt;
+&lt;p&gt;Install the package for your distribution, or run the program directly:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# x86_64
+sudo pacman -U helix-toolbox-1.25.8-1-x86_64.pkg.tar.zst   # Arch and derivatives
+sudo apt install ./helix-toolbox_1.25.8-1_amd64.deb        # Debian, Ubuntu
+sudo dnf install ./helix-toolbox-1.25.8-1.x86_64.rpm       # Fedora
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.8-1.x86_64.rpm   # openSUSE
+
+# aarch64 (ARM64)
+sudo pacman -U helix-toolbox-1.25.8-1-aarch64.pkg.tar.zst  # Arch Linux ARM
+sudo apt install ./helix-toolbox_1.25.8-1_arm64.deb        # Debian, Ubuntu, Raspberry Pi OS
+sudo dnf install ./helix-toolbox-1.25.8-1.aarch64.rpm      # Fedora, Fedora Asahi Remix
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.8-1.aarch64.rpm   # openSUSE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The window (docs/GUI.md), which needs the helix-toolbox package above:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo pacman -U helix-toolbox-gui-1.25.8-1-x86_64.pkg.tar.zst   # Arch and derivatives (aarch64 for ARM64)
+sudo apt install ./helix-toolbox-gui_1.25.8_amd64.deb      # Debian, Ubuntu (arm64 for ARM64)
+sudo dnf install ./helix-toolbox-gui-1.25.8-1.x86_64.rpm   # Fedora, openSUSE (aarch64 for ARM64)
+chmod +x helix-toolbox-gui_1.25.8_amd64.AppImage &amp;amp;&amp;amp; ./helix-toolbox-gui_1.25.8_amd64.AppImage   # any distribution
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Arch and its derivatives can take both packages from the repository at &lt;a href=&quot;https://commanderx-code.github.io/Helix-toolbox&quot;&gt;https://commanderx-code.github.io/Helix-toolbox&lt;/a&gt; instead, which pacman then updates with the rest of the system (docs/INSTALL.md).&lt;/p&gt;
+&lt;p&gt;Check a download with &lt;code&gt;sha256sum --check --ignore-missing SHA256SUMS&lt;/code&gt;, and where it was built with &lt;code&gt;gh attestation verify &amp;lt;file&amp;gt; --repo Commanderx-code/Helix-toolbox&lt;/code&gt;. See docs/INSTALL.md.&lt;/p&gt;
+&lt;p&gt;The files named helixforge-* are the same files under the name before 1.7, for copies of HelixForge to update from.&lt;/p&gt;
+&lt;p&gt;The *-sbom.cdx.json files are CycloneDX software bills of materials: every crate in the program and the window, and the window&apos;s frontend packages.&lt;/p&gt;
+</content:encoded><category>Helix Toolbox</category></item><item><title>Helix Toolbox v1.25.7: Helix Toolbox v1.25.7</title><link>https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.7</link><guid isPermaLink="true">https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.7</guid><description>Helix Toolbox v1.25.7, built from commit dbf46ad8c9a2e95310f5a56ce40ae31f997d0377. Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer). Install the package for your distribution, or run the program directly: # x86_64 sudo pacman -U helix-toolbox-1.25.7-1-x86_64.pkg.tar.zst…</description><pubDate>Sun, 25 Oct 2026 19:47:34 GMT</pubDate><content:encoded>&lt;p&gt;Helix Toolbox v1.25.7, built from commit dbf46ad8c9a2e95310f5a56ce40ae31f997d0377.&lt;/p&gt;
+&lt;p&gt;Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer).&lt;/p&gt;
+&lt;p&gt;Install the package for your distribution, or run the program directly:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# x86_64
+sudo pacman -U helix-toolbox-1.25.7-1-x86_64.pkg.tar.zst   # Arch and derivatives
+sudo apt install ./helix-toolbox_1.25.7-1_amd64.deb        # Debian, Ubuntu
+sudo dnf install ./helix-toolbox-1.25.7-1.x86_64.rpm       # Fedora
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.7-1.x86_64.rpm   # openSUSE
+
+# aarch64 (ARM64)
+sudo pacman -U helix-toolbox-1.25.7-1-aarch64.pkg.tar.zst  # Arch Linux ARM
+sudo apt install ./helix-toolbox_1.25.7-1_arm64.deb        # Debian, Ubuntu, Raspberry Pi OS
+sudo dnf install ./helix-toolbox-1.25.7-1.aarch64.rpm      # Fedora, Fedora Asahi Remix
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.7-1.aarch64.rpm   # openSUSE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The window (docs/GUI.md), which needs the helix-toolbox package above:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo pacman -U helix-toolbox-gui-1.25.7-1-x86_64.pkg.tar.zst   # Arch and derivatives (aarch64 for ARM64)
+sudo apt install ./helix-toolbox-gui_1.25.7_amd64.deb      # Debian, Ubuntu (arm64 for ARM64)
+sudo dnf install ./helix-toolbox-gui-1.25.7-1.x86_64.rpm   # Fedora, openSUSE (aarch64 for ARM64)
+chmod +x helix-toolbox-gui_1.25.7_amd64.AppImage &amp;amp;&amp;amp; ./helix-toolbox-gui_1.25.7_amd64.AppImage   # any distribution
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Arch and its derivatives can take both packages from the repository at &lt;a href=&quot;https://commanderx-code.github.io/Helix-toolbox&quot;&gt;https://commanderx-code.github.io/Helix-toolbox&lt;/a&gt; instead, which pacman then updates with the rest of the system (docs/INSTALL.md).&lt;/p&gt;
+&lt;p&gt;Check a download with &lt;code&gt;sha256sum --check --ignore-missing SHA256SUMS&lt;/code&gt;, and where it was built with &lt;code&gt;gh attestation verify &amp;lt;file&amp;gt; --repo Commanderx-code/Helix-toolbox&lt;/code&gt;. See docs/INSTALL.md.&lt;/p&gt;
+&lt;p&gt;The files named helixforge-* are the same files under the name before 1.7, for copies of HelixForge to update from.&lt;/p&gt;
+&lt;p&gt;The *-sbom.cdx.json files are CycloneDX software bills of materials: every crate in the program and the window, and the window&apos;s frontend packages.&lt;/p&gt;
+</content:encoded><category>Helix Toolbox</category></item><item><title>Helix Toolbox v1.25.6: Helix Toolbox v1.25.6</title><link>https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.6</link><guid isPermaLink="true">https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.6</guid><description>Helix Toolbox v1.25.6, built from commit db8734018695672872cf3908d82c9f34a1e4fa3f. Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer). Install the package for your distribution, or run the program directly: # x86_64 sudo pacman -U helix-toolbox-1.25.6-1-x86_64.pkg.tar.zst…</description><pubDate>Sun, 25 Oct 2026 19:30:17 GMT</pubDate><content:encoded>&lt;p&gt;Helix Toolbox v1.25.6, built from commit db8734018695672872cf3908d82c9f34a1e4fa3f.&lt;/p&gt;
+&lt;p&gt;Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer).&lt;/p&gt;
+&lt;p&gt;Install the package for your distribution, or run the program directly:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# x86_64
+sudo pacman -U helix-toolbox-1.25.6-1-x86_64.pkg.tar.zst   # Arch and derivatives
+sudo apt install ./helix-toolbox_1.25.6-1_amd64.deb        # Debian, Ubuntu
+sudo dnf install ./helix-toolbox-1.25.6-1.x86_64.rpm       # Fedora
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.6-1.x86_64.rpm   # openSUSE
+
+# aarch64 (ARM64)
+sudo pacman -U helix-toolbox-1.25.6-1-aarch64.pkg.tar.zst  # Arch Linux ARM
+sudo apt install ./helix-toolbox_1.25.6-1_arm64.deb        # Debian, Ubuntu, Raspberry Pi OS
+sudo dnf install ./helix-toolbox-1.25.6-1.aarch64.rpm      # Fedora, Fedora Asahi Remix
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.6-1.aarch64.rpm   # openSUSE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The window (docs/GUI.md), which needs the helix-toolbox package above:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo pacman -U helix-toolbox-gui-1.25.6-1-x86_64.pkg.tar.zst   # Arch and derivatives (aarch64 for ARM64)
+sudo apt install ./helix-toolbox-gui_1.25.6_amd64.deb      # Debian, Ubuntu (arm64 for ARM64)
+sudo dnf install ./helix-toolbox-gui-1.25.6-1.x86_64.rpm   # Fedora, openSUSE (aarch64 for ARM64)
+chmod +x helix-toolbox-gui_1.25.6_amd64.AppImage &amp;amp;&amp;amp; ./helix-toolbox-gui_1.25.6_amd64.AppImage   # any distribution
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Arch and its derivatives can take both packages from the repository at &lt;a href=&quot;https://commanderx-code.github.io/Helix-toolbox&quot;&gt;https://commanderx-code.github.io/Helix-toolbox&lt;/a&gt; instead, which pacman then updates with the rest of the system (docs/INSTALL.md).&lt;/p&gt;
+&lt;p&gt;Check a download with &lt;code&gt;sha256sum --check --ignore-missing SHA256SUMS&lt;/code&gt;, and where it was built with &lt;code&gt;gh attestation verify &amp;lt;file&amp;gt; --repo Commanderx-code/Helix-toolbox&lt;/code&gt;. See docs/INSTALL.md.&lt;/p&gt;
+&lt;p&gt;The files named helixforge-* are the same files under the name before 1.7, for copies of HelixForge to update from.&lt;/p&gt;
+&lt;p&gt;The *-sbom.cdx.json files are CycloneDX software bills of materials: every crate in the program and the window, and the window&apos;s frontend packages.&lt;/p&gt;
+</content:encoded><category>Helix Toolbox</category></item><item><title>Touchdown v0.1.0: Touchdown v0.1.0</title><link>https://github.com/Commanderx-code/touchdown-cli/releases/tag/v0.1.0</link><guid isPermaLink="true">https://github.com/Commanderx-code/touchdown-cli/releases/tag/v0.1.0</guid><description>Touchdown v0.1.0 First public release of Touchdown, a keyboard-driven NFL scores and stats dashboard for the terminal. Highlights Live scores, weekly matchups, conference standings, and a favorite-team dashboard. Team schedules, next kickoff, bye weeks, season leaders, and game details. Configurabl…</description><pubDate>Sun, 25 Oct 2026 18:46:45 GMT</pubDate><content:encoded>&lt;h1&gt;Touchdown v0.1.0&lt;/h1&gt;
+&lt;p&gt;First public release of Touchdown, a keyboard-driven NFL scores and stats dashboard for the terminal.&lt;/p&gt;
+&lt;h2&gt;Highlights&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Live scores, weekly matchups, conference standings, and a favorite-team dashboard.&lt;/li&gt;
+&lt;li&gt;Team schedules, next kickoff, bye weeks, season leaders, and game details.&lt;/li&gt;
+&lt;li&gt;Configurable favorite team and color theme, cached responses, and optional desktop alerts.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;td&lt;/code&gt; shortcut when installed from source with &lt;code&gt;make install&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Downloads&lt;/h2&gt;
+&lt;p&gt;Choose the archive for your operating system and CPU: Linux, macOS, or Windows on AMD64 or ARM64. Each archive contains the executable, README, and MIT license. Download &lt;code&gt;SHA256SUMS&lt;/code&gt; to verify the archive&apos;s checksum.&lt;/p&gt;
+&lt;p&gt;The release binaries are unsigned. Builds for all six targets completed successfully; runtime smoke testing was performed on Linux AMD64. macOS, Windows, and ARM64 runtime behavior has not been tested on those systems.&lt;/p&gt;
+&lt;p&gt;Touchdown uses publicly accessible, undocumented ESPN endpoints. Live data and stats depend on those endpoints remaining available.&lt;/p&gt;
+</content:encoded><category>Touchdown</category></item><item><title>Helix Toolbox v1.25.5: Helix Toolbox v1.25.5</title><link>https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.5</link><guid isPermaLink="true">https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.5</guid><description>Helix Toolbox v1.25.5, built from commit e1786bc225b4ec4ce290ce45fb82f9f97ab43664. Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer). Install the package for your distribution, or run the program directly: # x86_64 sudo pacman -U helix-toolbox-1.25.5-1-x86_64.pkg.tar.zst…</description><pubDate>Sun, 25 Oct 2026 08:40:54 GMT</pubDate><content:encoded>&lt;p&gt;Helix Toolbox v1.25.5, built from commit e1786bc225b4ec4ce290ce45fb82f9f97ab43664.&lt;/p&gt;
+&lt;p&gt;Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer).&lt;/p&gt;
+&lt;p&gt;Install the package for your distribution, or run the program directly:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# x86_64
+sudo pacman -U helix-toolbox-1.25.5-1-x86_64.pkg.tar.zst   # Arch and derivatives
+sudo apt install ./helix-toolbox_1.25.5-1_amd64.deb        # Debian, Ubuntu
+sudo dnf install ./helix-toolbox-1.25.5-1.x86_64.rpm       # Fedora
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.5-1.x86_64.rpm   # openSUSE
+
+# aarch64 (ARM64)
+sudo pacman -U helix-toolbox-1.25.5-1-aarch64.pkg.tar.zst  # Arch Linux ARM
+sudo apt install ./helix-toolbox_1.25.5-1_arm64.deb        # Debian, Ubuntu, Raspberry Pi OS
+sudo dnf install ./helix-toolbox-1.25.5-1.aarch64.rpm      # Fedora, Fedora Asahi Remix
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.5-1.aarch64.rpm   # openSUSE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The window (docs/GUI.md), which needs the helix-toolbox package above:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo pacman -U helix-toolbox-gui-1.25.5-1-x86_64.pkg.tar.zst   # Arch and derivatives (aarch64 for ARM64)
+sudo apt install ./helix-toolbox-gui_1.25.5_amd64.deb      # Debian, Ubuntu (arm64 for ARM64)
+sudo dnf install ./helix-toolbox-gui-1.25.5-1.x86_64.rpm   # Fedora, openSUSE (aarch64 for ARM64)
+chmod +x helix-toolbox-gui_1.25.5_amd64.AppImage &amp;amp;&amp;amp; ./helix-toolbox-gui_1.25.5_amd64.AppImage   # any distribution
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Arch and its derivatives can take both packages from the repository at &lt;a href=&quot;https://commanderx-code.github.io/Helix-toolbox&quot;&gt;https://commanderx-code.github.io/Helix-toolbox&lt;/a&gt; instead, which pacman then updates with the rest of the system (docs/INSTALL.md).&lt;/p&gt;
+&lt;p&gt;Check a download with &lt;code&gt;sha256sum --check --ignore-missing SHA256SUMS&lt;/code&gt;, and where it was built with &lt;code&gt;gh attestation verify &amp;lt;file&amp;gt; --repo Commanderx-code/Helix-toolbox&lt;/code&gt;. See docs/INSTALL.md.&lt;/p&gt;
+&lt;p&gt;The files named helixforge-* are the same files under the name before 1.7, for copies of HelixForge to update from.&lt;/p&gt;
+&lt;p&gt;The *-sbom.cdx.json files are CycloneDX software bills of materials: every crate in the program and the window, and the window&apos;s frontend packages.&lt;/p&gt;
+</content:encoded><category>Helix Toolbox</category></item><item><title>Helix Toolbox v1.25.4: Helix Toolbox v1.25.4</title><link>https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.4</link><guid isPermaLink="true">https://github.com/Commanderx-code/Helix-toolbox/releases/tag/v1.25.4</guid><description>Helix Toolbox v1.25.4, built from commit e80944fc285fbe5e3aec42c4d4d7c1501bd8b9e7. Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer). Install the package for your distribution, or run the program directly: # x86_64 sudo pacman -U helix-toolbox-1.25.4-1-x86_64.pkg.tar.zst…</description><pubDate>Sun, 25 Oct 2026 08:24:53 GMT</pubDate><content:encoded>&lt;p&gt;Helix Toolbox v1.25.4, built from commit e80944fc285fbe5e3aec42c4d4d7c1501bd8b9e7.&lt;/p&gt;
+&lt;p&gt;Linux x86_64 and aarch64 (ARM64), built on Ubuntu 22.04 (glibc 2.35 or newer).&lt;/p&gt;
+&lt;p&gt;Install the package for your distribution, or run the program directly:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# x86_64
+sudo pacman -U helix-toolbox-1.25.4-1-x86_64.pkg.tar.zst   # Arch and derivatives
+sudo apt install ./helix-toolbox_1.25.4-1_amd64.deb        # Debian, Ubuntu
+sudo dnf install ./helix-toolbox-1.25.4-1.x86_64.rpm       # Fedora
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.4-1.x86_64.rpm   # openSUSE
+
+# aarch64 (ARM64)
+sudo pacman -U helix-toolbox-1.25.4-1-aarch64.pkg.tar.zst  # Arch Linux ARM
+sudo apt install ./helix-toolbox_1.25.4-1_arm64.deb        # Debian, Ubuntu, Raspberry Pi OS
+sudo dnf install ./helix-toolbox-1.25.4-1.aarch64.rpm      # Fedora, Fedora Asahi Remix
+sudo zypper install --allow-unsigned-rpm ./helix-toolbox-1.25.4-1.aarch64.rpm   # openSUSE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The window (docs/GUI.md), which needs the helix-toolbox package above:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo pacman -U helix-toolbox-gui-1.25.4-1-x86_64.pkg.tar.zst   # Arch and derivatives (aarch64 for ARM64)
+sudo apt install ./helix-toolbox-gui_1.25.4_amd64.deb      # Debian, Ubuntu (arm64 for ARM64)
+sudo dnf install ./helix-toolbox-gui-1.25.4-1.x86_64.rpm   # Fedora, openSUSE (aarch64 for ARM64)
+chmod +x helix-toolbox-gui_1.25.4_amd64.AppImage &amp;amp;&amp;amp; ./helix-toolbox-gui_1.25.4_amd64.AppImage   # any distribution
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Arch and its derivatives can take both packages from the repository at &lt;a href=&quot;https://commanderx-code.github.io/Helix-toolbox&quot;&gt;https://commanderx-code.github.io/Helix-toolbox&lt;/a&gt; instead, which pacman then updates with the rest of the system (docs/INSTALL.md).&lt;/p&gt;
+&lt;p&gt;Check a download with &lt;code&gt;sha256sum --check --ignore-missing SHA256SUMS&lt;/code&gt;, and where it was built with &lt;code&gt;gh attestation verify &amp;lt;file&amp;gt; --repo Commanderx-code/Helix-toolbox&lt;/code&gt;. See docs/INSTALL.md.&lt;/p&gt;
+&lt;p&gt;The files named helixforge-* are the same files under the name before 1.7, for copies of HelixForge to update from.&lt;/p&gt;
+&lt;p&gt;The *-sbom.cdx.json files are CycloneDX software bills of materials: every crate in the program and the window, and the window&apos;s frontend packages.&lt;/p&gt;
+</content:encoded><category>Helix Toolbox</category></item><item><title>Helix Boot v0.7.7: Helix Boot v0.7.7</title><link>https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.7</link><guid isPermaLink="true">https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.7</guid><description>Changed A shorter README. It is the pitch, a quick start and where to find the rest (140 lines, from 554). What it held is in pages of its own under docs/: installing and updating, what&apos;s on the stick, packs, Lazarus PE and the roadmap. Checking a download: sha256sum -c SHA256SUMS, or gh attestatio…</description><pubDate>Thu, 08 Oct 2026 18:47:24 GMT</pubDate><content:encoded>&lt;h3&gt;Changed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;A shorter README.&lt;/strong&gt; It is the pitch, a quick start and where to find the rest (140 lines, from 554). What it held is in pages of its own under &lt;code&gt;docs/&lt;/code&gt;: &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/blob/v0.7.7/docs/install.md&quot;&gt;installing and updating&lt;/a&gt;, &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/blob/v0.7.7/docs/tools.md&quot;&gt;what&apos;s on the stick&lt;/a&gt;, &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/blob/v0.7.7/docs/packs.md&quot;&gt;packs&lt;/a&gt;, &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/blob/v0.7.7/docs/lazarus-pe.md&quot;&gt;Lazarus PE&lt;/a&gt; and the &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/blob/v0.7.7/docs/roadmap.md&quot;&gt;roadmap&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Checking a download:&lt;/strong&gt; &lt;code&gt;sha256sum -c SHA256SUMS&lt;/code&gt;, or &lt;code&gt;gh attestation verify HelixBoot.exe --repo Commanderx-code/helix-boot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/compare/v0.7.6...v0.7.7&quot;&gt;https://github.com/Commanderx-code/helix-boot/compare/v0.7.6...v0.7.7&lt;/a&gt;&lt;/p&gt;
+</content:encoded><category>Helix Boot</category></item><item><title>Helix Boot v0.7.6: Helix Boot v0.7.6</title><link>https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.6</link><guid isPermaLink="true">https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.6</guid><description>Added A stick a virtual machine also holds isn&apos;t written. Two systems writing one stick corrupts it. On Linux, install.sh, refresh.sh, check.sh, theme.sh and the window stop when a running libvirt VM has the stick attached as a disk, and warn when a VM is set to take it at its next start. scripts/v…</description><pubDate>Thu, 08 Oct 2026 01:35:59 GMT</pubDate><content:encoded>&lt;h3&gt;Added&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;A stick a virtual machine also holds isn&apos;t written.&lt;/strong&gt; Two systems writing one stick corrupts it. On Linux, &lt;code&gt;install.sh&lt;/code&gt;, &lt;code&gt;refresh.sh&lt;/code&gt;, &lt;code&gt;check.sh&lt;/code&gt;, &lt;code&gt;theme.sh&lt;/code&gt; and the window stop when a running libvirt VM has the stick attached as a disk, and warn when a VM is set to take it at its next start.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;scripts/vm-stick.sh give &amp;lt;vm&amp;gt;&lt;/code&gt; / &lt;code&gt;take &amp;lt;vm&amp;gt;&lt;/code&gt;&lt;/strong&gt; hands the stick to a running VM and takes it back: unmounted here before it is attached there, and mounted here again only after it is detached. Nothing is added to the VM&apos;s settings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Fixed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;The app&apos;s window opens in the middle of the screen. Where Windows put it on a small screen, the bottom row of buttons could be under the taskbar.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Changed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/blob/v0.7.6/docs/testing.md&quot;&gt;What has been tried on real hardware&lt;/a&gt;, and what hasn&apos;t.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scripts/release.sh&lt;/code&gt; waits for CI on the commit it is about to release, and stops if a run failed or was cancelled.&lt;/li&gt;
+&lt;li&gt;CI downloads and verifies every tool (about 4 GB) on the weekly run, for a release, and when &lt;code&gt;helix&lt;/code&gt;, &lt;code&gt;tools.toml&lt;/code&gt; or the workflow changed. Any other push skips that, and still asks every upstream for its latest.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ProduKey is off by default.&lt;/strong&gt; Windows Defender stops it being written, so a new stick no longer meets that. Tick it in the app&apos;s Tools window (or enable it in &lt;code&gt;local.toml&lt;/code&gt;) to have it. Without that, the next update from the PC that put it on a stick takes it off again, as for any tool that is no longer chosen; a stick filled by another PC keeps it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Checking a download:&lt;/strong&gt; &lt;code&gt;sha256sum -c SHA256SUMS&lt;/code&gt;, or &lt;code&gt;gh attestation verify HelixBoot.exe --repo Commanderx-code/helix-boot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/compare/v0.7.5...v0.7.6&quot;&gt;https://github.com/Commanderx-code/helix-boot/compare/v0.7.5...v0.7.6&lt;/a&gt;&lt;/p&gt;
+</content:encoded><category>Helix Boot</category></item><item><title>Helix Boot v0.7.5: Helix Boot v0.7.5</title><link>https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.5</link><guid isPermaLink="true">https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.5</guid><description>Added A check watches the programs you put on the stick yourself. Portable apps and the like have no checksum from a download to be held to, so a check now remembers what each program file was and says when one has changed since the last check. If you updated it, that is why; if you didn&apos;t, somethi…</description><pubDate>Wed, 07 Oct 2026 19:13:54 GMT</pubDate><content:encoded>&lt;h3&gt;Added&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;A check watches the programs you put on the stick yourself.&lt;/strong&gt; Portable apps and the like have no checksum from a download to be held to, so a check now remembers what each program file was and says when one has changed since the last check. If you updated it, that is why; if you didn&apos;t, something changed it, which is how a virus that infects programs shows. Helix Boot&apos;s own files are told apart and checked against their checksums as before.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Eject&lt;/strong&gt;, beside Refresh in the window: what was written is flushed and the stick is ejected, so it is safe to unplug (Windows and Linux).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tools…&lt;/strong&gt; in the window: a list of every tool to tick, by category. What you choose is kept in &lt;code&gt;tool-choices.json&lt;/code&gt; beside &lt;code&gt;local.toml&lt;/code&gt;, which is left alone, and applies from the next Install or Update.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Said before the install: what antivirus will block.&lt;/strong&gt; A tool known to be stopped by antivirus is marked &lt;code&gt;flagged&lt;/code&gt; in &lt;code&gt;tools.toml&lt;/code&gt; (ProduKey, so far). The Windows app names such tools before anything is copied and offers to leave them out. Unticked, they are tried as before and skipped if blocked.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The Linux window in the applications menu:&lt;/strong&gt; &lt;code&gt;HelixBoot-linux-x86_64 --add-launcher&lt;/code&gt; adds it, with its icon, for you only; &lt;code&gt;--remove-launcher&lt;/code&gt; takes it out.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;After an update of the app: &quot;Start the new version now?&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;self-update&lt;/code&gt; for the Mac program and &lt;code&gt;HelixBoot.sh&lt;/code&gt;&lt;/strong&gt; (also in its menu): the latest release&apos;s file, checked against the sha256 GitHub gives for it, in this one&apos;s place.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;helix pack --public&lt;/code&gt;:&lt;/strong&gt; a pack with only what anyone can download, as the project ships it, so it can be shared. It is planned by a configuration that has never seen your folder: nothing from &lt;code&gt;local.toml&lt;/code&gt; (your tools, your settings, what you switched off), &lt;code&gt;tool-choices.json&lt;/code&gt; or &lt;code&gt;byo/&lt;/code&gt; (your files, icons and splash) can be in it, and Lazarus PE, your own build, is left out. The download cache is still yours, so a tool you pointed somewhere of your own is left out as well, and so is any cached copy that didn&apos;t come from the project&apos;s source for that tool: boot images, apps, Ventoy, the menu&apos;s platform and the bundled programs alike. What is taken is held to the cache&apos;s record as well: it has to be in that tool&apos;s own folder of the cache and still have the checksum it had when it was downloaded, a folder included. Whatever can&apos;t be checked is left out and named. (A cache from before this version has no checksum for the PortableApps.com platform&apos;s folder: &lt;code&gt;helix fetch --force portableapps&lt;/code&gt; records one.)&lt;/li&gt;
+&lt;li&gt;Making any pack re-checks Ventoy and the bundled &lt;code&gt;HelixBoot.exe&lt;/code&gt; against the checksums they were verified to have when downloaded, as it does the apps.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;helix pack --split&lt;/code&gt;:&lt;/strong&gt; also cuts the pack into pieces (2 GiB if not said) in a folder beside it, with its checksum, a README, and scripts for Windows and for Linux and Mac that join the pieces, check the result and start the installer: for uploading or sending.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Checking a download:&lt;/strong&gt; &lt;code&gt;sha256sum -c SHA256SUMS&lt;/code&gt;, or &lt;code&gt;gh attestation verify HelixBoot.exe --repo Commanderx-code/helix-boot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/compare/v0.7.4...v0.7.5&quot;&gt;https://github.com/Commanderx-code/helix-boot/compare/v0.7.4...v0.7.5&lt;/a&gt;&lt;/p&gt;
+</content:encoded><category>Helix Boot</category></item><item><title>Helix Boot v0.7.4: Helix Boot v0.7.4</title><link>https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.4</link><guid isPermaLink="true">https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.4</guid><description>Fixed With a pack chosen, the window&apos;s line about newer tools said &quot;Update stick gets them&quot;, which a pack can&apos;t do: it holds the versions it was made with. It now says to choose &quot;Tools from the internet&quot; first. The note about tools an antivirus kept off the stick names them as the menu does (&quot;Produ…</description><pubDate>Wed, 07 Oct 2026 17:06:16 GMT</pubDate><content:encoded>&lt;h3&gt;Fixed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;With a pack chosen, the window&apos;s line about newer tools said &quot;Update stick gets them&quot;, which a pack can&apos;t do: it holds the versions it was made with. It now says to choose &quot;Tools from the internet&quot; first.&lt;/li&gt;
+&lt;li&gt;The note about tools an antivirus kept off the stick names them as the menu does (&quot;ProduKey&quot;, where it said &quot;produkey&quot;) and reads right for one tool.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Added&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;The app updates itself.&lt;/strong&gt; At its start the window looks for a newer Helix Boot and asks whether to get it; &lt;strong&gt;Check for update&lt;/strong&gt;, under the version number, does the same when you click it. The new program is downloaded from the release, checked against the checksum GitHub gives for it at that moment (a copy kept from an earlier download counts only if it is that file), and put in the running one&apos;s place (which steps aside and is deleted at the next start). A version you say no to isn&apos;t offered again, an older one never is, and &lt;code&gt;check_for_updates = false&lt;/code&gt; in &lt;code&gt;local.toml&lt;/code&gt; turns the look at the start off. Also &lt;code&gt;HelixBoot.exe --self-update&lt;/code&gt;, and the same on Linux. Run from a clone, it says to &lt;code&gt;git pull&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Helix Boot in a window on Linux:&lt;/strong&gt; &lt;code&gt;HelixBoot-linux-x86_64&lt;/code&gt; in each release, one file with Python and Tk inside. It is the Windows app&apos;s window on Linux&apos;s own parts: sticks come from &lt;code&gt;lsblk&lt;/code&gt;, a stick is where it is mounted and not a drive letter, and Ventoy is installed by its own Linux script. It runs as you, and asks for your password in the desktop&apos;s dialog (pkexec) only to install Ventoy and for Repair stick. Root never runs anything out of your cache: it is handed Ventoy&apos;s archive, checks its own copy against the checksum Ventoy publishes, and runs Ventoy from there. That checksum is the program&apos;s own (or, for a newer Ventoy, asked of Ventoy&apos;s release page), never what the cache or a pack says about itself. A disk holding the running system is never offered, by the same check &lt;code&gt;install.sh&lt;/code&gt; makes, and a stick swapped for another after you chose it is refused. From a clone: &lt;code&gt;python3 linux/helix_gui.py&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Checking a download:&lt;/strong&gt; &lt;code&gt;sha256sum -c SHA256SUMS&lt;/code&gt;, or &lt;code&gt;gh attestation verify HelixBoot.exe --repo Commanderx-code/helix-boot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/compare/v0.7.3...v0.7.4&quot;&gt;https://github.com/Commanderx-code/helix-boot/compare/v0.7.3...v0.7.4&lt;/a&gt;&lt;/p&gt;
+</content:encoded><category>Helix Boot</category></item><item><title>Helix Boot v0.7.3: Helix Boot v0.7.3</title><link>https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.3</link><guid isPermaLink="true">https://github.com/Commanderx-code/helix-boot/releases/tag/v0.7.3</guid><description>Fixed A tool the PC&apos;s antivirus blocks no longer stops the whole install. On Windows, Defender refuses to let some tools be written (a product key reader, for one) and the install ended there with &quot;the file contains a virus or potentially unwanted software&quot;, leaving the stick empty. That tool is no…</description><pubDate>Wed, 07 Oct 2026 09:27:01 GMT</pubDate><content:encoded>&lt;h3&gt;Fixed&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;A tool the PC&apos;s antivirus blocks no longer stops the whole install.&lt;/strong&gt; On Windows, Defender refuses to let some tools be written (a product key reader, for one) and the install ended there with &quot;the file contains a virus or potentially unwanted software&quot;, leaving the stick empty. That tool is now left out, the rest of the stick is made, and the end of the run names what is missing and how to add it. A boot image that is blocked still stops the run, with a message that says it was the antivirus.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Checking a download:&lt;/strong&gt; &lt;code&gt;sha256sum -c SHA256SUMS&lt;/code&gt;, or &lt;code&gt;gh attestation verify HelixBoot.exe --repo Commanderx-code/helix-boot&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: &lt;a href=&quot;https://github.com/Commanderx-code/helix-boot/compare/v0.7.2...v0.7.3&quot;&gt;https://github.com/Commanderx-code/helix-boot/compare/v0.7.2...v0.7.3&lt;/a&gt;&lt;/p&gt;
+</content:encoded><category>Helix Boot</category></item></channel></rss>

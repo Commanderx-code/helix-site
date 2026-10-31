@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The Config Bible logo: the Helix Toolbox tile and strand, with CB for its
+  letters. scripts/icons.sh renders it into the app's icons.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a3570"/>
+      <stop offset="1" stop-color="#0d0f2c"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3bd2ff"/>
+      <stop offset="1" stop-color="#c04cf0"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#d4d6e6"/>
+      <stop offset="1" stop-color="#9ea2bd"/>
+    </linearGradient>
+    <linearGradient id="strand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3bd2ff"/>
+      <stop offset="1" stop-color="#d040ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="14" fill="url(#tile)" stroke="url(#rim)" stroke-width="3"/>
+  <path fill="url(#metal)" d="M15 16h15v7H17v18h13v7H15l-5-5V21z"/>
+  <path d="M21 10c26 6 -2 30 24 44" fill="none" stroke="url(#strand)" stroke-width="5" stroke-linecap="round"/>
+  <path fill="url(#metal)" fill-rule="evenodd" d="M32 16h17l5 5v6l-3 5l3 5v6l-5 5h-17z M39 23h8v6h-8z M39 35h8v6h-8z"/>
+</svg>
