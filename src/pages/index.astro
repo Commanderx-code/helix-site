@@ -107,7 +107,7 @@ const homelab = [
   <section class="hero wrap">
     {
       floating.map((f) => (
-        <figure class:list={['float', f.place]} data-reveal={f.place.endsWith('left') ? 'left' : 'right'} aria-hidden="true">
+        <figure class:list={['float', f.place]} data-enter={f.place.endsWith('left') ? 'left' : 'right'} aria-hidden="true">
           <div class="drift" data-depth={f.depth}>
             <Image src={f.shot!.src} alt="" widths={[320, 560]} sizes="16rem" />
           </div>
@@ -115,25 +115,25 @@ const homelab = [
       ))
     }
     <div class="pitch">
-      <p class="eyebrow" data-reveal>Independent tools · one home</p>
-      <h1 data-reveal>
+      <p class="eyebrow" data-enter>Independent tools · one home</p>
+      <h1 data-enter>
         <span class="visually-hidden">Build. Configure. Optimize.</span>
         <span aria-hidden="true">
           Build. Configure.<br />
           <span class="lit"><span data-typed={words.join('|')}>{words[0]}</span></span><span class="caret"></span>
         </span>
       </h1>
-      <p class="lede" data-reveal>
+      <p class="lede" data-enter>
         Tools for setting up, rescuing and enjoying your machines: a Linux setup toolbox, a rescue USB that builds itself, a
         handbook for your own workstation, a home screen for LG TVs and a scoreboard for the terminal.
       </p>
-      <p class="actions" data-reveal>
+      <p class="actions" data-enter>
         <a class="button primary" href="#tools">Explore the tools <Icon name="arrow-down" /></a>
         <a class="button" href="https://github.com/Commanderx-code">Visit GitHub <Icon name="external" /></a>
       </p>
       {
         tryIt?.code && (
-          <div class="try" data-reveal>
+          <div class="try" data-enter>
             <p>{featured.name}: {tryIt.title.toLowerCase()}</p>
             <Command code={tryIt.code} label={`${featured.name}: ${tryIt.title}`} />
           </div>
@@ -142,7 +142,7 @@ const homelab = [
     </div>
   </section>
 
-  <div class="wrap laptop-wrap" data-reveal="zoom">
+  <div class="wrap laptop-wrap" data-enter="zoom">
     <div class="laptop">
       <div class="screen" data-dark>
         <Showcase />
@@ -427,6 +427,25 @@ const homelab = [
     max-width: 46rem;
     margin-inline: auto;
     text-align: center;
+  }
+  /* One beat apart, top to bottom; the screenshots and the slider after them */
+  .pitch > :nth-child(2) {
+    --enter-order: 1;
+  }
+  .pitch > :nth-child(3) {
+    --enter-order: 2;
+  }
+  .pitch > :nth-child(4) {
+    --enter-order: 3;
+  }
+  .pitch > :nth-child(5) {
+    --enter-order: 4;
+  }
+  .float {
+    --enter-order: 3;
+  }
+  .laptop-wrap {
+    --enter-order: 5;
   }
   .hero h1 {
     margin-bottom: 1.5rem;

@@ -11,8 +11,21 @@ interface Props {
   shots: Shot[];
 }
 const { shots } = Astro.props;
+
+// Every slide is the same box, sized to the widest shot, so a taller shot
+// among them, like a portrait window, sits letterboxed in it instead of
+// stretching the row to its height
+const widest = Math.max(...shots.map((shot) => shot.src.width / shot.src.height));
+const boxes: [string, number][] = [
+  ['wide', 16 / 9],
+  ['laptop', 16 / 10],
+  ['photo', 3 / 2],
+  ['tablet', 7 / 5],
+  ['classic', 4 / 3],
+];
+const [box] = boxes.reduce((best, next) => (Math.abs(next[1] - widest) < Math.abs(best[1] - widest) ? next : best));
 ---
-<section class="gallery" aria-roledescription="carousel" aria-label="Screenshots" data-showcase>
+<section class:list={['gallery', box]} aria-roledescription="carousel" aria-label="Screenshots" data-showcase>
   <div class="track" data-track>
     {
       shots.map((shot, i) => (
@@ -92,10 +105,26 @@ const { shots } = Astro.props;
     display: block;
     overflow: hidden;
     border-radius: 10px;
+    background: var(--ink);
+    aspect-ratio: 16 / 9;
+  }
+  .laptop .slide a {
+    aspect-ratio: 16 / 10;
+  }
+  .photo .slide a {
+    aspect-ratio: 3 / 2;
+  }
+  .tablet .slide a {
+    aspect-ratio: 7 / 5;
+  }
+  .classic .slide a {
+    aspect-ratio: 4 / 3;
   }
   .slide :global(img) {
     display: block;
     width: 100%;
+    height: 100%;
+    object-fit: contain;
     border-radius: 10px;
   }
   /* With a mouse, a panel with the caption slides in over the picture from
