@@ -8,6 +8,9 @@ import { tools, latestRelease, repoStats } from '../data/tools';
 import { testimonials } from '../data/testimonials';
 import { faq } from '../data/faq';
 import logo from '../assets/brand/logo-on-dark.png';
+// Behind the header and the hero: Helix Boot's menu, blurred and dimmed
+// almost to the page colour, so the helix glows through the headline
+import sky from '../assets/tools/boot/boot-menu.jpg';
 const [releases, stats] = await Promise.all([
   Promise.all(tools.map((t) => latestRelease(t.repo))),
   Promise.all(tools.map((t) => repoStats(t.repo))),
@@ -98,6 +101,9 @@ const homelab = [
   description="Helix Toolbox, Helix Boot, Config Bible, webOS Launcher and Touchdown: open tools for setting up, rescuing and enjoying your machines."
   jsonLd={jsonLd}
 >
+  <div class="sky" slot="backdrop" aria-hidden="true">
+    <Image src={sky} alt="" widths={[720, 1440]} sizes="100vw" quality={40} loading="eager" />
+  </div>
   <section class="hero wrap">
     {
       floating.map((f) => (
@@ -362,6 +368,40 @@ const homelab = [
 </Base>
 
 <style>
+  /* The backdrop fills the first screen, behind the see-through header and
+     the hero, and fades into the page colour before the showcase */
+  .sky {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -1;
+    height: min(100vh, 60rem);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .sky :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* The helix in the right half of the shot, zoomed in so the menu's
+       text is out of frame and only colour and light remain */
+    object-position: 72% 45%;
+    filter: blur(7px) saturate(1.15);
+    scale: 1.6;
+  }
+  .sky::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 50% at 50% 45%, transparent, color-mix(in srgb, var(--ink) 55%, transparent)),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--ink) 48%, transparent),
+        color-mix(in srgb, var(--ink) 60%, transparent) 55%,
+        var(--ink)
+      );
+  }
+
   /* The headline, centred, with screenshots floating around it on wide screens */
   .hero {
     position: relative;
