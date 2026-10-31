@@ -7,7 +7,8 @@ const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // The header turns frosted and shorter once the page leaves the top, and
 // the back-to-top button appears once a screen has gone by. Its ring fills
-// with how far down the page the reader is (--progress, 0 to 1).
+// with how far down the page the reader is (--progress, 0 to 1), and the
+// button fills solid once the reader reaches the foot of the page.
 const header = document.querySelector<HTMLElement>('[data-header]');
 const top = document.querySelector<HTMLElement>('[data-top]');
 const update = () => {
@@ -17,6 +18,8 @@ const update = () => {
   const room = document.documentElement.scrollHeight - innerHeight;
   const progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
   top.style.setProperty('--progress', progress.toFixed(3));
+  // At the foot of the page the ring is complete and the disc fills in
+  top.toggleAttribute('data-full', progress >= 0.995);
 };
 update();
 addEventListener('scroll', update, { passive: true });
