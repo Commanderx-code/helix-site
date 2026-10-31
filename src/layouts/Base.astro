@@ -493,7 +493,8 @@ const gallery = (
 
   /* Floating back-to-top button, shown once the page has scrolled a screen.
      The ring around it fills clockwise with how far down the page the
-     reader is; scripts/motion.ts keeps --progress up to date. */
+     reader is, and the disc fills solid at the foot of the page;
+     scripts/motion.ts keeps --progress and data-full up to date. */
   .to-top {
     position: fixed;
     right: clamp(1rem, 3vw, 2rem);
@@ -523,17 +524,20 @@ const gallery = (
     inset: -3px;
     border-radius: 50%;
     background: conic-gradient(var(--mint) calc(var(--progress, 0) * 1turn), var(--line-strong) 0);
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 2.5px));
   }
   .to-top[data-show] {
     opacity: 1;
     translate: none;
     pointer-events: auto;
   }
-  .to-top:hover {
+  .to-top:hover,
+  .to-top[data-full] {
     color: var(--on-accent);
     background: var(--mint);
+  }
+  .to-top:hover {
     scale: 1.08;
   }
 </style>
