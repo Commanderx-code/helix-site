@@ -18,6 +18,10 @@ const { shots } = Astro.props;
       shots.map((shot, i) => (
         <figure class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${shots.length}`}>
           <a href={shot.src.src}>
+            <span class="over" aria-hidden="true">
+              <span class="over-text">{shot.alt}</span>
+              <span class="over-hint">Open full size <Icon name="arrow-right" size={14} /></span>
+            </span>
             <Image
               src={shot.src}
               alt={shot.alt}
@@ -84,11 +88,60 @@ const { shots } = Astro.props;
     background: var(--deep);
   }
   .slide a {
+    position: relative;
     display: block;
+    overflow: hidden;
+    border-radius: 10px;
   }
   .slide :global(img) {
+    display: block;
     width: 100%;
     border-radius: 10px;
+  }
+  /* With a mouse, a panel with the caption slides in over the picture from
+     the left while it is hovered or focused; elsewhere the caption below is
+     all there is */
+  .over {
+    display: none;
+  }
+  @media (hover: hover) {
+    .over {
+      position: absolute;
+      inset: 0 auto 0 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.75rem;
+      width: min(22rem, 48%);
+      padding: clamp(1rem, 3vw, 2rem);
+      background: color-mix(in srgb, var(--ink) 86%, transparent);
+      backdrop-filter: blur(8px);
+      color: var(--chrome);
+      font-size: var(--step-0);
+      font-weight: 600;
+      line-height: 1.4;
+      translate: -100% 0;
+      transition: translate 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .over-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent, var(--mint));
+    }
+    .slide a:hover .over,
+    .slide a:focus-visible .over {
+      translate: 0 0;
+    }
+    .slide a:focus-visible {
+      outline-offset: 3px;
+    }
   }
   figcaption {
     padding: 0.75rem 0.375rem 0.25rem;
