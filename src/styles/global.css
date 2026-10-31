@@ -233,7 +233,8 @@ html[data-motion] [data-reveal].is-in {
   scale: none;
 }
 
-/* The ring that follows the mouse */
+/* A soft disc that follows the mouse over links and buttons, and opens
+   into a labelled disc over [data-cursor]; nothing shows elsewhere */
 .cursor-ring {
   position: fixed;
   top: 0;
@@ -241,7 +242,7 @@ html[data-motion] [data-reveal].is-in {
   z-index: 100;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 .cursor-ring.is-visible {
   opacity: 1;
@@ -250,27 +251,26 @@ html[data-motion] [data-reveal].is-in {
   position: absolute;
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin: -1.125rem 0 0 -1.125rem;
-  border: 1.5px solid var(--mint);
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: -2.75rem 0 0 -2.75rem;
   border-radius: 50%;
+  background: color-mix(in srgb, var(--violet) 34%, transparent);
   font-family: var(--body);
   font-size: 0;
   font-weight: 600;
   color: var(--on-accent);
+  scale: 0.5;
   transition:
     width 0.25s ease,
     height 0.25s ease,
     margin 0.25s ease,
     background-color 0.25s ease,
+    scale 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     font-size 0.2s ease;
 }
-.cursor-ring.is-link span {
-  width: 3rem;
-  height: 3rem;
-  margin: -1.5rem 0 0 -1.5rem;
-  background: color-mix(in srgb, var(--mint) 12%, transparent);
+.cursor-ring.is-visible span {
+  scale: 1;
 }
 .cursor-ring.is-label span {
   width: 4.5rem;
