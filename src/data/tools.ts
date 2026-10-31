@@ -13,6 +13,11 @@ import toolboxGui from '../assets/tools/toolbox/gui-dashboard.png';
 import toolboxIcon from '../assets/tools/toolbox/icon.svg';
 import bibleIcon from '../assets/tools/config-bible/icon.svg';
 import webosIcon from '../assets/tools/webos/largeIcon.png';
+import webosHome from '../assets/tools/webos/home.jpg';
+import webosPlex from '../assets/tools/webos/plex-rows.jpg';
+import webosEdit from '../assets/tools/webos/edit.jpg';
+import webosSidebar from '../assets/tools/webos/sidebar.jpg';
+import webosScreensaver from '../assets/tools/webos/screensaver.jpg';
 import tdDashboard from '../assets/tools/touchdown/dashboard.png';
 import tdGame from '../assets/tools/touchdown/game-center.png';
 import tdSeason from '../assets/tools/touchdown/season.png';
@@ -182,7 +187,15 @@ export const tools: Tool[] = [
       'Syncs and updates itself every hour.',
       'On rooted TVs: a phone remote page, commercial mute, layout backup and app updates.',
     ],
-    shots: [],
+    // From the launcher's code running in a desktop browser at 1920×1080,
+    // with sample titles and artwork in place of a real Plex library
+    shots: [
+      { src: webosHome, alt: 'The launcher’s home screen over a wallpaper of your own, with white glass icons' },
+      { src: webosPlex, alt: 'Continue Watching and Recently Added rows from Plex' },
+      { src: webosEdit, alt: 'Moving an app in edit mode' },
+      { src: webosSidebar, alt: 'Launcher settings in the side menu, with the theme list open' },
+      { src: webosScreensaver, alt: 'The screensaver with one picture picked' },
+    ],
     install: [
       {
         title: 'Connect the TV',

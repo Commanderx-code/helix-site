@@ -61,8 +61,9 @@ server's config in the homelab repository.
 ## Checks
 
 Two more workflows watch the site. Quality runs Lighthouse on every push and
-pull request against the thresholds in `lighthouserc.json`, and keeps the
-reports as an artifact. Check links runs weekly: it builds the site, follows
+pull request, once as a desktop and once as a phone on a slow connection,
+against the thresholds in `lighthouserc.json` and `lighthouserc.mobile.json`,
+and keeps both sets of reports as an artifact. Check links runs weekly: it builds the site, follows
 every link on every page, local and external, and opens an issue labelled
 "broken links" (or adds to the open one) when something stops answering.
 Both can also be started by hand from the Actions tab.
