@@ -11,8 +11,8 @@ export default defineConfig({
     inlineStylesheets: 'never',
   },
   vite: {
-    // Scripts and small assets as files too, for the same reason; and all of
-    // a page's styles in one file, so one request instead of five
-    build: { assetsInlineLimit: 0, cssCodeSplit: false },
+    // Scripts and small assets as files too, for the same reason; and each
+    // page's styles in files of their own, so a page loads only what it uses
+    build: { assetsInlineLimit: 0, cssCodeSplit: true },
   },
 });

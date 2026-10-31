@@ -26,7 +26,13 @@ addEventListener('scroll', update, { passive: true });
 
 if (!still) {
   // Each [data-reveal] rises into view, a beat after the one before it in the same parent
-  const reveals = [...document.querySelectorAll<HTMLElement>('[data-reveal]')];
+  // Anything already on screen has painted: hiding it now would blink, so
+  // it stays as it is and only what is further down rises into view
+  const reveals = [...document.querySelectorAll<HTMLElement>('[data-reveal]')].filter((el) => {
+    if (el.getBoundingClientRect().top >= innerHeight) return true;
+    el.removeAttribute('data-reveal');
+    return false;
+  });
   for (const el of reveals) {
     const siblings = [...(el.parentElement?.children ?? [])].filter((c) => c.hasAttribute('data-reveal'));
     el.style.setProperty('--reveal-order', String(siblings.indexOf(el)));
