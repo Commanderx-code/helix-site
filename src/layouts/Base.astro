@@ -86,7 +86,17 @@ const gallery = (
           <Image class="on-dark" src={logoOnDark} alt="" height={40} densities={[1, 2]} loading="eager" />
           <Image class="on-light" src={logoOnLight} alt="" height={40} densities={[1, 2]} loading="eager" />
         </a>
-        <nav aria-label="Site">
+        <div class="switches">
+          <button class="theme" type="button" data-theme-toggle aria-label="Switch theme">
+            <span class="sun"><Icon name="sun" size={18} /></span>
+            <span class="moon"><Icon name="moon" size={18} /></span>
+          </button>
+          <button class="menu" type="button" data-menu aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+            <span class="open"><Icon name="menu" size={22} /></span>
+            <span class="shut"><Icon name="close" size={22} /></span>
+          </button>
+        </div>
+        <nav id="site-nav" aria-label="Site">
           <a href="/#tools">Tools</a>
           <a href="/#homelab">Homelab</a>
           <a href="/#faq">FAQ</a>
@@ -94,10 +104,6 @@ const gallery = (
           <a href="https://docs.helixtech.app/">Docs</a>
           <a href="/contact/">Contact</a>
           <a href="https://github.com/Commanderx-code">GitHub <Icon name="external" size={14} /></a>
-          <button class="theme" type="button" data-theme-toggle aria-label="Switch theme">
-            <span class="sun"><Icon name="sun" size={18} /></span>
-            <span class="moon"><Icon name="moon" size={18} /></span>
-          </button>
         </nav>
       </div>
     </header>
@@ -194,6 +200,7 @@ const gallery = (
     <script>
       import '../scripts/copy.ts';
       import '../scripts/motion.ts';
+      import '../scripts/nav.ts';
       import '../scripts/theme.ts';
     </script>
   </body>
@@ -266,6 +273,13 @@ const gallery = (
     flex-wrap: wrap;
     align-items: center;
     gap: 0.25rem;
+    margin-left: auto;
+  }
+  .switches {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    order: 3;
   }
   .bar nav a {
     display: inline-flex;
@@ -285,13 +299,13 @@ const gallery = (
   }
   /* The theme switch: a sun while the page is dark, a moon while it is light.
      Shown only once theme.js has run, since without it the switch does nothing */
-  .theme {
+  .theme,
+  .menu {
     display: none;
     align-items: center;
     justify-content: center;
     width: 2.75rem;
     min-height: 2.75rem;
-    margin-left: 0.25rem;
     padding: 0;
     border: 0;
     border-radius: 8px;
@@ -302,11 +316,22 @@ const gallery = (
   :root[data-theme] .theme {
     display: inline-flex;
   }
-  .theme:hover {
+  .theme:hover,
+  .menu:hover {
     color: var(--chrome);
     background: var(--raised);
   }
-  .theme span {
+  .theme span,
+  .menu span {
+    display: inline-flex;
+  }
+  /* The menu button, on narrow screens only: the links fold into a panel
+     under the bar until it is pressed. scripts/nav.ts opens and closes it. */
+  .menu .shut,
+  .menu[aria-expanded='true'] .open {
+    display: none;
+  }
+  .menu[aria-expanded='true'] .shut {
     display: inline-flex;
   }
   .theme .moon,
@@ -316,10 +341,35 @@ const gallery = (
   :root[data-theme='light'] .theme .moon {
     display: inline-flex;
   }
-  @media (max-width: 30rem) {
-    .bar nav a {
-      padding: 0 0.5rem;
+  @media (max-width: 60rem) {
+    .menu {
+      display: inline-flex;
     }
+    .bar nav {
+      display: none;
+      order: 4;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.125rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem 0 0.75rem;
+      border-top: 1px solid var(--line);
+    }
+    .site-head[data-open] {
+      border-color: var(--line);
+      background: var(--ink);
+    }
+    .site-head[data-open] .bar nav {
+      display: flex;
+    }
+    .bar nav a {
+      min-height: 3rem;
+      padding: 0 0.75rem;
+      font-size: 1.0625rem;
+    }
+  }
+  @media (max-width: 30rem) {
     .wordmark :global(img),
     [data-scrolled] .wordmark :global(img) {
       height: 1.75rem;
