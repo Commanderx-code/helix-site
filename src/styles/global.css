@@ -274,7 +274,7 @@ html[data-motion] [data-reveal].is-in {
   height: 5.5rem;
   margin: -2.75rem 0 0 -2.75rem;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--violet) 34%, transparent);
+  background: color-mix(in srgb, var(--mint) 28%, transparent);
   font-family: var(--body);
   font-size: 0;
   font-weight: 600;
