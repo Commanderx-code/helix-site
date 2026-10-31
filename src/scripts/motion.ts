@@ -125,15 +125,20 @@ if (!still) {
     );
   }
 
-  // A soft disc follows the mouse over links and buttons, and opens into a
-  // labelled disc over [data-cursor]; over anything else it stays hidden
+  // A small dot stands in for the mouse pointer. A soft disc trails it over
+  // links and buttons, and opens into a labelled disc over [data-cursor];
+  // over anything else only the dot shows
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const ring = document.createElement('div');
     ring.className = 'cursor-ring';
     ring.setAttribute('aria-hidden', 'true');
     const label = document.createElement('span');
     ring.append(label);
-    document.body.append(ring);
+    const dot = document.createElement('div');
+    dot.className = 'cursor-dot';
+    dot.setAttribute('aria-hidden', 'true');
+    document.body.append(ring, dot);
+    document.documentElement.setAttribute('data-dot', '');
 
     let x = innerWidth / 2;
     let y = innerHeight / 2;
@@ -150,13 +155,18 @@ if (!still) {
     addEventListener('pointermove', (e) => {
       x = e.clientX;
       y = e.clientY;
+      dot.style.transform = `translate(${x}px, ${y}px)`;
+      dot.classList.add('is-visible');
       const target = e.target as Element;
       const labelled = target.closest<HTMLElement>('[data-cursor]');
       ring.classList.toggle('is-label', !!labelled);
       ring.classList.toggle('is-visible', !!labelled || !!target.closest('a, button, summary, label, input, select, textarea'));
       if (labelled) label.textContent = labelled.dataset.cursor!;
     });
-    document.documentElement.addEventListener('pointerleave', () => ring.classList.remove('is-visible'));
+    document.documentElement.addEventListener('pointerleave', () => {
+      ring.classList.remove('is-visible');
+      dot.classList.remove('is-visible');
+    });
   }
 }
 
