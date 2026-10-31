@@ -385,7 +385,7 @@ const homelab = [
     /* The helix in the right half of the shot, zoomed in so the menu's
        text is out of frame and only colour and light remain */
     object-position: 72% 45%;
-    filter: blur(7px) saturate(1.15);
+    filter: blur(5px) saturate(1.2);
     scale: 1.6;
   }
   .sky::after {
@@ -393,11 +393,11 @@ const homelab = [
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(60% 50% at 50% 45%, transparent, color-mix(in srgb, var(--ink) 55%, transparent)),
+      radial-gradient(60% 50% at 50% 45%, transparent, color-mix(in srgb, var(--ink) 40%, transparent)),
       linear-gradient(
         to bottom,
-        color-mix(in srgb, var(--ink) 48%, transparent),
-        color-mix(in srgb, var(--ink) 60%, transparent) 55%,
+        color-mix(in srgb, var(--ink) 34%, transparent),
+        color-mix(in srgb, var(--ink) 46%, transparent) 55%,
         var(--ink)
       );
   }
