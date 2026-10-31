@@ -256,16 +256,25 @@ const homelab = [
         {
           principles.map((p) => (
             <div class="principle" data-reveal>
-              <Icon name={p.icon} size={28} />
-              <h3>{p.title}</h3>
-              <p>{p.text}</p>
-              <ul class="chips">
-                {p.tools.map((t) => (
-                  <li>
-                    <a href={`/tools/${t.slug}/`}>{t.name}</a>
-                  </li>
-                ))}
-              </ul>
+              <div class="card">
+                <div class="face front">
+                  <Icon name={p.icon} size={32} />
+                  <h3>{p.title}</h3>
+                  <p class="hint" aria-hidden="true">
+                    Flip <Icon name="arrow-right" size={14} />
+                  </p>
+                </div>
+                <div class="face back">
+                  <p>{p.text}</p>
+                  <ul class="chips">
+                    {p.tools.map((t) => (
+                      <li>
+                        <a href={`/tools/${t.slug}/`}>{t.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           ))
         }
@@ -755,7 +764,20 @@ const homelab = [
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
     margin-top: clamp(1.75rem, 4vw, 2.75rem);
   }
+  /* Each principle is a card with two faces. With a mouse it turns over
+     to its back on hover or focus; on touch screens, where there is no
+     hover, both faces stack and nothing is hidden. */
   .principle {
+    perspective: 1200px;
+  }
+  .card {
+    display: grid;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .face {
+    grid-area: 1 / 1;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -763,9 +785,53 @@ const homelab = [
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--ink);
+    backface-visibility: hidden;
   }
-  .principle > :global(svg) {
+  .front {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--mint) 16%, var(--ink)), color-mix(in srgb, var(--violet) 22%, var(--ink)));
+  }
+  .front > :global(svg) {
     color: var(--mint);
+  }
+  .hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0.25rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .back {
+    transform: rotateY(180deg);
+    background: var(--deep);
+  }
+  @media (hover: hover) {
+    .principle:hover .card,
+    .principle:focus-within .card {
+      transform: rotateY(180deg);
+    }
+  }
+  /* No hover: the faces follow one another, the back face the right way round */
+  @media (hover: none) {
+    .card {
+      gap: 0.75rem;
+    }
+    .face {
+      grid-area: auto;
+    }
+    .back {
+      transform: none;
+    }
+    .hint {
+      display: none;
+    }
   }
   .principle h3,
   .lab-name {
