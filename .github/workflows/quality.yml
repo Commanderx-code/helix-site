@@ -1,9 +1,10 @@
 name: Quality
 
-# Runs Lighthouse on the built site. A drop in accessibility, best practices
-# or SEO below 95 fails the run; performance only warns, as it varies with
-# the runner. The reports are kept as an artifact. Thresholds live in
-# lighthouserc.json.
+# Runs Lighthouse on the built site, once as a desktop and once as a phone
+# on a slow connection. A drop in accessibility, best practices or SEO below
+# 95 fails the run; performance only warns, as it varies with the runner.
+# The reports are kept as an artifact. Thresholds live in lighthouserc.json
+# (desktop) and lighthouserc.mobile.json (phone).
 on:
   push:
     branches: [main]
@@ -33,7 +34,11 @@ jobs:
           PUBLIC_WEB3FORMS_KEY: ${{ vars.PUBLIC_WEB3FORMS_KEY }}
       # Not a dependency of the site: it would add its own tree to the audit.
       # Fetched fresh, with a retry for the registry's occasional miss.
-      - run: for try in 1 2 3; do npx --yes @lhci/cli@0.15.1 autorun && exit 0; sleep 30; done; exit 1
+      - name: Lighthouse, desktop
+        run: for try in 1 2 3; do npx --yes @lhci/cli@0.15.1 autorun && exit 0; sleep 30; done; exit 1
+      - name: Lighthouse, phone
+        if: always()
+        run: for try in 1 2 3; do npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.json && exit 0; sleep 30; done; exit 1
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
