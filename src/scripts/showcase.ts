@@ -1,12 +1,14 @@
 // The tool slider: previous and next, a dot per slide, and a slide every
 // few seconds until someone hovers, focuses or pauses it. Reduced motion
 // turns off both the timer and the smooth scroll; a request to save data
-// turns off the timer, so no slide loads unasked. From the keyboard, only
+// turns off the timer, so no slide loads unasked, and so does a narrow
+// screen, where the row moves only when swiped. From the keyboard, only
 // the slide in view can be tabbed into, one dot stands for the row of them,
 // and the arrow keys move between slides.
 const DELAY = 6000;
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const sparing = matchMedia('(prefers-reduced-data: reduce)').matches;
+const handheld = matchMedia('(max-width: 48rem)').matches;
 
 for (const root of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
   const track = root.querySelector<HTMLElement>('[data-track]')!;
@@ -17,7 +19,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
 
   root.querySelector<HTMLElement>('[data-controls]')!.hidden = false;
   let current = 0;
-  let paused = still || sparing;
+  let paused = still || sparing || handheld;
   let held = false;
   let timer: number | undefined;
 

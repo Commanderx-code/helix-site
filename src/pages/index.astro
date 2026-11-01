@@ -561,6 +561,19 @@ const homelab = [
     border-radius: 0 0 18px 18px;
     background: linear-gradient(var(--raised), var(--deep));
   }
+  /* On a phone the laptop would leave the screenshot too small to read:
+     the slides take the whole width and the frame goes */
+  @media (max-width: 48rem) {
+    .screen {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: none;
+    }
+    .base {
+      display: none;
+    }
+  }
 
   .stats ul {
     display: grid;

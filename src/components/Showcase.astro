@@ -205,10 +205,14 @@ const slides = tools
     flex-wrap: wrap;
     justify-content: center;
   }
-  /* A dot per screenshot is a wide row: below the buttons on narrow screens */
+  /* On a narrow screen the row is swiped, so the buttons go and the dots
+     stay, as the sign that there is more to the side */
   @media (max-width: 48rem) {
+    .round,
+    .pause {
+      display: none;
+    }
     .dots {
-      order: 1;
       flex-basis: 100%;
     }
     .dot {
