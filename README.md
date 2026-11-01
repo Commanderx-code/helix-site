@@ -26,10 +26,31 @@ it the page offers the email address instead of a form.
 
 ## Publishing
 
-Every push to `main`, and a daily run that picks up new releases, builds the
-site in GitHub Actions and pushes the result to the `deploy` branch. The
-server pulls that branch every two minutes and switches to the new build in
-one step, so nothing on it accepts a push.
+Every push to `main` builds the site in GitHub Actions and pushes the result
+to the `deploy` branch. The server pulls that branch every two minutes and
+switches to the new build in one step, so nothing on it accepts a push.
+
+A new release of a tool reaches the site the same way: each tool repository
+has a workflow that sends this repository a `tool-release` event when a
+release is published, and the build runs on it. That workflow needs a token
+that may write to this repository, kept in the tool repository's secrets as
+`SITE_TOKEN`: a fine-grained personal access token for `helix-site` alone,
+with contents read and write. A daily run catches releases that arrived
+without the event. The workflow a tool repository needs is:
+
+```yaml
+name: Site
+on:
+  release:
+    types: [published]
+jobs:
+  tell-the-site:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh api repos/Commanderx-code/helix-site/dispatches -f event_type=tool-release -f "client_payload[repo]=$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ secrets.SITE_TOKEN }}
+```
 
 The pages load no third-party scripts, fonts or images, so the server can
 send a strict Content-Security-Policy. The one outside address is the form's

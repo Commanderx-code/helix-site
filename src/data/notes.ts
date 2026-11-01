@@ -8,12 +8,29 @@ import sanitize from 'sanitize-html';
 const escape = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
+// A GitHub address pasted as is reads as GitHub itself shows it: the
+// repository and the pull request, issue, commit or comparison
+const github = /^https:\/\/github\.com\/([^/\s]+\/[^/\s]+)\/(pull|issues|commit|compare)\/([^\s?#]+)$/;
+export function linkText(href: string): string {
+  const m = github.exec(href);
+  if (!m) return href;
+  const [, repo, kind, rest] = m;
+  if (kind === 'commit') return `${repo}@${rest.slice(0, 7)}`;
+  if (kind === 'compare') return `${repo}@${rest}`;
+  return `${repo}#${rest.split('/')[0]}`;
+}
+
 // Pictures would come from GitHub, which the site's policy does not load, so
 // they become links; raw HTML is shown as text
 marked.use({
   renderer: {
     image: ({ href, text }) => `<a href="${escape(href)}">${escape(text || 'image')}</a>`,
     html: ({ text }) => escape(text),
+    link({ href, tokens }) {
+      const bare = tokens.length === 1 && tokens[0].type === 'text' && tokens[0].raw === href;
+      const text = bare ? escape(linkText(href)) : this.parser.parseInline(tokens);
+      return `<a href="${escape(href)}">${text}</a>`;
+    },
   },
 });
 

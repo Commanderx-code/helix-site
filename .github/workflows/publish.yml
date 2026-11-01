@@ -1,10 +1,14 @@
 name: Publish
 
 # Builds the site and pushes it to the deploy branch, which the VPS pulls
-# every two minutes. The daily run picks up new tool releases.
+# every two minutes. A tool repository sends the tool-release event when it
+# publishes a release, so the site shows it within minutes; the daily run
+# catches anything that event missed.
 on:
   push:
     branches: [main]
+  repository_dispatch:
+    types: [tool-release]
   schedule:
     - cron: '17 9 * * *'
   workflow_dispatch:

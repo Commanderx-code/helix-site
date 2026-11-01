@@ -6,9 +6,15 @@
         "/",
         "/tools/toolbox/",
         "/tools/boot/",
+        "/tools/touchdown/",
+        "/tools/webos-launcher/",
+        "/tools/config-bible/",
         "/contact/",
         "/news/",
-        "/privacy/"
+        "/privacy/",
+        "/404.html",
+        "/coming-soon/",
+        "/maintenance/"
       ],
       "numberOfRuns": 2,
       "settings": {
@@ -25,7 +31,7 @@
         "categories:accessibility": [
           "error",
           {
-            "minScore": 0.95
+            "minScore": 1
           }
         ],
         "categories:best-practices": [
