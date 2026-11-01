@@ -141,6 +141,8 @@ a:hover { color: var(--chrome); }
 code, pre, kbd { font-family: var(--mono); font-size: 0.9em; }
 
 img { max-width: 100%; height: auto; display: block; }
+/* The page behind an open viewer stays put */
+body:has(dialog[open]) { overflow: hidden; }
 
 .wrap {
   width: min(75rem, 100% - 2 * var(--gutter));
