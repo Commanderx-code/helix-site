@@ -33,12 +33,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLIC_WEB3FORMS_KEY: ${{ vars.PUBLIC_WEB3FORMS_KEY }}
       # Not a dependency of the site: it would add its own tree to the audit.
-      # Fetched fresh, with a retry for the registry's occasional miss.
+      # Fetched fresh, with a retry for the registry's occasional miss; the
+      # audits themselves run once, so a failed score is not run three times.
+      - name: Fetch Lighthouse
+        run: for try in 1 2 3; do npx --yes @lhci/cli@0.15.1 --version && exit 0; sleep 30; done; exit 1
       - name: Lighthouse, desktop
-        run: for try in 1 2 3; do npx --yes @lhci/cli@0.15.1 autorun && exit 0; sleep 30; done; exit 1
+        run: npx --yes @lhci/cli@0.15.1 autorun
       - name: Lighthouse, phone
         if: always()
-        run: for try in 1 2 3; do npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.json && exit 0; sleep 30; done; exit 1
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

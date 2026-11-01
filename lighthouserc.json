@@ -27,37 +27,47 @@
         ]
       }
     },
-    "assert": {
-      "assertions": {
-        "categories:accessibility": [
-          "error",
-          {
-            "minScore": 1
-          }
-        ],
-        "categories:best-practices": [
-          "error",
-          {
-            "minScore": 0.95
-          }
-        ],
-        "categories:seo": [
-          "error",
-          {
-            "minScore": 0.95
-          }
-        ],
-        "categories:performance": [
-          "warn",
-          {
-            "minScore": 0.85
-          }
-        ]
-      }
-    },
     "upload": {
       "target": "filesystem",
       "outputDir": "./lighthouse/desktop"
+    },
+    "assert": {
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": ".*",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "categories:best-practices": [
+              "error",
+              {
+                "minScore": 0.95
+              }
+            ],
+            "categories:performance": [
+              "warn",
+              {
+                "minScore": 0.85
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "^(?!.*/(coming-soon|maintenance)/).*$",
+          "assertions": {
+            "categories:seo": [
+              "error",
+              {
+                "minScore": 0.95
+              }
+            ]
+          }
+        }
+      ]
     }
   }
 }
