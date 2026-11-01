@@ -1,5 +1,5 @@
 // The icons a phone's home screen uses for a saved page, named in
-// manifest.webmanifest: the favicon at 192 and 512 pixels, and a "maskable"
+// manifest.json: the favicon at 192 and 512 pixels, and a "maskable"
 // one with the mark drawn smaller on its own navy, so a launcher that crops
 // icons to a circle keeps the whole helix
 import { readFile } from 'node:fs/promises';
