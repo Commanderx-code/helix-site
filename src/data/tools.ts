@@ -10,6 +10,10 @@ import toolboxPlan from '../assets/tools/toolbox/plan.png';
 import toolboxApps from '../assets/tools/toolbox/applications.png';
 import toolboxDoctor from '../assets/tools/toolbox/doctor.png';
 import toolboxGui from '../assets/tools/toolbox/gui-dashboard.png';
+import toolboxGuiApps from '../assets/tools/toolbox/gui-applications.png';
+import toolboxGuiConfirm from '../assets/tools/toolbox/gui-confirm.png';
+import toolboxGuiDoctor from '../assets/tools/toolbox/gui-doctor.png';
+import toolboxGuiHardware from '../assets/tools/toolbox/gui-hardware.png';
 import toolboxIcon from '../assets/tools/toolbox/icon.svg';
 import bibleIcon from '../assets/tools/config-bible/icon.svg';
 import webosIcon from '../assets/tools/webos/largeIcon.png';
@@ -84,6 +88,10 @@ export const tools: Tool[] = [
       { src: toolboxApps, alt: 'Browsing the application catalog' },
       { src: toolboxDoctor, alt: 'Helix Doctor health checks' },
       { src: toolboxGui, alt: 'The Helix Toolbox desktop window' },
+      { src: toolboxGuiApps, alt: 'The application catalog in the desktop window, with an entry opened beside it' },
+      { src: toolboxGuiConfirm, alt: 'The desktop window asking before a plan runs: its risk, its steps and what each changes' },
+      { src: toolboxGuiDoctor, alt: 'Helix Doctor in the desktop window: each check with its result' },
+      { src: toolboxGuiHardware, alt: 'The Hardware page in the desktop window: firmware, disks and temperatures' },
     ],
     install: [
       { title: 'Try it without installing', code: 'curl -fsSL https://raw.githubusercontent.com/Commanderx-code/Helix-toolbox/main/start.sh | sh' },
