@@ -16,7 +16,7 @@
         "/coming-soon/",
         "/maintenance/"
       ],
-      "numberOfRuns": 2,
+      "numberOfRuns": 1,
       "settings": {
         "onlyCategories": [
           "performance",

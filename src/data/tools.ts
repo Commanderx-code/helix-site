@@ -296,11 +296,18 @@ async function githubCount(path: string): Promise<number | undefined> {
   }
 }
 
+// A release tag is written by whoever can publish a release, so it is
+// trusted only as far as it looks like a version: digits and dots, an
+// optional v, then letters, digits, dots, plus and dashes for a suffix
+// such as -rc.1. A release with any other tag is left out.
+const VERSION_TAG = /^v?\d+(\.\d+)*[A-Za-z0-9.+-]*$/;
+const versioned = (tag: unknown): tag is string => typeof tag === 'string' && VERSION_TAG.test(tag);
+
 /** Latest release of each public repository, read from GitHub at build time. */
 export async function latestRelease(repo?: string): Promise<Release | undefined> {
   if (!repo) return undefined;
   const r = await github(`repos/${repo}/releases/latest`);
-  return r && { tag: r.tag_name, date: r.published_at, url: r.html_url };
+  return r && versioned(r.tag_name) ? { tag: r.tag_name, date: r.published_at, url: r.html_url } : undefined;
 }
 
 export interface ReleaseNote extends Release {
@@ -316,7 +323,7 @@ export async function releaseNotes(repo?: string, count = 3): Promise<ReleaseNot
   const list = await github(`repos/${repo}/releases?per_page=${count + 2}`);
   if (!Array.isArray(list)) return [];
   return list
-    .filter((r: any) => !r.draft)
+    .filter((r: any) => !r.draft && versioned(r.tag_name))
     .slice(0, count)
     .map((r: any) => ({
       tag: r.tag_name,

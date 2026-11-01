@@ -42,6 +42,8 @@ const allowed: sanitize.IOptions = {
   ],
   allowedAttributes: { a: ['href'] },
   allowedSchemes: ['http', 'https', 'mailto'],
+  // A link written as //host would follow the page's scheme to any host; not needed
+  allowProtocolRelative: false,
 };
 
 /** The notes as safe HTML. */
