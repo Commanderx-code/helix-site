@@ -54,7 +54,9 @@ jobs:
 
 The pages load no third-party scripts, fonts or images, so the server can
 send a strict Content-Security-Policy. The one outside address is the form's
-target, so `form-action` must allow `https://api.web3forms.com`.
+target, so `form-action` must allow `https://api.web3forms.com`. The web app
+manifest, which gives a page saved to a phone's home screen its name and
+icon, loads under `manifest-src`, so that must allow `'self'`.
 
 One script is inline: `src/scripts/theme-boot.js`, which puts the chosen
 theme on `<html>` before the first paint. The policy allows it by its hash,
