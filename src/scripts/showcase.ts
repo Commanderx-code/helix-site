@@ -1,6 +1,8 @@
 // The tool slider: previous and next, a dot per slide, and a slide every
 // few seconds until someone hovers, focuses or pauses it. Reduced motion
-// turns off both the timer and the smooth scroll.
+// turns off both the timer and the smooth scroll. From the keyboard, only
+// the slide in view can be tabbed into, one dot stands for the row of them,
+// and the arrow keys move between slides.
 const DELAY = 6000;
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -22,13 +24,18 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
     track.scrollTo({ left: slides[n].offsetLeft - slides[0].offsetLeft, behavior: still ? 'auto' : 'smooth' });
   };
 
-  // The slide most in view is the current one, however it got there
+  // The slide most in view is the current one, however it got there. The
+  // others are inert, so Tab does not walk through every slide's link
   const seen = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
+        (entry.target as HTMLElement).inert = !entry.isIntersecting;
         if (!entry.isIntersecting) continue;
         current = slides.indexOf(entry.target as HTMLElement);
-        dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === current)));
+        dots.forEach((dot, i) => {
+          dot.setAttribute('aria-current', String(i === current));
+          dot.tabIndex = i === current ? 0 : -1;
+        });
       }
     },
     { root: track, threshold: 0.6 },
@@ -49,6 +56,18 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-showcase]')) {
   root.querySelector('[data-next]')!.addEventListener('click', () => show(current + 1));
   dots.forEach((dot, i) => dot.addEventListener('click', () => show(i)));
   pause.addEventListener('click', () => setPaused(!paused));
+
+  // Left and right arrows move a slide, Home and End to the ends; on the
+  // dots the focus moves along with the slide
+  root.addEventListener('keydown', (e) => {
+    const step = { ArrowLeft: -1, ArrowRight: 1 }[e.key];
+    const target = e.key === 'Home' ? 0 : e.key === 'End' ? slides.length - 1 : step && current + step;
+    if (target === undefined || e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    const n = (target + slides.length) % slides.length;
+    show(n);
+    if (dots.includes(e.target as HTMLButtonElement)) dots[n].focus();
+  });
 
   // Hold still while someone is looking at or working in the slider
   const hold = (value: boolean) => () => {

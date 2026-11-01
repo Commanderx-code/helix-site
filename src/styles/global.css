@@ -207,6 +207,8 @@ img { max-width: 100%; height: auto; display: block; }
   left: -999px;
 }
 .skip:focus { left: var(--gutter); top: 0.75rem; background: var(--deep); padding: 0.5rem 0.75rem; z-index: 60; }
+/* Where the skip link lands: focusable so the next Tab starts there, with no ring around the whole page */
+main:focus { outline: none; }
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
