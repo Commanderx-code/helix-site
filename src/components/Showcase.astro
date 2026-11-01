@@ -1,13 +1,14 @@
 ---
-// A slider of every screenshot the tools have, each slide opening the
-// tool's page. Without JavaScript it is a row you swipe or scroll; the
-// script adds the buttons, the dots and the timed advance.
+// A slider of one or two screenshots per tool, each slide opening the
+// tool's page, where the rest are. Without JavaScript it is a row you
+// swipe or scroll; the script adds the buttons, the dots and the timed
+// advance.
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { tools } from '../data/tools';
 
 const slides = tools
-  .flatMap((tool) => tool.shots.map((shot) => ({ tool, shot })))
+  .flatMap((tool) => (tool.featured ?? [0, 1]).flatMap((i) => (tool.shots[i] ? [{ tool, shot: tool.shots[i] }] : [])))
   .map((s, i) => ({ ...s, number: String(i + 1).padStart(2, '0') }));
 ---
 <section class="showcase" aria-roledescription="carousel" aria-label="Tools at a glance" data-showcase>

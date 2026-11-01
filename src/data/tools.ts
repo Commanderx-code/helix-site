@@ -56,6 +56,8 @@ export interface Tool {
   license?: string;
   features: string[];
   shots: Shot[];
+  /** Which of the shots the slider on the home page shows, by position; the first two when absent */
+  featured?: number[];
   install: Install[];
   docs?: string;
 }
@@ -93,6 +95,8 @@ export const tools: Tool[] = [
       { src: toolboxGuiDoctor, alt: 'Helix Doctor in the desktop window: each check with its result' },
       { src: toolboxGuiHardware, alt: 'The Hardware page in the desktop window: firmware, disks and temperatures' },
     ],
+    // Two of the terminal, two of the desktop window
+    featured: [0, 1, 4, 6],
     install: [
       { title: 'Try it without installing', code: 'curl -fsSL https://raw.githubusercontent.com/Commanderx-code/Helix-toolbox/main/start.sh | sh' },
       { title: 'Arch', note: 'Download the package from the latest release, then:', code: 'sudo pacman -U helix-toolbox-*-x86_64.pkg.tar.zst' },
@@ -129,6 +133,8 @@ export const tools: Tool[] = [
       { src: bootLazarus, alt: 'The Lazarus PE tool launcher on Windows PE' },
       { src: bootWindows, alt: 'The Helix Boot app on Windows' },
     ],
+    // The boot menu, and the app that writes the stick
+    featured: [0, 3],
     install: [
       {
         title: 'Download',
