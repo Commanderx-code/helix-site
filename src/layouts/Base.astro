@@ -32,6 +32,10 @@ interface Props {
 }
 const { title, description, tool, noindex = false, image = '/og/home.png', jsonLd, bare = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// The structured data goes into a <script> element as raw text, so a "<" in
+// it, as in a release tag from GitHub, could end the element early and leave
+// the rest on the page as markup. Written as \u003c it stays plain JSON.
+const jsonLdText = jsonLd && JSON.stringify(jsonLd).replaceAll('<', '\\u003c');
 // The copyright runs from the first year to the year of the build
 const year = new Date().getFullYear();
 const years = year > 2026 ? `2026–${year}` : '2026';
@@ -79,7 +83,7 @@ const gallery = (
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content={title} />
     <meta name="twitter:card" content="summary_large_image" />
-    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+    {jsonLdText && <script type="application/ld+json" is:inline set:html={jsonLdText} />}
     <script is:inline set:html={themeBoot} />
   </head>
   <body data-tool={tool}>
