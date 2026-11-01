@@ -56,6 +56,15 @@ The pages load no third-party scripts, fonts or images, so the server can
 send a strict Content-Security-Policy. The one outside address is the form's
 target, so `form-action` must allow `https://api.web3forms.com`.
 
+One script is inline: `src/scripts/theme-boot.js`, which puts the chosen
+theme on `<html>` before the first paint. The policy allows it by its hash,
+so any change to that file, comments included, needs the new hash in the
+server's `script-src` before the change is pushed:
+
+```sh
+openssl dgst -sha256 -binary src/scripts/theme-boot.js | base64
+```
+
 ## Standby pages
 
 Two pages stand in for the site and are built with it, linked from nowhere

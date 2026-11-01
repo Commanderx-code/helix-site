@@ -1,4 +1,4 @@
-// Runs in the head, before the page paints: the theme chosen with the
+// Inlined into the head of every page, before it paints: the theme chosen with the
 // header switch, or failing that the system's, goes on <html> so the right
 // colours show from the first frame. The switch itself lives in the site's
 // script.

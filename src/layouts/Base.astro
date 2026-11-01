@@ -11,6 +11,11 @@ import { tools } from '../data/tools';
 // for them so the text does not swap and shift
 import displayFont from '@fontsource/fira-sans-condensed/files/fira-sans-condensed-latin-800-normal.woff2?url';
 import bodyFont from '@fontsource/fira-sans/files/fira-sans-latin-400-normal.woff2?url';
+// Inline, so the theme is on <html> before the first paint without a
+// request: the server's Content-Security-Policy allows this script by its
+// hash, so its text must not change without the header changing with it
+// (see README)
+import themeBoot from '../scripts/theme-boot.js?raw';
 
 interface Props {
   title: string;
@@ -74,7 +79,7 @@ const gallery = (
     <meta property="og:image:alt" content={title} />
     <meta name="twitter:card" content="summary_large_image" />
     {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
-    <script is:inline src="/theme.js"></script>
+    <script is:inline set:html={themeBoot} />
   </head>
   <body data-tool={tool}>
     <slot name="backdrop" />
@@ -299,7 +304,7 @@ const gallery = (
     background: var(--raised);
   }
   /* The theme switch: a sun while the page is dark, a moon while it is light.
-     Shown only once theme.js has run, since without it the switch does nothing */
+     Shown only once the theme script has run, since without it the switch does nothing */
   .theme,
   .menu {
     display: none;
