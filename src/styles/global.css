@@ -114,6 +114,13 @@ body {
   overflow-x: hidden;
 }
 
+/* What waits to slide in from the right sits past the edge of the page. Left
+   to widen it, a phone lays out fixed things, like the back-to-top button, by
+   that width, off the screen. The body's own rule above does not prevent it. */
+main {
+  overflow-x: clip;
+}
+
 h1, h2, h3 {
   font-family: var(--display);
   color: var(--chrome);
