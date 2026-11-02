@@ -89,6 +89,9 @@ const years = year > 2026 ? `2026–${year}` : '2026';
           <Image class="on-light" src={logoOnLight} alt="" height={40} densities={[1, 2]} quality={70} />
         </a>
         <div class="switches">
+          <button class="find" type="button" data-search-open aria-label="Search the site" aria-haspopup="dialog">
+            <Icon name="search" size={18} />
+          </button>
           <a class="gh" href="https://github.com/Commanderx-code" aria-label="Helix Tech on GitHub">
             <Icon name="github" size={18} />
           </a>
@@ -121,6 +124,17 @@ const years = year > 2026 ? `2026–${year}` : '2026';
         </nav>
       </div>
     </header>
+    <dialog class="search" data-search aria-label="Search the site">
+      <div class="search-box">
+        <form role="search">
+          <Icon name="search" size={18} />
+          <input type="text" inputmode="search" autofocus enterkeyhint="go" autocomplete="off" placeholder="Search posts, tools and more" aria-label="Search the site" />
+          <button type="button" data-search-close aria-label="Close search"><Icon name="close" size={18} /></button>
+        </form>
+        <p role="status"></p>
+        <ol></ol>
+      </div>
+    </dialog>
     )}
     <main id="main" tabindex="-1">
       <slot />
@@ -204,6 +218,7 @@ const years = year > 2026 ? `2026–${year}` : '2026';
       import '../scripts/links.ts';
       import '../scripts/motion.ts';
       import '../scripts/nav.ts';
+      import '../scripts/search.ts';
       import '../scripts/theme.ts';
     </script>
   </body>
@@ -311,6 +326,12 @@ const years = year > 2026 ? `2026–${year}` : '2026';
     color: var(--chrome);
     background: var(--raised);
   }
+  /* The smallest phones fit three buttons beside the logo; GitHub is in the footer too */
+  @media (max-width: 22rem) {
+    .gh {
+      display: none;
+    }
+  }
   .bar nav > a,
   .tools-menu summary {
     display: inline-flex;
@@ -398,6 +419,7 @@ const years = year > 2026 ? `2026–${year}` : '2026';
   }
   /* The theme switch: a sun while the page is dark, a moon while it is light.
      Shown only once the theme script has run, since without it the switch does nothing */
+  .find,
   .theme,
   .menu {
     display: none;
@@ -412,13 +434,130 @@ const years = year > 2026 ? `2026–${year}` : '2026';
     color: var(--text);
     cursor: pointer;
   }
+  :root[data-theme] .find,
   :root[data-theme] .theme {
     display: inline-flex;
   }
+  .find:hover,
   .theme:hover,
   .menu:hover {
     color: var(--chrome);
     background: var(--raised);
+  }
+  /* The search box over the page. scripts/search.ts opens it and fills the
+     list, so what it adds is styled with :global. */
+  .search {
+    width: min(36rem, 100% - 2rem);
+    max-height: min(32rem, 100dvh - 4rem);
+    margin: clamp(1rem, 10vh, 6rem) auto auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--deep);
+    color: var(--text);
+  }
+  .search[open] {
+    display: flex;
+  }
+  .search::backdrop {
+    background: rgb(0 0 0 / 0.6);
+  }
+  .search-box {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0.5rem;
+  }
+  .search form {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.25rem;
+    padding-left: 0.75rem;
+    border-radius: 10px;
+    background: var(--raised);
+    color: var(--muted);
+  }
+  .search form:focus-within {
+    outline: 1px solid var(--mint);
+  }
+  .search input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding-inline: 0.5rem;
+    border: 0;
+    background: none;
+    color: var(--chrome);
+    font: inherit;
+    outline: none;
+  }
+  .search input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+  .search button {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .search button:hover {
+    color: var(--chrome);
+  }
+  .search p {
+    flex: none;
+    max-width: none;
+    margin: 0;
+    padding: 0.625rem 0.75rem 0.25rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .search ol {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+  }
+  .search :global(li a) {
+    display: grid;
+    gap: 0.125rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 10px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .search :global(li a:hover),
+  .search :global(li a:focus-visible) {
+    background: var(--raised);
+  }
+  .search :global(.kind) {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .search :global(.title) {
+    font-weight: 600;
+    color: var(--chrome);
+  }
+  .search :global(.summary) {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: var(--step--1);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
   .theme span,
   .menu span {

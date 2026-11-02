@@ -34,6 +34,10 @@ page offers the email address instead of a form, and the footer offers
 GitHub instead of the box. Each address that subscribes arrives as an email;
 nothing sends to the list by itself.
 
+Search runs in the browser, over `/search.json`. That index comes from
+`src/pages/search.json.ts`: the tools, posts and FAQ, plus a short list of
+pages kept there by hand.
+
 ## Publishing
 
 Every push to `main` builds the site in GitHub Actions and pushes the result
