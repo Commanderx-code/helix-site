@@ -8,7 +8,7 @@ export default defineConfig({
   // Content-Security-Policy refuses
   markdown: { syntaxHighlight: false },
   // Every page but the form's landing page and the two standby pages
-  integrations: [sitemap({ filter: (page) => !/\/(contact\/sent|coming-soon|maintenance)\/$/.test(page) })],
+  integrations: [sitemap({ filter: (page) => !/\/(contact\/(?:sent|subscribed)|coming-soon|maintenance)\/$/.test(page) })],
   build: {
     // Stylesheets as files, so the Content-Security-Policy needs no inline styles
     inlineStylesheets: 'never',

@@ -26,10 +26,13 @@ by side, and a line of emphasis alone under a picture is its caption.
 `@astrojs/sitemap` writes the sitemap; `public/robots.txt` points
 to it.
 
-The contact form posts to [Web3Forms](https://web3forms.com). Its access
-key, which is public by design, comes from `PUBLIC_WEB3FORMS_KEY`: in `.env`
-locally and in a repository variable of the same name for the build. Without
-it the page offers the email address instead of a form.
+The contact form and the footer's subscribe box post to
+[Web3Forms](https://web3forms.com). Its access key, which is public by
+design, comes from `PUBLIC_WEB3FORMS_KEY`: in `.env` locally and in a
+repository variable of the same name for the build. Without it the contact
+page offers the email address instead of a form, and the footer offers
+GitHub instead of the box. Each address that subscribes arrives as an email;
+nothing sends to the list by itself.
 
 ## Publishing
 

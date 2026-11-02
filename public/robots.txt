@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /contact/sent/
+Disallow: /contact/subscribed/
 Disallow: /coming-soon/
 Disallow: /maintenance/
 
