@@ -105,7 +105,8 @@ const homelab = [
     {/* A browser asked to save data gets a blank pixel instead of the photo */}
     <picture>
       <source media="(prefers-reduced-data: reduce)" srcset="/blank.png" />
-      <Image src={sky} alt="" widths={[720, 1440]} sizes="100vw" quality={40} loading="eager" />
+      {/* One small size for every screen: the blur leaves no detail to enlarge */}
+      <Image src={sky} alt="" width={480} quality={20} loading="eager" />
     </picture>
   </div>
   <section class="hero wrap">
@@ -222,8 +223,8 @@ const homelab = [
                       data-reveal="zoom"
                       src={lead.src}
                       alt={lead.alt}
-                      widths={[480, 800]}
-                      sizes="(max-width: 40rem) 100vw, (max-width: 64rem) 50vw, 24rem"
+                      widths={[320, 480, 800]}
+                      sizes="(max-width: 40rem) calc(100vw - 8.75rem), (max-width: 64rem) calc(50vw - 6rem), 20rem"
                     />
                   )}
                   <p class="links">
@@ -442,6 +443,13 @@ const homelab = [
     max-width: 46rem;
     margin-inline: auto;
     text-align: center;
+  }
+  /* From 0.01, which looks the same as 0: a browser leaves text at exactly 0
+     out of the largest paint for good, and would time the page by the logo.
+     Only these three lines: whatever comes later stays at 0, so a font landing
+     while it is still unseen does not count as the page shifting. */
+  .pitch > :nth-child(-n + 3) {
+    --enter-opacity: 0.01;
   }
   /* One beat apart, top to bottom; the screenshots and the slider after them */
   .pitch > :nth-child(2) {

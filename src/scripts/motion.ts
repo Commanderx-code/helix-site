@@ -11,53 +11,70 @@ const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // button fills solid once the reader reaches the foot of the page.
 const header = document.querySelector<HTMLElement>('[data-header]');
 const top = document.querySelector<HTMLElement>('[data-top]');
+// All the measuring comes before all the writing: measuring after a write
+// makes the browser lay the page out again on the spot.
 const update = () => {
-  header?.toggleAttribute('data-scrolled', scrollY > 8);
+  const y = scrollY;
+  const height = innerHeight;
+  const room = document.documentElement.scrollHeight - height;
+  header?.toggleAttribute('data-scrolled', y > 8);
   if (!top) return;
-  top.toggleAttribute('data-show', scrollY > innerHeight * 0.8);
-  const room = document.documentElement.scrollHeight - innerHeight;
-  const progress = room > 0 ? Math.min(1, Math.max(0, scrollY / room)) : 0;
+  top.toggleAttribute('data-show', y > height * 0.8);
+  const progress = room > 0 ? Math.min(1, Math.max(0, y / room)) : 0;
   top.style.setProperty('--progress', progress.toFixed(3));
   // At the foot of the page the ring is complete and the disc fills in
   top.toggleAttribute('data-full', progress >= 0.995);
 };
-update();
+// The first look waits until the first frame is laid out, so as not to force
+// that layout early
+requestAnimationFrame(() => setTimeout(update));
 addEventListener('scroll', update, { passive: true });
 
 if (!still) {
   // Each [data-reveal] rises into view, a beat after the one before it in the same parent
+  const arrive = (reveals: HTMLElement[]) => {
+    for (const el of reveals) {
+      const siblings = [...(el.parentElement?.children ?? [])].filter((c) => c.hasAttribute('data-reveal'));
+      el.style.setProperty('--reveal-order', String(siblings.indexOf(el)));
+    }
+    const rise = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const el = entry.target as HTMLElement;
+          el.classList.add('is-in');
+          rise.unobserve(el);
+          // Once in place, drop the reveal so the element's own transitions,
+          // like a card growing under the pointer, are not slowed by it
+          const settle = () => {
+            el.removeAttribute('data-reveal');
+            el.classList.remove('is-in');
+          };
+          const order = Number(el.style.getPropertyValue('--reveal-order')) || 0;
+          setTimeout(settle, 1700 + order * 160);
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px' },
+    );
+    document.documentElement.setAttribute('data-motion', '');
+    reveals.forEach((el) => rise.observe(el));
+  };
+
   // Anything already on screen has painted: hiding it now would blink, so
-  // it stays as it is and only what is further down rises into view
-  const reveals = [...document.querySelectorAll<HTMLElement>('[data-reveal]')].filter((el) => {
-    if (el.getBoundingClientRect().top >= innerHeight) return true;
-    el.removeAttribute('data-reveal');
-    return false;
+  // it stays as it is and only what is further down rises into view. An
+  // observer reports where each one is once the page is laid out, where
+  // asking each element here would force that layout early.
+  const sort = new IntersectionObserver((entries) => {
+    sort.disconnect();
+    arrive(
+      entries.flatMap((entry) => {
+        if (entry.boundingClientRect.top >= innerHeight) return [entry.target as HTMLElement];
+        entry.target.removeAttribute('data-reveal');
+        return [];
+      }),
+    );
   });
-  for (const el of reveals) {
-    const siblings = [...(el.parentElement?.children ?? [])].filter((c) => c.hasAttribute('data-reveal'));
-    el.style.setProperty('--reveal-order', String(siblings.indexOf(el)));
-  }
-  const rise = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const el = entry.target as HTMLElement;
-        el.classList.add('is-in');
-        rise.unobserve(el);
-        // Once in place, drop the reveal so the element's own transitions,
-        // like a card growing under the pointer, are not slowed by it
-        const settle = () => {
-          el.removeAttribute('data-reveal');
-          el.classList.remove('is-in');
-        };
-        const order = Number(el.style.getPropertyValue('--reveal-order')) || 0;
-        setTimeout(settle, 1700 + order * 160);
-      }
-    },
-    { rootMargin: '0px 0px -8% 0px' },
-  );
-  document.documentElement.setAttribute('data-motion', '');
-  reveals.forEach((el) => rise.observe(el));
+  document.querySelectorAll('[data-reveal]').forEach((el) => sort.observe(el));
 
   // Counters show zero from the start and run up to their number once they
   // are seen, after a beat so the page has painted first

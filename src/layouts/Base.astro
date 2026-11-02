@@ -93,8 +93,9 @@ const gallery = (
     <header class="site-head" data-header>
       <div class="wrap bar">
         <a class="wordmark" href="/" aria-label="Helix Tech home">
-          <Image class="on-dark" src={logoOnDark} alt="" height={40} densities={[1, 2]} loading="eager" />
-          <Image class="on-light" src={logoOnLight} alt="" height={40} densities={[1, 2]} loading="eager" />
+          {/* Lazy, so the one the theme hides is never fetched */}
+          <Image class="on-dark" src={logoOnDark} alt="" height={40} densities={[1, 2]} quality={70} />
+          <Image class="on-light" src={logoOnLight} alt="" height={40} densities={[1, 2]} quality={70} />
         </a>
         <div class="switches">
           <button class="theme" type="button" data-theme-toggle aria-label="Switch theme">
