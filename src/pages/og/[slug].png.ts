@@ -2,6 +2,7 @@
 // per tool under its slug
 import type { APIRoute } from 'astro';
 import { tools } from '../../data/tools';
+import { allPosts } from '../../data/posts';
 import { card, type Card } from '../../og/card';
 
 // The tools' dark accents, as in tools.css
@@ -28,6 +29,11 @@ const pages: Record<string, Card> = {
     eyebrow: 'Releases',
     title: 'What’s new.',
     text: 'The latest releases of every Helix Tech tool, with their notes.',
+  },
+  posts: {
+    eyebrow: 'Guides and notes',
+    title: 'Posts.',
+    text: 'What the Helix Tech tools do, how they work and how to get the most from them.',
   },
   privacy: {
     eyebrow: 'Privacy',
@@ -57,8 +63,17 @@ const pages: Record<string, Card> = {
   ),
 };
 
-export function getStaticPaths() {
-  return Object.entries(pages).map(([slug, props]) => ({ params: { slug }, props }));
+export async function getStaticPaths() {
+  const posts = (await allPosts()).map((post) => [
+    post.id,
+    {
+      eyebrow: post.data.categories[0],
+      title: post.data.title,
+      text: post.data.description,
+      accent: post.data.tool ? accents[post.data.tool] : undefined,
+    },
+  ]);
+  return [...Object.entries(pages), ...posts].map(([slug, props]) => ({ params: { slug }, props }));
 }
 
 export const GET: APIRoute = async ({ props }) =>

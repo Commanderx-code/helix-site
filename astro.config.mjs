@@ -4,6 +4,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://helixtech.app',
   trailingSlash: 'ignore',
+  // No colours in code blocks: they would come as inline styles, which the
+  // Content-Security-Policy refuses
+  markdown: { syntaxHighlight: false },
   // Every page but the form's landing page and the two standby pages
   integrations: [sitemap({ filter: (page) => !/\/(contact\/sent|coming-soon|maintenance)\/$/.test(page) })],
   build: {

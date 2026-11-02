@@ -16,7 +16,14 @@ a `GITHUB_TOKEN` in `.env` keeps the dev server within the API limits.
 Each page's share picture (the `og:image` under `/og/`) is drawn at build
 time by `src/og/card.ts` from the site's own fonts and logo. The "What's new"
 page and `/feed.xml` list the tools' releases, read from GitHub like the
-versions. `@astrojs/sitemap` writes the sitemap; `public/robots.txt` points
+versions.
+
+Posts are Markdown files in `src/content/posts`, listed at `/posts/` and in
+the feed. The file's name is the post's address, and its frontmatter is
+described in `src/content.config.ts`. Two pictures in one paragraph sit side
+by side, and a line of emphasis alone under a picture is its caption.
+
+`@astrojs/sitemap` writes the sitemap; `public/robots.txt` points
 to it.
 
 The contact form posts to [Web3Forms](https://web3forms.com). Its access

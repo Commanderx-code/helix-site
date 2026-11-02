@@ -20,6 +20,10 @@ _Avoid_: Project, app, product
 The kind of job a Tool does, in a word or two: Linux setup, Recovery, Documentation, TV, Game day.
 _Avoid_: Type, kind, section
 
+**Post**:
+An article on the site, written as a Markdown file in `src/content/posts`. Releases are not Posts: they belong to What's new.
+_Avoid_: Blog, article
+
 **Helix Toolbox**:
 The Tool for setting up and looking after a Linux machine from one menu in the terminal.
 _Avoid_: Helix Forge

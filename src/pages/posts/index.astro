@@ -1,0 +1,142 @@
+---
+// Every post, newest first: a thumbnail, the date, the title, a summary and
+// its categories
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { allPosts, postDate } from '../../data/posts';
+
+const posts = await allPosts();
+---
+<Base
+  title="Posts: guides and notes from Helix Tech"
+  description="What the Helix Tech tools do, how they work and how to get the most from them."
+  image="/og/posts.png"
+>
+  <section class="wrap head">
+    <p class="eyebrow">Guides and notes</p>
+    <h1>Posts.</h1>
+    <p class="lede">
+      What the tools do, how they work and how to get the most from them. Follow along with the{' '}
+      <a href="/feed.xml">RSS feed <Icon name="rss" size={14} /></a>.
+    </p>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <ol class="list">
+        {
+          posts.map((post) => (
+            <li>
+              <article class="row">
+                <Image src={post.data.image} alt="" widths={[240, 480]} sizes="(max-width: 36rem) 6.5rem, 11rem" />
+                <div class="text">
+                  <p class="date">
+                    <time datetime={post.data.date.toISOString()}>{postDate(post.data.date)}</time>
+                  </p>
+                  <h2>
+                    <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+                  </h2>
+                  <p class="summary">{post.data.description}</p>
+                  <ul class="chips">
+                    {post.data.categories.map((category) => <li>{category}</li>)}
+                  </ul>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(2rem, 4vw, 3rem);
+  }
+  .lede {
+    margin: 0;
+    font-size: var(--step-1);
+    color: var(--muted);
+  }
+  .lede a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .band {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(1rem, 3vw, 2rem) clamp(4rem, 8vw, 7rem);
+  }
+  .list {
+    max-width: 56rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .list > li + li {
+    border-top: 1px solid var(--line);
+  }
+  /* The whole row opens the post */
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+  }
+  .row :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: top left;
+  }
+  .date {
+    margin: 0 0 0.25rem;
+    font-family: var(--mono);
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  h2 {
+    margin-bottom: 0.5rem;
+    font-size: var(--step-2);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  h2 a {
+    color: var(--chrome);
+    text-decoration: none;
+  }
+  h2 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  h2 a:focus-visible {
+    outline: none;
+  }
+  h2 a:focus-visible::after {
+    outline: 2px solid var(--mint);
+    outline-offset: -2px;
+    border-radius: 10px;
+  }
+  .row:hover h2 a {
+    color: var(--mint);
+  }
+  .summary {
+    margin-bottom: 0.75rem;
+  }
+  @media (max-width: 36rem) {
+    .row {
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+      gap: 1rem;
+    }
+    h2 {
+      font-size: var(--step-1);
+    }
+  }
+</style>
